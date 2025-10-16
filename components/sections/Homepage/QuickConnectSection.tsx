@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { TopRightArrowBlack, TopRightArrowWhite } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import Image from "next/image";
 
 interface FormData {
   name: string;
@@ -247,9 +248,11 @@ export default function QuickConnect() {
                   </p>
                 </div>
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <Image
                     src={card.image}
                     alt={card.title}
+                    width={100}
+                    height={100}
                     className="w-full h-full object-cover"
                     style={{
                       borderRadius: "20px",

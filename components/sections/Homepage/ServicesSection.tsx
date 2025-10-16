@@ -1,11 +1,11 @@
 import React from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
 import {
   Checkbox,
   TopRightArrowBlack,
   TopRightArrowWhite,
 } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import Image from "next/image";
 
 const ServicesSection = () => {
   const services = [
@@ -54,9 +54,11 @@ const ServicesSection = () => {
             >
               {/* Card Image */}
               <div className="absolute inset-0 w-full h-full">
-                <img
+                <Image
                   src={service.image}
                   alt={service.title}
+                  width={100}
+                  height={100}
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient Overlay */}
