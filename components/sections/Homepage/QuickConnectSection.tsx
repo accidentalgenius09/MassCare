@@ -36,8 +36,7 @@ export default function QuickConnect() {
       description:
         "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
       date: "11.07.2025",
-      image:
-        "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop",
+      image: "/news/news1.png",
     },
     {
       id: 2,
@@ -45,8 +44,7 @@ export default function QuickConnect() {
       description:
         "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
       date: "05.07.2025",
-      image:
-        "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&h=300&fit=crop",
+      image: "/news/news2.jpg",
     },
     {
       id: 3,
@@ -54,8 +52,7 @@ export default function QuickConnect() {
       description:
         "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
       date: "03.07.2025",
-      image:
-        "https://images.unsplash.com/photo-1605433246995-23f532d1e001?w=400&h=300&fit=crop",
+      image: "/news/news3.jpg",
     },
     {
       id: 4,
@@ -63,8 +60,7 @@ export default function QuickConnect() {
       description:
         "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
       date: "01.07.2025",
-      image:
-        "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&h=300&fit=crop",
+      image: "/news/news4.jpg",
     },
   ];
 
@@ -231,19 +227,25 @@ export default function QuickConnect() {
                     <TTSWrapper
                       text={card.title}
                       className="text-lg font-bold text-black mb-3 leading-tight"
-                    >{card.title}</TTSWrapper>
+                    >
+                      {card.title}
+                    </TTSWrapper>
                   </h3>
                   <p className="text-black text-sm mb-4 leading-relaxed">
                     <TTSWrapper
                       text={card.description}
                       className="text-black text-sm mb-4 leading-relaxed"
-                    >{card.description}</TTSWrapper>
+                    >
+                      {card.description}
+                    </TTSWrapper>
                   </p>
                   <p className="text-sm text-black font-semibold">
                     <TTSWrapper
                       text={card.date}
                       className="text-sm text-black font-semibold"
-                    >{card.date}</TTSWrapper>
+                    >
+                      {card.date}
+                    </TTSWrapper>
                   </p>
                 </div>
                 <div className="relative h-48 overflow-hidden">
