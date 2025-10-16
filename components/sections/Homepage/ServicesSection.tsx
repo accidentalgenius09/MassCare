@@ -217,7 +217,7 @@ const ServicesSection = () => {
                   className="text-white text-sm mb-8 leading-relaxed"
                 >
                   Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
+                  typesetting industry. Lorem Ipsum has been the industry&apos;s
                   standard dummy text ever since the 1500s when an unknown
                   printer took a galley
                 </TTSWrapper>
@@ -289,9 +289,11 @@ const ServicesSection = () => {
 
             {/* Right Image */}
             <div className="relative h-64 lg:h-auto">
-              <img
+              <Image
                 src="/services/careerpathways.png"
                 alt="Healthcare professional with elderly patient"
+                width={100}
+                height={100}
                 className="w-full h-full object-cover"
               />
             </div>

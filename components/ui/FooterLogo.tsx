@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { MapPin, ExternalLink } from "lucide-react";
 import { GoogleMapPinIcon, TopRightArrowBlack } from "../helpers/svgs";
 
 interface LocationCardProps {

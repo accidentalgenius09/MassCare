@@ -17,7 +17,7 @@ const AccreditationsSection = () => {
     { name: "DBS", logo: "/logos/dbs.png" },
   ];
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
+  const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: "start",

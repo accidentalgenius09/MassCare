@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TopRightArrowBlack } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import Image from "next/image";
 
 interface Testimonial {
   id: number;
@@ -421,9 +422,11 @@ const TestimonialsSection = () => {
 
                                 {/* Author */}
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                  <img
+                                  <Image
                                     src={testimonial.avatar}
                                     alt={testimonial.name}
+                                    width={48}
+                                    height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                                   />
                                   <div>

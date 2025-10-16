@@ -1,6 +1,5 @@
 "use client";
 
-import TextToSpeechWrapper from "@/components/ui/TextToSpeechWrapper";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 
