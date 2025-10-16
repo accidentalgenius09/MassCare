@@ -1,8 +1,17 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTTS } from "@/components/providers/TTSProvider";
+import { useAccessibility } from "@/components/providers/AccessibilityProvider";
 
 const Header = () => {
+  const { isEnabled, setEnabled } = useTTS();
+  const { stepFontSize } = useAccessibility();
+  
+  const toggleTTS = () => {
+    setEnabled(!isEnabled);
+  };
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 px-4 pb-6 pt-2 md:px-8 lg:px-16">
       {/* Gradient Background */}
@@ -110,6 +119,7 @@ const Header = () => {
 
           {/* Accessibility Icons */}
           <button
+            onClick={stepFontSize}
             className="w-10 h-10 flex items-center justify-center transition-all"
             style={{
               borderRadius: "300px",
@@ -117,6 +127,7 @@ const Header = () => {
               background: "rgba(212, 212, 212, 0.10)",
               backdropFilter: "blur(17.5px)",
             }}
+            aria-label="Increase text size by 2px (resets after +10px)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -150,12 +161,19 @@ const Header = () => {
               </defs>
             </svg>{" "}
           </button>
+          
           <button
-            className="w-10 h-10 flex items-center justify-center transition-all border-1 border-white/50 bg-[rgba(212,212,212,0.1)] cursor-pointer"
+            onClick={toggleTTS}
+            className={`w-10 h-10 flex items-center justify-center transition-all border-1 cursor-pointer ${
+              isEnabled 
+                ? 'border-blue-500 bg-blue-500/30' 
+                : 'border-white/50 bg-[rgba(212,212,212,0.1)]'
+            }`}
             style={{
               borderRadius: "300px",
               backdropFilter: "blur(17.5px)",
             }}
+            aria-label={isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

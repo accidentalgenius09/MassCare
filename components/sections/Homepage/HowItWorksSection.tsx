@@ -87,7 +87,6 @@ const HowItWorksSection = () => {
   ];
 
   const totalSlides = Math.ceil(steps.length / itemsPerView);
-  console.log(steps.length);
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
   };

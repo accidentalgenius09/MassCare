@@ -19,8 +19,10 @@ export const useTextToSpeech = () => {
     return text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
   };
 
-  const splitIntoWords = (sentence: string): string[] => {
-    return sentence.trim().split(/\s+/).filter(word => word.length > 0);
+  const extractWordTokens = (sentence: string): string[] => {
+    // Extract word-like tokens; keep it simple to align with speech boundary indices
+    const matches = Array.from(sentence.matchAll(/\b\S+\b/g));
+    return matches.map(m => m[0]);
   };
 
   const createHighlightedTexts = (words: string[], currentWordIndex: number): HighlightedText[] => {
@@ -53,7 +55,7 @@ export const useTextToSpeech = () => {
       }
 
       const sentence = sentences[currentSentenceIndex];
-      const words = splitIntoWords(sentence);
+      const words = extractWordTokens(sentence);
 
       setState(prev => ({ 
         ...prev, 
@@ -62,8 +64,8 @@ export const useTextToSpeech = () => {
         isPlaying: true 
       }));
 
-      // We are not highlighting words anymore
-      setHighlightedTexts([]);
+      // Initialize highlights with the first word highlighted
+      setHighlightedTexts(createHighlightedTexts(words, 0));
 
       const utterance = new SpeechSynthesisUtterance(sentence);
       utterance.rate = options.rate || 1;
@@ -73,7 +75,30 @@ export const useTextToSpeech = () => {
 
       speechRef.current = utterance;
 
-      // No per-word boundary handling; rely on native speech only
+      // Highlight current word on boundary events
+      utterance.onboundary = (event) => {
+        // Some browsers provide charIndex for word boundaries
+        if (typeof event.charIndex === 'number') {
+          const charIndex = event.charIndex;
+          // Find words with their start indices using regex to match words
+          const matches = Array.from(sentence.matchAll(/\b\S+\b/g));
+          let currentIndex = 0;
+          for (let i = 0; i < matches.length; i++) {
+            const m = matches[i];
+            const start = m.index ?? 0;
+            const end = start + m[0].length;
+            if (charIndex >= start && charIndex < end) {
+              currentIndex = i;
+              break;
+            }
+            if (charIndex >= end) {
+              currentIndex = i; // closest word behind the boundary
+            }
+          }
+          setState(prev => ({ ...prev, currentWord: matches[currentIndex]?.[0] || '' }));
+          setHighlightedTexts(createHighlightedTexts(words, currentIndex));
+        }
+      };
 
       utterance.onend = () => {
         currentSentenceIndex++;

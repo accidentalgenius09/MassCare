@@ -57,8 +57,7 @@ const ServicesSection = () => {
                 <Image
                   src={service.image}
                   alt={service.title}
-                  width={100}
-                  height={100}
+                  fill
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient Overlay */}
@@ -292,8 +291,7 @@ const ServicesSection = () => {
               <Image
                 src="/services/careerpathways.png"
                 alt="Healthcare professional with elderly patient"
-                width={100}
-                height={100}
+                fill
                 className="w-full h-full object-cover"
               />
             </div>

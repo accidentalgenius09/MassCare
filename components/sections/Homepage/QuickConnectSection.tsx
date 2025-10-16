@@ -69,7 +69,6 @@ export default function QuickConnect() {
   ];
 
   const handleSubmit = () => {
-    console.log("Form submitted:", formData);
     alert("Form submitted successfully!");
   };
 
@@ -251,8 +250,7 @@ export default function QuickConnect() {
                   <Image
                     src={card.image}
                     alt={card.title}
-                    width={100}
-                    height={100}
+                    fill
                     className="w-full h-full object-cover"
                     style={{
                       borderRadius: "20px",

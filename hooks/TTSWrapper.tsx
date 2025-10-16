@@ -1,4 +1,5 @@
 "use client";
+import { useTTS } from "@/components/providers/TTSProvider";
 import React, { useRef, useState } from "react";
 
 interface TTSWrapperProps {
@@ -12,11 +13,13 @@ const TTSWrapper: React.FC<TTSWrapperProps> = ({
   className,
   children,
 }) => {
+  const { isEnabled } = useTTS();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [highlightedText, setHighlightedText] = useState(text);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const speak = () => {
+    if (!isEnabled) return;
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
 
@@ -25,17 +28,31 @@ const TTSWrapper: React.FC<TTSWrapperProps> = ({
 
     utterance.onboundary = (event) => {
       if (event.charIndex !== undefined) {
-        const currentWordMatch = text.slice(event.charIndex).match(/\b\S+\b/);
-        const currentWord = currentWordMatch ? currentWordMatch[0] : "";
-        const highlighted = text.replace(
-          new RegExp(`\\b(${currentWord})\\b`, "i"),
-          `<mark style="background-color: yellow; color: black;">$1</mark>`
-        );
+        // Find the next word boundaries after charIndex
+        const start = event.charIndex;
+        const remainingText = text.slice(start);
+        const match = remainingText.match(/\b\S+\b/);
+        if (!match) return;
+
+        const word = match[0];
+        const wordStart = start;
+        const wordEnd = start + word.length;
+
+        // Highlight only the current word
+        const highlighted =
+          text.slice(0, wordStart) +
+          `<mark style="background-color: yellow; color: black;">` +
+          text.slice(wordStart, wordEnd) +
+          `</mark>` +
+          text.slice(wordEnd);
+
         setHighlightedText(highlighted);
       }
     };
 
-    utterance.onstart = () => setIsSpeaking(true);
+    if (isEnabled) {
+      utterance.onstart = () => setIsSpeaking(true);
+    }
     utterance.onend = () => {
       setIsSpeaking(false);
       setHighlightedText(text);
@@ -53,7 +70,7 @@ const TTSWrapper: React.FC<TTSWrapperProps> = ({
 
   return (
     <div onMouseEnter={speak} onMouseLeave={stop} className={className}>
-      {!isSpeaking ? (
+      {!isSpeaking && !isEnabled ? (
         children
       ) : (
         <p

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TTSProvider } from '@/components/providers/TTSProvider';
+import { AccessibilityProvider } from '@/components/providers/AccessibilityProvider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <TTSProvider>
-          {children}
-        </TTSProvider>
+        <AccessibilityProvider>
+          <TTSProvider>
+            {children}
+          </TTSProvider>
+        </AccessibilityProvider>
       </body>
     </html>
   );
