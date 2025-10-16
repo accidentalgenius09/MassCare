@@ -4,29 +4,33 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTTS } from "@/components/providers/TTSProvider";
 import { useAccessibility } from "@/components/providers/AccessibilityProvider";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const { isEnabled, setEnabled } = useTTS();
   const { stepFontSize } = useAccessibility();
-  
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 px-4 pb-6 pt-2 md:px-8 lg:px-16">
       {/* Gradient Background */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)'
+          background:
+            "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)",
         }}
       />
-      
+
       <div className="relative max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo-mass-care.png"
+            src={isHome ? "/logo-mass-care.png" : "/logo-white.png"}
             alt="Mass Care Logo"
             width={189}
             height={88}
@@ -40,6 +44,12 @@ const Header = () => {
             className="text-white hover:text-gray-200 transition-colors"
           >
             Home
+          </Link>
+          <Link
+            href="/about-us"
+            className="text-white hover:text-gray-200 transition-colors"
+          >
+            About Us
           </Link>
           <div className="relative group">
             <button className="text-white hover:text-gray-200 transition-colors flex items-center">
@@ -59,29 +69,24 @@ const Header = () => {
               </svg>
             </button>
           </div>
+
           <Link
-            href="/clients"
+            href="/careers"
             className="text-white hover:text-gray-200 transition-colors"
           >
-            Clients
+            Careers
           </Link>
           <Link
-            href="/career-pathways"
+            href="/news-and-insights"
             className="text-white hover:text-gray-200 transition-colors"
           >
-            Career Pathways
+            News and Insights
           </Link>
           <Link
-            href="/news"
+            href="/testimonials"
             className="text-white hover:text-gray-200 transition-colors"
           >
-            News
-          </Link>
-          <Link
-            href="/faq"
-            className="text-white hover:text-gray-200 transition-colors"
-          >
-            FAQ
+            Testimonials
           </Link>
         </div>
 
@@ -120,7 +125,7 @@ const Header = () => {
           {/* Accessibility Icons */}
           <button
             onClick={stepFontSize}
-            className="w-10 h-10 flex items-center justify-center transition-all"
+            className="w-10 h-10 flex items-center justify-center transition-all cursor-pointer"
             style={{
               borderRadius: "300px",
               border: "1px solid rgba(255, 255, 255, 0.50)",
@@ -161,19 +166,21 @@ const Header = () => {
               </defs>
             </svg>{" "}
           </button>
-          
+
           <button
             onClick={toggleTTS}
             className={`w-10 h-10 flex items-center justify-center transition-all border-1 cursor-pointer ${
-              isEnabled 
-                ? 'border-blue-500 bg-blue-500/30' 
-                : 'border-white/50 bg-[rgba(212,212,212,0.1)]'
+              isEnabled
+                ? "border-blue-500 bg-blue-500/30"
+                : "border-white/50 bg-[rgba(212,212,212,0.1)]"
             }`}
             style={{
               borderRadius: "300px",
               backdropFilter: "blur(17.5px)",
             }}
-            aria-label={isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"}
+            aria-label={
+              isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

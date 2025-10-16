@@ -8,6 +8,7 @@ import AccreditationsSection from './AccreditationsSection'
 import HeroSection from "./HeroSection";
 import QuickConnect from "./QuickConnectSection";
 import ServicesSection from "./ServicesSection";
+import CareerPathwaysSection from "./CareerPathways";
 
 function HomePage() {
   return (
@@ -20,6 +21,7 @@ function HomePage() {
       <TestimonialsSection />
       <AccreditationsSection />
       <ServicesSection />
+      <CareerPathwaysSection />
       <QuickConnect />
     </div>
   );
