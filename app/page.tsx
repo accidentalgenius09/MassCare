@@ -1,15 +1,13 @@
-import Header from '@/components/ui/Header';
-import Footer from '@/components/ui/Footer';
 import HomePage from '@/components/sections/Homepage/Home';
+import AboutUsPage from './about-us/page';
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <Header />
       <main>
         <HomePage/>
+        <AboutUsPage/>
       </main>
-      <Footer />
     </div>
   );
 }
