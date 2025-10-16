@@ -279,7 +279,9 @@ const ServicesSection = () => {
                   <TTSWrapper
                     text="Explore Career Routes"
                     className="text-white flex items-center gap-1 group cursor-pointer"
-                  >Explore Career Routes</TTSWrapper>
+                  >
+                    Explore Career Routes
+                  </TTSWrapper>
                   <TopRightArrowWhite />
                 </button>
               </div>
