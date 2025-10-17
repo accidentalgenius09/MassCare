@@ -1,6 +1,7 @@
 import { SmallFilledCheckbox } from "@/components/helpers/svgs";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import Link from "next/link";
 import React from "react";
 
 function TermsAndCondtions() {
@@ -286,9 +287,9 @@ function TermsAndCondtions() {
               collect, manage, process, secure, and store your private
               information. Our privacy policy is included under the scope of
               this User Agreement. To read our privacy policy in its entirety, 
-              <a href="/privacy-policy" className="underline cursor-pointer">
+              <Link href="/privacy-policy" className="underline cursor-pointer">
                 click here.
-              </a>
+              </Link>
             </TTSWrapper>
           </p>
         </div>
