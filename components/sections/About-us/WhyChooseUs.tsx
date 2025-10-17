@@ -1,14 +1,5 @@
 import React from "react";
 import {
-  Network,
-  CheckCircle,
-  Zap,
-  Users,
-  Shield,
-  MapPin,
-  ArrowRight,
-} from "lucide-react";
-import {
   BadgeCheckIcon,
   CustomerSupport,
   FastPlacementIcon,

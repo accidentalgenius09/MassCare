@@ -393,12 +393,12 @@ const InternalServerError: React.FC = () => {
           </h1>
           <p className="text-blue-200 text-base max-w-2xl mx-auto text-center leading-relaxed px-4">
             <TTSWrapper
-              text="Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry's standard dummy text ever since"
+              text="Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since"
               className="text-blue-200 text-base text-center leading-relaxed"
             >
               Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of
               the printing and typesetting ndustry. Lorem Ipsum has been the
-              industry's standard dummy text ever since
+              industry&apos;s standard dummy text ever since
             </TTSWrapper>
           </p>
         </div>

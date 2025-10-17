@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Checkbox,
-  TopRightArrowBlack,
-  TopRightArrowWhite,
-} from "../../helpers/svgs";
+import { Checkbox, TopRightArrowBlack } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 
