@@ -11,7 +11,7 @@ function PrivacyPolicy() {
         image="/common/privacypolicy-banner.png"
         description="Lorem Ipsum 8 years of meaningful care... care without compromise."
       />
-      <div className="px-14 pt-10 pb-15">
+      <div className="px-20 py-15">
         <div>
           <h1 className="text-3xl font-bold">
             <TTSWrapper text="Privacy Policy">Privacy Policy</TTSWrapper>
