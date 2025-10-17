@@ -6,7 +6,6 @@ export default function Home() {
     <div className="min-h-screen">
       <main>
         <HomePage/>
-        <AboutUsPage/>
       </main>
     </div>
   );
