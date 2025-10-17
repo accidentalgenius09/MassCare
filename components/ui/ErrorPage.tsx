@@ -8,18 +8,18 @@ import Image from "next/image";
 const InternalServerError: React.FC = () => {
   const router = useRouter();
   return (
-    <div className="min-h-[90vh] bg-[#012B71] w-full flex items-center justify-center px-4 py-8">
+    <div className="min-h-[70vh] bg-[#012B71] w-full flex items-center justify-center px-4 py-8">
       <div className="max-w-4xl w-full text-center">
         <div className="relative mb-8">
           {/* Medical Illustration */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center mt-10">
             <div className="relative">
               {/* Nurse Standing */}
               <Image
                 src="/common/404-patient.png"
                 alt="404"
-                width={550}
-                height={350}
+                width={450}
+                height={300}
                 className="object-contain"
               />
             </div>
