@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: "TT Hoves", Arial, Helvetica, sans-serif;
 }
+
+.list-alpha-paren {
+  list-style-type: lower-alpha;
+}
+
+.list-alpha-paren li::marker {
+  content: counter(list-item, lower-alpha) ") ";
+}
+
