@@ -72,7 +72,18 @@ const Page: React.FC<{}> = () => {
           <h1
             className={`text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4`}
           >
-            <TTSWrapper text="Thank you for your enquiry">
+            <TTSWrapper
+              className={`text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4`}
+              text={`${
+                slug === "thankyou-enquiry"
+                  ? "Thank You for Your Enquiry!"
+                  : slug === "application-received"
+                  ? "Application Received Successfully!"
+                  : slug === "welcome-course"
+                  ? "Welcome to Your Course!"
+                  : "Internal Server Error"
+              }`}
+            >
               {slug === "thankyou-enquiry"
                 ? "Thank You for Your Enquiry!"
                 : slug === "application-received"
@@ -84,8 +95,16 @@ const Page: React.FC<{}> = () => {
           </h1>
           <p className="text-blue-200 text-base max-w-2xl mx-auto text-center leading-relaxed px-4">
             <TTSWrapper
-              text="Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry's standard dummy text ever since"
-              className="text-blue-200 text-base text-center leading-relaxed"
+              text={
+                slug === "thankyou-enquiry"
+                  ? "We've received your enquiry and will get back to you as soon as possible."
+                  : slug === "application-received"
+                  ? "Thank you for your interest in joining our team. We're excited to review your application."
+                  : slug === "welcome-course"
+                  ? "Your enrollment has been successfully completed. Get ready to begin your healthcare education journey."
+                  : "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry standard dummy text ever since"
+              }
+              className="text-blue-200 text-base max-w-2xl mx-auto text-center leading-relaxed"
             >
               {slug === "thankyou-enquiry"
                 ? "We've received your enquiry and will get back to you as soon as possible."
@@ -93,7 +112,7 @@ const Page: React.FC<{}> = () => {
                 ? "Thank you for your interest in joining our team. We're excited to review your application."
                 : slug === "welcome-course"
                 ? "Your enrollment has been successfully completed. Get ready to begin your healthcare education journey."
-                : "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since"}
+                : `Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry standard dummy text ever since`}
             </TTSWrapper>
           </p>
         </div>
@@ -101,7 +120,7 @@ const Page: React.FC<{}> = () => {
         {/* Go Back Button */}
         <button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-6 sm:px-8 py-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-6 sm:px-8 py-2 rounded-full"
         >
           <TTSWrapper text="Go Back">Go Back </TTSWrapper>
           <TopRightArrowWhite />
