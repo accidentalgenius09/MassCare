@@ -1,6 +1,6 @@
 "use client";
 import { useTTS } from "@/components/providers/TTSProvider";
-import React, { useRef, useState } from "react";
+import React, { isValidElement, useRef, useState } from "react";
 
 interface TTSWrapperProps {
   text: string;
@@ -68,17 +68,51 @@ const TTSWrapper: React.FC<TTSWrapperProps> = ({
     setHighlightedText(text);
   };
 
+  // If child is a valid element (e.g., h1/h2/p/span), clone it and attach handlers.
+  if (isValidElement(children)) {
+    const child: any = children;
+    const mergedClassName = [child.props?.className, className]
+      .filter(Boolean)
+      .join(" ");
+
+    const mergedHandlers = {
+      onMouseEnter: (e: any) => {
+        child.props?.onMouseEnter?.(e);
+        speak();
+      },
+      onMouseLeave: (e: any) => {
+        child.props?.onMouseLeave?.(e);
+        stop();
+      },
+    };
+
+    if (isSpeaking && isEnabled) {
+      // Render the same tag with highlighted HTML to avoid wrapper/divs inside <p> etc.
+      return React.cloneElement(child, {
+        ...child.props,
+        ...mergedHandlers,
+        className: mergedClassName,
+        dangerouslySetInnerHTML: { __html: highlightedText },
+        children: undefined,
+      });
+    }
+
+    return React.cloneElement(child, {
+      ...child.props,
+      ...mergedHandlers,
+      className: mergedClassName,
+    });
+  }
+
+  // Fallback for text nodes: use an inline wrapper to remain valid inside <p>
   return (
-    <div onMouseEnter={speak} onMouseLeave={stop} className={className}>
-      {!isSpeaking && !isEnabled ? (
-        children
+    <span onMouseEnter={speak} onMouseLeave={stop} className={className}>
+      {isSpeaking && isEnabled ? (
+        <span dangerouslySetInnerHTML={{ __html: highlightedText }} />
       ) : (
-        <p
-          className={className}
-          dangerouslySetInnerHTML={{ __html: highlightedText }}
-        />
+        children
       )}
-    </div>
+    </span>
   );
 };
 
