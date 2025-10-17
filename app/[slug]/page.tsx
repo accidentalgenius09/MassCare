@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 
-const Page: React.FC<{}> = () => {
+const Page: React.FC = () => {
   const router = useRouter();
   const { slug } = useParams();
   console.log(slug, "slug");
