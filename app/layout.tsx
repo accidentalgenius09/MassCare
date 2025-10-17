@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ fontFamily: 'TT Hoves, Arial, Helvetica, sans-serif' }}>
       <body className={`antialiased`}>
         <AccessibilityProvider>
           <TTSProvider>

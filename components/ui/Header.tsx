@@ -11,6 +11,8 @@ const Header = () => {
   const { stepFontSize } = useAccessibility();
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isNewsletterHistory = pathname === "/newsletter-history";
+  console.log(pathname);
 
   const toggleTTS = () => {
     setEnabled(!isEnabled);
@@ -21,8 +23,9 @@ const Header = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)",
+          background: isNewsletterHistory
+            ? "transparent"
+            : "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)",
         }}
       />
 
@@ -38,7 +41,7 @@ const Header = () => {
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8 font-[500] font-['TT_Hoves',sans-serif]">
+        <div className="hidden lg:flex items-center space-x-8 font-[500]">
           <Link
             href="/"
             className="text-white hover:text-gray-200 transition-colors"
