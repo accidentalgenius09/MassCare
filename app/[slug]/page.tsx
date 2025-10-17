@@ -10,11 +10,20 @@ const Page: React.FC<{}> = () => {
   const { slug } = useParams();
   console.log(slug, "slug");
   return (
-    <div className="min-h-[70vh] bg-[#012B71] w-full flex items-center justify-center px-4 py-8">
+    <div className="min-h-[70vh] bg-[#012B71] w-full flex items-center justify-center px-4 pt-8 pb-20">
       <div className="max-w-4xl w-full text-center">
         <div className="relative mb-8">
           {/* Medical Illustration */}
-          <div className="flex items-center justify-center mt-10">
+          <div
+            className={`flex items-center justify-center ${
+              slug === "thankyou-enquiry" || slug === "application-received"
+                ? "mt-16"
+                : slug === "welcome-course"
+                ? "mt-20"
+                : "mt-10"
+            }
+            }`}
+          >
             <div className="relative">
               {/* Nurse Standing */}
               <Image
@@ -36,8 +45,22 @@ const Page: React.FC<{}> = () => {
                     ? "Welcome to Your Course!"
                     : "Internal Server Error"
                 }
-                width={slug === "welcome-course" ? 200 : 450}
-                height={slug === "welcome-course" ? 250 : 300}
+                width={
+                  slug === "welcome-course"
+                    ? 200
+                    : slug === "thankyou-enquiry" ||
+                      slug === "application-received"
+                    ? 300
+                    : 450
+                }
+                height={
+                  slug === "welcome-course"
+                    ? 250
+                    : slug === "thankyou-enquiry" ||
+                      slug === "application-received"
+                    ? 300
+                    : 300
+                }
                 className="object-contain"
               />
             </div>
@@ -46,7 +69,9 @@ const Page: React.FC<{}> = () => {
 
         {/* Error Message */}
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4">
+          <h1
+            className={`text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4`}
+          >
             <TTSWrapper text="Thank you for your enquiry">
               {slug === "thankyou-enquiry"
                 ? "Thank You for Your Enquiry!"
