@@ -8,8 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "TT Hoves", Arial, Helvetica, sans-serif;
+  --font-mono: "TT Hoves", Arial, Helvetica, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: "TT Hoves", Arial, Helvetica, sans-serif;
 }
+
+.list-alpha-paren {
+  list-style-type: lower-alpha;
+}
+
+.list-alpha-paren li::marker {
+  content: counter(list-item, lower-alpha) ") ";
+}
+

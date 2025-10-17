@@ -5,11 +5,22 @@ interface PageBannerProps {
   title: string;
   breadcrumb: string;
   description: string;
+  image?: string;
 }
 
-function PageBanner({ title, breadcrumb, description }: PageBannerProps) {
+function PageBanner({
+  title,
+  breadcrumb,
+  description,
+  image,
+}: PageBannerProps) {
   return (
-    <div className="h-[50vh] bg-[url('/common/dna-banner.png')] bg-cover bg-center flex items-center justify-center">
+    <div
+      className={`h-[50vh] bg-cover bg-center flex items-center justify-center pt-16`}
+      style={{
+        backgroundImage: `url(${image ?? "/common/dna-banner.png"})`,
+      }}
+    >
       <div className="container mx-auto h-full">
         <div className="flex flex-col items-center justify-center h-full text-center">
           <div className="border border-white rounded-full px-4 py-2 text-white text-sm">
