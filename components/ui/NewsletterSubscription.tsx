@@ -93,7 +93,7 @@ function Newsletter() {
               </h2>
               <p className="text-xs mb-4 text-white">
                 <TTSWrapper text="Welcome to our newsletter! We're excited to have you on board.">
-                  Welcome to our newsletter! We're excited to have you on board.
+                  Welcome to our newsletter! We&apos;re excited to have you on board.
                 </TTSWrapper>
               </p>
 
@@ -114,7 +114,7 @@ function Newsletter() {
               {/* Instructions Box */}
               <div className="bg-white text-black backdrop-blur-sm rounded-xl p-4 mb-5 text-left">
                 <h3 className="font-semibold mb-2 text-sm">
-                  <TTSWrapper text="What's next?">What's next?</TTSWrapper>
+                  <TTSWrapper text="What's next?">What&apos;s next?</TTSWrapper>
                 </h3>
                 <ul className="space-y-2 text-xs">
                   <li className="flex items-start gap-2">

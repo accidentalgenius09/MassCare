@@ -1,11 +1,9 @@
-import HomePage from '@/components/sections/Homepage/Home';
-import AboutUsPage from './about-us/page';
-
+import HomePage from "@/components/sections/Homepage/Home";
 export default function Home() {
   return (
     <div className="min-h-screen">
       <main>
-        <HomePage/>
+        <HomePage />
       </main>
     </div>
   );
