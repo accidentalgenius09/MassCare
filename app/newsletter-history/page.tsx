@@ -5,7 +5,7 @@ import React from "react";
 function NewsletterHistory() {
   return (
     <>
-      <div className="h-[22vh] bg-[url('/common/news-history.png')] bg-cover bg-center"></div>
+      <div className="h-[15vh] bg-[url('/common/news-history.png')] bg-cover bg-center"></div>
       <div className="p-20">
         <div>
           <h1 className="text-3xl font-semibold">

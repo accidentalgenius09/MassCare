@@ -115,7 +115,7 @@ const TrustedInstitutionsSection = () => {
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4 flex">
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-gray-900 whitespace-nowrap">
+          <h2 className="text-4xl font-bold text-gray-900 whitespace-nowrap mr-2">
             <TTSWrapper
               text="Trusted by UK Institutions"
               className="text-4xl font-bold text-gray-900 whitespace-nowrap"

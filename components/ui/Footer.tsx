@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { TopRightArrowBlack } from "../helpers/svgs";
 import LocationCard from "./FooterLogo";
+import Newsletter from "./NewsletterSubscription";
 
 export default function Footer() {
   return (
@@ -157,26 +157,7 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-
-            {/* Newsletter */}
-            <div className="text-center">
-              <h3 className="font-semibold text-lg mb-4">
-                Subscribe Newsletter
-              </h3>
-              <form className="flex justify-between w-72 mx-auto items-center border border-white rounded-full">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="px-4 py-2 rounded-full text-white w-64"
-                />
-                <button
-                  type="submit"
-                  className="bg-white text-[#002D72] px-4 py-4 rounded-full font-semibold"
-                >
-                  <TopRightArrowBlack />
-                </button>
-              </form>
-            </div>
+            <Newsletter />
           </div>
         </div>
         <div
