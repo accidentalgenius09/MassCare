@@ -78,8 +78,8 @@ function TermsAndCondtions() {
                 certain information about yourself (such as identification,
                 contact details, etc.) as part of the registration process, or
                 as part of your ability to use the Resources. You agree that any
-                information you provide will always be accurate, correct, and up
-                to date.
+              information you provide will always be accurate, correct, and up
+              to date.
               </TTSWrapper>
             </li>
 
@@ -91,8 +91,8 @@ function TermsAndCondtions() {
               our Resources. Accordingly, you are responsible for all activities
               that occur under your accounts."
               >
-                You are responsible for maintaining the confidentiality of any
-                login information associated with any account you use to access
+              You are responsible for maintaining the confidentiality of any
+              login information associated with any account you use to access
                 our Resources. Accordingly, you are responsible for all
                 activities that occur under your accounts.
               </TTSWrapper>
@@ -106,11 +106,11 @@ function TermsAndCondtions() {
               access) any of our Resources through any automated, unethical or
               unconventional means."
               >
-                Accessing (or attempting to access) any of our Resources by any
-                means other than through the means we provide, is strictly
-                prohibited. You specifically agree not to access (or attempt to
-                access) any of our Resources through any automated, unethical or
-                unconventional means.
+              Accessing (or attempting to access) any of our Resources by any
+              means other than through the means we provide, is strictly
+              prohibited. You specifically agree not to access (or attempt to
+              access) any of our Resources through any automated, unethical or
+              unconventional means.
               </TTSWrapper>
             </li>
             <li className="py-2 flex items-start gap-2">
@@ -120,9 +120,9 @@ function TermsAndCondtions() {
               Resources, including the servers and/or networks to which our
               Resources are located or connected, is strictly prohibited."
               >
-                Engaging in any activity that disrupts or interferes with our
-                Resources, including the servers and/or networks to which our
-                Resources are located or connected, is strictly prohibited.
+              Engaging in any activity that disrupts or interferes with our
+              Resources, including the servers and/or networks to which our
+              Resources are located or connected, is strictly prohibited.
               </TTSWrapper>
             </li>
             <li className="py-2 flex items-start gap-2">
@@ -131,8 +131,8 @@ function TermsAndCondtions() {
                 text="Attempting to copy, duplicate, reproduce, sell, trade, or resell
               our Resources is strictly prohibited."
               >
-                Attempting to copy, duplicate, reproduce, sell, trade, or resell
-                our Resources is strictly prohibited.
+              Attempting to copy, duplicate, reproduce, sell, trade, or resell
+              our Resources is strictly prohibited.
               </TTSWrapper>
             </li>
             <li className="py-2 flex items-start gap-2">
@@ -143,8 +143,8 @@ function TermsAndCondtions() {
               unauthorized activities conducted by you, as explained above, and
               may incur criminal or civil liability."
               >
-                You are solely responsible any consequences, losses, or damages
-                that we may directly or indirectly incur or suffer due to any
+              You are solely responsible any consequences, losses, or damages
+              that we may directly or indirectly incur or suffer due to any
                 unauthorized activities conducted by you, as explained above,
                 and may incur criminal or civil liability.
               </TTSWrapper>
