@@ -11,8 +11,6 @@ const Header = () => {
   const { stepFontSize } = useAccessibility();
   const pathname = usePathname();
   const isHome = pathname === "/";
-  console.log(pathname);
-
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };

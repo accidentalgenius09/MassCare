@@ -8,7 +8,6 @@ import { TopRightArrowWhite } from "@/components/helpers/svgs";
 const Page: React.FC = () => {
   const router = useRouter();
   const { slug } = useParams();
-  console.log(slug, "slug");
   return (
     <div className="min-h-[70vh] bg-[#012B71] w-full flex items-center justify-center px-4 pt-8 pb-20">
       <div className="max-w-4xl w-full text-center">

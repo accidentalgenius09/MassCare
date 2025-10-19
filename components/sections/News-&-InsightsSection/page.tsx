@@ -18,14 +18,6 @@ function NewsAndInsightsSection() {
   const [activeTab2, setActiveTab2] = useState(1);
   const [newsCards, setNewsCards] = useState<NewsCard[]>([]);
   const [blogsCards, setBlogsCards] = useState<NewsCard[]>([]);
-  console.log(
-    "blogsCards",
-    blogsCards,
-    "newsCards",
-    newsCards,
-    activeTab,
-    activeTab2
-  );
   const navigate = useRouter();
   useEffect(() => {
     if (activeTab === "news") {
