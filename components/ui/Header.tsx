@@ -11,7 +11,6 @@ const Header = () => {
   const { stepFontSize } = useAccessibility();
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const isNewsletterHistory = pathname === "/newsletter-history";
   console.log(pathname);
 
   const toggleTTS = () => {
@@ -23,9 +22,9 @@ const Header = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: isNewsletterHistory
-            ? "transparent"
-            : "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)",
+          background: isHome
+            ? "linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.85) 100%)"
+            : "transparent",
         }}
       />
 
@@ -35,13 +34,13 @@ const Header = () => {
           <Image
             src={isHome ? "/logo-mass-care.png" : "/logo-white.png"}
             alt="Mass Care Logo"
-            width={189}
-            height={88}
+            width={150}
+            height={68}
           />
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8 font-[500]">
+        <div className="hidden lg:flex items-center space-x-8 font-xs">
           <Link
             href="/"
             className="text-white hover:text-gray-200 transition-colors"
@@ -54,24 +53,12 @@ const Header = () => {
           >
             About Us
           </Link>
-          <div className="relative group">
-            <button className="text-white hover:text-gray-200 transition-colors flex items-center">
-              Services
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </div>
+          <Link
+            href="/services"
+            className="text-white hover:text-gray-200 transition-colors"
+          >
+            Services
+          </Link>
 
           <Link
             href="/careers"
@@ -83,7 +70,7 @@ const Header = () => {
             href="/news-and-insights"
             className="text-white hover:text-gray-200 transition-colors"
           >
-            News and Insights
+            News & Insights
           </Link>
           <Link
             href="/testimonials"
