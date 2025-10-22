@@ -558,7 +558,7 @@ const ContactPage: React.FC = () => {
                   </div>
                   {expandedFAQ === faq.id && (
                     <div className="px-6 pb-6">
-                      <div className="border-t border-gray-100 pt-4">
+                      <div>
                         <p className="text-white leading-relaxed">
                           <TTSWrapper text={faq.answer}>
                             {faq.answer}
