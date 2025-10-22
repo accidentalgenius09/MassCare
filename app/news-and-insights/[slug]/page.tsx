@@ -17,7 +17,6 @@ interface RecentNewsItem {
 
 export default function NewsAndInsightsDetailPage() {
   const params = useParams();
-  const slug = params?.slug;
   const [currentSlide, setCurrentSlide] = useState(0);
   const [articleHeight, setArticleHeight] = useState(0);
   const [visibleItems, setVisibleItems] = useState(3);

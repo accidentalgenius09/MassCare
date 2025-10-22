@@ -81,7 +81,7 @@ const Header = () => {
         {/* Right Side Actions */}
         <div className="flex items-center space-x-3">
           <Link
-            href="/contact"
+            href="/contact-us"
             className="hidden md:flex items-center bg-neutral-300/10 rounded-[300px] border-1 border-white/50 backdrop-blur-lg px-6 py-3 transition-all"
           >
             <div className="flex items-center gap-3 w-full h-full">
