@@ -59,7 +59,7 @@ const Header = () => {
           </Link>
 
           <Link
-            href="/careers"
+            href="/career-opportunities"
             className="text-white hover:text-gray-200 transition-colors"
           >
             Careers
