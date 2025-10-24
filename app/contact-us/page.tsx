@@ -75,6 +75,7 @@ const ContactPage: React.FC = () => {
       <PageBanner
         title="Get In Touch With Us"
         breadcrumb="Home / Contact Us"
+        image="/common/contact-banner.jpeg"
         description="Our team of healthcare professionals is here to help you. Get in touch with us to discuss your care needs and find the right solution for you."
       />
 
