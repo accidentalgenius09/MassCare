@@ -1,0 +1,265 @@
+"use client";
+
+import TTSWrapper from "@/hooks/TTSWrapper";
+import { X, ArrowUpRight, Upload } from "lucide-react";
+import React, { useState } from "react";
+import { UploadOutline, XOutline } from "../helpers/svgs";
+
+interface ApplyNowModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  jobTitle: string;
+}
+
+const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
+  isOpen,
+  onClose,
+  jobTitle,
+}) => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    experience: "",
+    cv: null as File | null,
+    agreeToTerms: false,
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    if (type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: (e.target as HTMLInputElement).checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData((prev) => ({
+      ...prev,
+      cv: file,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log("Form submitted:", formData);
+    onClose();
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f]"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-white rounded-md max-w-4xl w-full h-full overflow-y-auto scrollbar-hide relative">
+        {/* Close Button */}
+        {/* Modal Content */}
+        <div className="px-18 py-12">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center">
+              <h2 className="text-4xl font-base text-black mb-2">
+                <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
+              </h2>
+              <button
+                onClick={onClose}
+                className=" p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close modal"
+              >
+                <XOutline />
+              </button>
+            </div>
+            <p className="text-md font-extralight text-black">
+              <TTSWrapper text={`Submit your application for the ${jobTitle}`}>
+                Submit your application for the {jobTitle} Role
+              </TTSWrapper>
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Full Name */}
+            <div>
+              <label className="block text-base font-medium text-black mb-2">
+                <TTSWrapper text="Full Name *">Full Name *</TTSWrapper>
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            {/* Email Address */}
+            <div>
+              <label className="block text-base font-medium text-black mb-2">
+                <TTSWrapper text="Email Address *">Email Address *</TTSWrapper>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email address"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-base font-medium text-black mb-2">
+                <TTSWrapper text="Phone Number *">Phone Number *</TTSWrapper>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Enter Phone number"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            {/* Experience */}
+            <div>
+              <label className="block text-base font-medium text-black mb-2">
+                <TTSWrapper text="Experience *">Experience *</TTSWrapper>
+              </label>
+              <div className="relative">
+                <select
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                  required
+                >
+                  <option value="" disabled className="text-gray-500">
+                    {" "}
+                    Select your experience in this field
+                  </option>
+                  <option value="0-1">0-1 years</option>
+                  <option value="1-2">1-2 years</option>
+                  <option value="2-5">2-5 years</option>
+                  <option value="5-10">5-10 years</option>
+                  <option value="10+">10+ years</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="8"
+                    height="5"
+                    viewBox="0 0 8 5"
+                    fill="none"
+                  >
+                    <path
+                      d="M0.142787 0.938336L3.55548 4.80157C3.61049 4.86381 3.67873 4.91376 3.75551 4.94802C3.8323 4.98227 3.91581 5 4.00032 5C4.08483 5 4.16835 4.98227 4.24513 4.94802C4.32191 4.91376 4.39015 4.86381 4.44516 4.80157L7.85786 0.938336C8.18355 0.569585 7.91352 0 7.41302 0H0.586647C0.0861442 0 -0.183883 0.569585 0.142787 0.938336Z"
+                      fill="#212121"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Upload CV */}
+            <div>
+              <label className="block text-base font-medium text-black mb-2">
+                <TTSWrapper text="Upload CV *">Upload CV *</TTSWrapper>
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  name="cv"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  required
+                />
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
+                  <div className="w-8 h-8 mx-auto mb-2">
+                    <UploadOutline />
+                  </div>{" "}
+                  <p className="text-sm text-[#00000066]">
+                    <TTSWrapper text="Click To Upload Your CV (PDF, DOC, DOCX)">
+                      Click To Upload Your CV (PDF, DOC, DOCX)
+                    </TTSWrapper>
+                  </p>
+                </div>
+              </div>
+              {formData.cv && (
+                <p className="text-sm text-green-600 mt-2">
+                  <TTSWrapper text={`Selected: ${formData.cv.name}`}>
+                    Selected: {formData.cv.name}
+                  </TTSWrapper>
+                </p>
+              )}
+            </div>
+
+            {/* Terms & Conditions */}
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                name="agreeToTerms"
+                checked={formData.agreeToTerms}
+                onChange={handleInputChange}
+                className="w-5 h-5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                required
+              />
+              <label className="text-sm text-black">
+                <TTSWrapper text="I Agree To The Terms & Conditions *">
+                  I Agree To The Terms & Conditions *
+                </TTSWrapper>
+              </label>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 pt-1">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-6 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full font-medium hover:bg-blue-50 transition-colors"
+              >
+                <TTSWrapper text="Cancel">Cancel</TTSWrapper>
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <TTSWrapper text="Submit Application">
+                  Submit Application
+                </TTSWrapper>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ApplyNowModal;
