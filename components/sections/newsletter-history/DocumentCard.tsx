@@ -101,10 +101,10 @@ const DocumentCard: React.FC<{ doc: Document }> = ({ doc }) => {
   return (
     <div className="bg-blue-50 rounded-2xl p-4 flex items-center justify-between">
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-semibold truncate">
+        <h3 className="text-base font-medium truncate">
           <TTSWrapper text={doc.title}>{doc.title}</TTSWrapper>
         </h3>
-        <p className="text-xs truncate mt-0.5">
+        <p className="text-base font-normal truncate mt-0.5">
           <TTSWrapper text={doc.subtitle}>{doc.subtitle}</TTSWrapper>
         </p>
       </div>

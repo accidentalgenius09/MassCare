@@ -7,6 +7,7 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 const TrustedInstitutionsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
+  const [gap, setGap] = useState(32);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -39,10 +40,13 @@ const TrustedInstitutionsSection = () => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640) {
         setItemsPerView(1);
+        setGap(16);
       } else if (window.innerWidth < 1024) {
         setItemsPerView(2);
+        setGap(24);
       } else {
         setItemsPerView(4);
+        setGap(32);
       }
     };
 
@@ -112,22 +116,21 @@ const TrustedInstitutionsSection = () => {
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4 flex">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold text-gray-900 whitespace-nowrap mr-2">
+    <section className="py-8 sm:py-12 md:py-16 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 flex flex-col lg:flex-row items-center lg:items-start">
+        <div className="text-center mb-6 lg:mb-0 lg:mr-4 lg:text-left flex-shrink-0">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center lg:whitespace-nowrap">
             <TTSWrapper
               text="Trusted by UK Institutions"
-              className="text-4xl font-bold text-gray-900 whitespace-nowrap"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900"
             >
-              {" "}
               Trusted by UK Institutions
             </TTSWrapper>
           </h2>
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative w-full lg:max-w-6xl mx-auto">
           <div
             ref={carouselRef}
             className="overflow-hidden cursor-grab active:cursor-grabbing"
@@ -146,7 +149,7 @@ const TrustedInstitutionsSection = () => {
               }}
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div key={slideIndex} className="min-w-full flex gap-8">
+                <div key={slideIndex} className="min-w-full flex gap-4 sm:gap-6 md:gap-8">
                   {institutions
                     .slice(
                       slideIndex * itemsPerView,
@@ -157,18 +160,18 @@ const TrustedInstitutionsSection = () => {
                         key={slideIndex * itemsPerView + index}
                         style={{
                           width: `calc((100% - ${
-                            (itemsPerView - 1) * 32
+                            (itemsPerView - 1) * gap
                           }px) / ${itemsPerView})`,
                           flexShrink: 0,
                         }}
-                        className="flex justify-center"
+                        className="flex justify-center items-center"
                       >
                         <Image
                           src={institution.logo}
                           alt={institution.name}
-                          width={200}
-                          height={150}
-                          className="object-contain max-h-[150px] w-auto pointer-events-none select-none"
+                          width={100}
+                          height={100}
+                          className="object-contain max-h-[60px] sm:max-h-[70px] md:max-h-[80px] w-auto pointer-events-none select-none"
                           draggable={false}
                         />
                       </div>

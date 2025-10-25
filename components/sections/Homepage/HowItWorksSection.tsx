@@ -14,8 +14,8 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 const FlowerDecoration = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="60"
-    height="68"
+    width="80"
+    height="91"
     viewBox="0 0 80 91"
     fill="none"
   >
@@ -96,21 +96,21 @@ const HowItWorksSection = () => {
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-8 sm:py-12 md:py-16 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             <TTSWrapper
               text="How It Works"
-              className="text-4xl font-bold text-gray-900 mb-4"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
             >
               How It Works
             </TTSWrapper>
           </h2>
-          <p className="text-md text-gray-700 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4">
             <TTSWrapper
               text="Lorem Ipsum is simply dummy text of the printing and typesetting industry"
-              className="text-md text-gray-700 max-w-xl mx-auto"
+              className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4"
             >
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry
@@ -119,7 +119,7 @@ const HowItWorksSection = () => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative max-w-full mx-auto">
           {/* Previous Button */}
           {steps.length > 5 && (
             <button
@@ -171,29 +171,29 @@ const HowItWorksSection = () => {
                           flexShrink: 0,
                         }}
                       >
-                        <div className="bg-[#E8EFFF] p-6 rounded-3xl h-full shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
+                        <div className="bg-[#E8EFFF] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
                           {/* Decorative Flower */}
-                          <div className="absolute top-2 right-2">
+                          <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
                             <FlowerDecoration />
                           </div>
 
                           {/* Icon */}
-                          <div className="flex mb-4">{step.icon}</div>
-                          <div className="max-w-[140px] mt-16 bottom-4">
-                            <h3 className="max-w-[140px] mt-16 bottom-4 text-lg font-semibold text-gray-900">
+                          <div className="flex mb-3 sm:mb-4">{step.icon}</div>
+                          <div className="w-full max-w-[120px] sm:max-w-[140px] absolute bottom-3 sm:bottom-4">
+                            <h3 className="w-full text-sm sm:text-base md:text-lg font-semibold text-gray-900">
                               <TTSWrapper
                                 text={step.title}
-                                className="text-lg font-semibold text-gray-900"
+                                className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
                               >
                                 {step.title}
                               </TTSWrapper>
                             </h3>
                           </div>
-                          <div className="absolute right-2 bottom-4">
-                            <div className="w-8 h-8 text-[#3C5387] text-xl font-medium">
+                          <div className="absolute right-1 sm:right-2 bottom-3 sm:bottom-4">
+                            <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
                               <TTSWrapper
                                 text={step.number}
-                                className="w-8 h-8 text-[#3C5387] text-xl font-medium"
+                                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
                               >
                                 {step.number}
                               </TTSWrapper>

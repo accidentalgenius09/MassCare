@@ -294,7 +294,7 @@ function NewsAndInsightsSection() {
       </div>
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-end mb-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto overflow-x-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
             <div className="flex gap-4 sm:gap-6 whitespace-nowrap">
               {tabs.map((tab: { id: number; title: string }) => (
                 <button
@@ -378,7 +378,7 @@ function NewsAndInsightsSection() {
                       >
                         <TTSWrapper
                           text="Read More"
-                          className="text-white text-sm font-medium rounded-lg flex items-center gap-1"
+                          className="text-white text-sm font-light rounded-lg flex items-center gap-1"
                         >
                           Read More
                         </TTSWrapper>
@@ -436,10 +436,7 @@ function NewsAndInsightsSection() {
                       </TTSWrapper>
                     </h3>
                     <p className="text-black text-sm mb-4 leading-relaxed line-clamp-3">
-                      <TTSWrapper
-                        text={card.description}
-                        className="text-black text-sm leading-relaxed"
-                      >
+                      <TTSWrapper text={card.description}>
                         {card.description}
                       </TTSWrapper>
                     </p>

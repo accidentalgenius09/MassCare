@@ -53,53 +53,53 @@ const MissionVisionSection = () => {
         "We care deeply for the well-being of vulnerable adults, providing support with empathy, dignity, and respect.",
       icon: <ComplianceChecksIcon />,
     },
-    {
-      number: "04",
-      title: "Core Beliefs",
-      description:
-        "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-      icon: <PlacementInductionIcon />,
-    },
-    {
-      number: "05",
-      title: "Quality Promise",
-      description:
-        "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-      icon: <OngoingSupportIcon />,
-    },
-    {
-      number: "04",
-      title: "Core Beliefs",
-      description:
-        "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-      icon: <PlacementInductionIcon />,
-    },
-    {
-      number: "05",
-      title: "Quality Promise",
-      description:
-        "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-      icon: <OngoingSupportIcon />,
-    },
+    // {
+    //   number: "04",
+    //   title: "Core Beliefs",
+    //   description:
+    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
+    //   icon: <PlacementInductionIcon />,
+    // },
+    // {
+    //   number: "05",
+    //   title: "Quality Promise",
+    //   description:
+    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
+    //   icon: <OngoingSupportIcon />,
+    // },
+    // {
+    //   number: "04",
+    //   title: "Core Beliefs",
+    //   description:
+    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
+    //   icon: <PlacementInductionIcon />,
+    // },
+    // {
+    //   number: "05",
+    //   title: "Quality Promise",
+    //   description:
+    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
+    //   icon: <OngoingSupportIcon />,
+    // },
   ];
 
-  const isCarousel = steps.length > 3;
-  const totalSlides = isCarousel ? Math.ceil(steps.length / itemsPerView) : 1;
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
-  };
+  // const isCarousel = steps.length > 3;
+  // const totalSlides = isCarousel ? Math.ceil(steps.length / itemsPerView) : 1;
+  // const nextSlide = () => {
+  //   setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  // };
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
+  // const prevSlide = () => {
+  //   setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  // };
 
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         {/* Carousel Container */}
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative max-w-full mx-auto">
           {/* Previous Button */}
-          {isCarousel && (
+          {/* {isCarousel && (
             <button
               onClick={prevSlide}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -120,9 +120,9 @@ const MissionVisionSection = () => {
                 />
               </svg>
             </button>
-          )}
+          )} */}
           {/* Carousel Track */}
-          {isCarousel ? (
+          {/* {isCarousel ? (
             <div className="overflow-hidden">
               <div
                 className="flex transition-transform duration-500 ease-out"
@@ -156,14 +156,12 @@ const MissionVisionSection = () => {
                           }}
                         >
                           <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
-                            {/* Decorative Flower */}
-                            <div className="absolute top-2 right-2">
+                            <div className="absolute top-2 pt-2 right-2">
                               <FlowerDecoration />
                             </div>
 
-                            {/* Icon */}
-                            <div className="max-w-[540px]">
-                              <h3 className="max-w-[540px] text-2xl font-semibold text-white">
+                            <div className="relative z-10 max-w-[540px]">
+                              <h3 className="text-2xl font-semibold text-white">
                                 <TTSWrapper
                                   text={step.title}
                                   className="text-2xl font-semibold text-white"
@@ -171,12 +169,12 @@ const MissionVisionSection = () => {
                                   {step.title}
                                 </TTSWrapper>
                               </h3>
+                              <p className="text-white text-xl font-normal mt-4">
+                                <TTSWrapper text={step.description}>
+                                  {step.description}
+                                </TTSWrapper>
+                              </p>
                             </div>
-                            <p className="text-white text-lg font-normal mt-4">
-                              <TTSWrapper text={step.description}>
-                                {step.description}
-                              </TTSWrapper>
-                            </p>
                           </div>
                         </div>
                       ))}
@@ -184,37 +182,38 @@ const MissionVisionSection = () => {
                 ))}
               </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8">
-              {steps.map((step, index) => (
-                <div key={index} className="min-w-0">
-                  <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
-                    {/* Decorative Flower */}
-                    <div className="absolute top-2 right-2">
-                      <FlowerDecoration />
-                    </div>
+          ) : ( */}
+          <div className="grid grid-cols-3 gap-6 justify-between">
+            {steps.map((step, index) => (
+              <div key={index} className="min-w-0">
+                <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
+                  {/* Decorative Flower */}
+                  <div className="absolute top-2 right-2">
+                    <FlowerDecoration />
+                  </div>
 
-                    {/* Icon */}
-                    <div className="max-w-[540px]">
-                      <h3 className="max-w-[540px] text-2xl font-semibold text-white">
-                        <TTSWrapper
-                          text={step.title}
-                          className="text-2xl font-semibold text-white"
-                        >
-                          {step.title}
-                        </TTSWrapper>
-                      </h3>
-                    </div>
+                  {/* Content */}
+                  <div className="relative z-10 max-w-full">
+                    <h3 className="text-2xl font-semibold text-white">
+                      <TTSWrapper
+                        text={step.title}
+                        className="text-2xl font-semibold text-white"
+                      >
+                        {step.title}
+                      </TTSWrapper>
+                    </h3>
                     <p className="text-white text-lg font-normal mt-4">
-                      {step.description}
+                      <TTSWrapper text={step.description}>
+                        {step.description}
+                      </TTSWrapper>
                     </p>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+          {/* )}
 
-          {/* Next Button */}
           {isCarousel && (
             <button
               onClick={nextSlide}
@@ -236,7 +235,7 @@ const MissionVisionSection = () => {
                 />
               </svg>
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </section>

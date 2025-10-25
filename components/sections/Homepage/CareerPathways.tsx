@@ -5,8 +5,8 @@ import Image from "next/image";
 
 const CareerPathwaysSection = () => {
   return (
-    <div className="w-full bg-white py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="container mx-auto bg-white py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto">
         {/* Career Pathways Section */}
         <div
           style={{
@@ -49,7 +49,9 @@ const CareerPathwaysSection = () => {
               {/* Benefits List */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start gap-3">
-                  <Checkbox />
+                  <div className="w-4 h-4 flex-shrink-0 mt-0.5">
+                    <Checkbox />
+                  </div>
                   <p className="text-white text-sm">
                     <strong>
                       <TTSWrapper
@@ -62,7 +64,9 @@ const CareerPathwaysSection = () => {
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Checkbox />
+                  <div className="w-4 h-4 flex-shrink-0 mt-0.5">
+                    <Checkbox />
+                  </div>
                   <p className="text-white text-sm">
                     <strong>
                       <TTSWrapper
@@ -75,7 +79,9 @@ const CareerPathwaysSection = () => {
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Checkbox />
+                  <div className="w-4 h-4 flex-shrink-0 mt-0.5">
+                    <Checkbox />
+                  </div>
                   <p className="text-white text-sm">
                     <strong>
                       <TTSWrapper
@@ -111,12 +117,20 @@ const CareerPathwaysSection = () => {
             </div>
 
             {/* Right Image */}
-            <div className="relative h-64 lg:h-auto">
+            <div className="relative h-78 lg:h-auto">
               <Image
                 src="/services/careerpathways.png"
                 alt="Healthcare professional with elderly patient"
                 fill
                 className="w-full h-full object-cover"
+              />
+              {/* Gradient Overlay */}
+              <div
+                className="absolute inset-y-0 left-10 w-1/2"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #012367 0%, rgba(1, 35, 103, 0.00) 100%)",
+                }}
               />
             </div>
           </div>

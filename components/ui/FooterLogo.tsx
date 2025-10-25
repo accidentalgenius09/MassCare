@@ -43,7 +43,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
         </div>
 
         {/* Google Map Button Section */}
-        <div className="">
+        <div className="me-4">
           <p className="text-white text-base font-bold mb-3">Google Map</p>
           <button
             onClick={handleMapClick}
@@ -65,9 +65,3 @@ const LocationCard: React.FC<LocationCardProps> = ({
 
 export default LocationCard;
 
-// Example usage:
-// <LocationCard
-//   companyName="mass"
-//   address="Unit A, Acorn Business Centre, Livingstone Way, Taunton, Somerset, United Kingdom, TA2 6BD"
-//   googleMapsUrl="https://www.google.com/maps/place/Your+Location"
-// />

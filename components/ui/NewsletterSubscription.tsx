@@ -34,13 +34,13 @@ function Newsletter() {
 
   return (
     <>
-      <div className="text-center">
-        <h3 className="font-semibold text-lg mb-4">Subscribe Newsletter</h3>
-        <form className="flex justify-between w-72 mx-auto items-center border border-white rounded-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 ms-2 sm:ms-4 md:ms-6">
+        <h3 className="font-semibold text-sm sm:text-base md:text-lg whitespace-nowrap">Subscribe Newsletter</h3>
+        <form className="flex w-full sm:w-auto mx-0 sm:mx-4 py-1 border border-white rounded-full">
           <input
             type="email"
             placeholder="Email"
-            className="px-4 py-2 border-r-0 rounded-full text-white w-64 outline-none focus:outline-none focus:ring-0 bg-transparent"
+            className="px-3 sm:px-4 py-2 border-r-0 rounded-full text-white w-full sm:w-48 md:w-56 lg:w-64 outline-none focus:outline-none focus:ring-0 bg-transparent placeholder-white text-sm sm:text-base"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -50,7 +50,7 @@ function Newsletter() {
             onClick={(e) => {
               handleSubmit(e);
             }}
-            className="bg-white text-[#002D72] px-4 py-4 rounded-full font-semibold"
+            className="bg-white text-[#002D72] px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0"
           >
             <TopRightArrowBlack />
           </button>
@@ -60,19 +60,20 @@ function Newsletter() {
       {/* Success Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#012B71]/80 backdrop-blur-sm px-4">
-          <div className="bg-[#012367] rounded-3xl p-6 md:p-8 w-[40vw] relative shadow-2xl">
+          <div className="bg-[#012367] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:w-[40vw] relative shadow-2xl">
             {/* Close Button */}
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-white hover:text-gray-300 transition-colors"
               aria-label="Close modal"
             >
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="sm:w-5 sm:h-5"
               >
                 <path
                   d="M18 6L6 18M6 6L18 18"
@@ -85,21 +86,22 @@ function Newsletter() {
             </button>
 
             {/* Content */}
-            <div className="text-center text-white py-4">
-              <h2 className="text-3xl font-semibold">
+            <div className="text-center text-white py-2 sm:py-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-2 sm:mb-4">
                 <TTSWrapper text="Thank You for Subscribing!">
                   Thank You for Subscribing!
                 </TTSWrapper>
               </h2>
-              <p className="text-xs mb-4 text-white">
+              <p className="text-xs sm:text-sm mb-3 sm:mb-4 text-white">
                 <TTSWrapper text="Welcome to our newsletter! We're excited to have you on board.">
-                  Welcome to our newsletter! We&apos;re excited to have you on board.
+                  Welcome to our newsletter! We&apos;re excited to have you on
+                  board.
                 </TTSWrapper>
               </p>
 
               {/* Email Confirmation Box */}
-              <div className="bg-white rounded-xl p-3 mb-2 text-left">
-                <p className="text-black text-sm">
+              <div className="bg-white rounded-lg sm:rounded-xl p-2 sm:p-3 mb-2 sm:mb-3 text-left">
+                <p className="text-black text-xs sm:text-sm">
                   <TTSWrapper text="Confirmation email sent to:">
                     Confirmation email sent to:
                   </TTSWrapper>{" "}
@@ -112,11 +114,11 @@ function Newsletter() {
               </div>
 
               {/* Instructions Box */}
-              <div className="bg-white text-black backdrop-blur-sm rounded-xl p-4 mb-5 text-left">
-                <h3 className="font-semibold mb-2 text-sm">
+              <div className="bg-white text-black backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 mb-4 sm:mb-5 text-left">
+                <h3 className="font-semibold mb-2 text-xs sm:text-sm">
                   <TTSWrapper text="What's next?">What&apos;s next?</TTSWrapper>
                 </h3>
-                <ul className="space-y-2 text-xs">
+                <ul className="space-y-1 sm:space-y-2 text-xs">
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5">•</span>
                     <span>
@@ -154,7 +156,7 @@ function Newsletter() {
                 }}
                 disabled={isNavigating}
                 aria-disabled={isNavigating}
-                className={`inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-5 py-2.5 rounded-full text-sm ${
+                className={`inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm ${
                   isNavigating ? "opacity-60 cursor-not-allowed" : ""
                 }`}
               >

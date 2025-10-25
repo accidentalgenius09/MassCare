@@ -40,7 +40,7 @@ const TestimonialsSection = () => {
       name: "Steeev",
       location: "UK",
       rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
+      text: "Lorem Ipsum is simply dummy  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the itext of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i ndustry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
       avatar: "https://i.pravatar.cc/150?img=2",
     },
     {
@@ -186,14 +186,7 @@ const TestimonialsSection = () => {
 
   const handleCardHover = (globalIndex: number) => {
     setHoveredIndex(globalIndex);
-
-    // Check if this is the last card in the current visible slide
-    const slideIndex = Math.floor(globalIndex / itemsPerView);
-    const positionInSlide = globalIndex % itemsPerView;
-    const isLastInCurrentSlide =
-      positionInSlide === itemsPerView - 1 && slideIndex === currentIndex;
-
-    setLastCardHovered(isLastInCurrentSlide && itemsPerView > 1);
+    setLastCardHovered(false); // Always show 4 cards, no special handling needed
   };
 
   const handleCardLeave = () => {
@@ -201,51 +194,47 @@ const TestimonialsSection = () => {
     setLastCardHovered(false);
   };
 
+  const handleTextScrollReset = (e: React.MouseEvent<HTMLParagraphElement>) => {
+    // Reset scroll position when mouse leaves the text area
+    e.currentTarget.scrollTop = 0;
+  };
+
   return (
     <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-16 md:py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="container mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 sm:mb-10 md:mb-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-0">
+          <h1 className="text-5xl font-semibold text-gray-900 mb-4 md:mb-0 px-12">
             <TTSWrapper
               text="Testimonials"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-0"
             >
               Testimonials
             </TTSWrapper>
           </h1>
 
           {/* Tabs and View All */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto overflow-x-auto">
-            <div className="flex gap-4 sm:gap-6 whitespace-nowrap">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
+            <div className="flex gap-8 whitespace-nowrap">
               {tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`text-xs sm:text-sm font-medium transition-colors pb-1 ${
+                  className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
                     activeTab === tab
-                      ? "text-gray-900 border-b-2 border-gray-900"
-                      : "text-gray-600 hover:text-gray-900"
+                      ? "border-b-2 font-bold border-gray-900"
+                      : "hover:text-gray-900 font-medium"
                   }`}
                 >
-                  <TTSWrapper
-                    text={tab}
-                    className="text-xs sm:text-sm font-medium transition-colors pb-1"
-                  >
-                    {tab}
-                  </TTSWrapper>
+                  <TTSWrapper text={tab}>{tab}</TTSWrapper>
                 </button>
               ))}
             </div>
-            <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 transition-all whitespace-nowrap">
-              <TTSWrapper
-                text="View All"
-                className="text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 transition-all whitespace-nowrap"
-              >
-                View All
-              </TTSWrapper>{" "}
-              <TopRightArrowBlack />
-            </button>
+            <div className="mx-14">
+              <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 transition-all whitespace-nowrap">
+                <TTSWrapper text="View All">View All</TTSWrapper>{" "}
+                <TopRightArrowBlack />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -254,7 +243,7 @@ const TestimonialsSection = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 bg-white rounded-full p-1.5 sm:p-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentIndex === 0}
           >
             <ChevronLeft size={20} className="text-gray-600 sm:w-6 sm:h-6" />
@@ -262,7 +251,7 @@ const TestimonialsSection = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 bg-white rounded-full p-1.5 sm:p-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentIndex === totalSlides - 1}
           >
             <ChevronRight size={20} className="text-gray-600 sm:w-6 sm:h-6" />
@@ -291,9 +280,7 @@ const TestimonialsSection = () => {
               <div
                 className="flex transition-transform duration-500 ease-out"
                 style={{
-                  transform: `translateX(calc(-${currentIndex * 100}% ${
-                    lastCardHovered ? `- ${100 / itemsPerView}%` : ""
-                  }))`,
+                  transform: `translateX(-${currentIndex * 100}%)`,
                   transition: "transform 0.5s ease-out",
                 }}
               >
@@ -310,6 +297,26 @@ const TestimonialsSection = () => {
                       .map((testimonial, index) => {
                         const globalIndex = slideIndex * itemsPerView + index;
                         const isHovered = hoveredIndex === globalIndex;
+                        const isInCurrentSlide = slideIndex === currentIndex;
+                        const hasHoveredCardInSlide =
+                          isInCurrentSlide && hoveredIndex !== null;
+
+                        // Calculate width based on hover state
+                        let cardWidth;
+                        if (isHovered) {
+                          cardWidth = `calc(${130 / itemsPerView}% - ${
+                            ((itemsPerView - 1) * 24) / itemsPerView
+                          }px)`;
+                        } else if (hasHoveredCardInSlide) {
+                          // Other cards in the same slide get slightly smaller
+                          cardWidth = `calc(${89 / itemsPerView}% - ${
+                            ((itemsPerView - 1) * 24) / itemsPerView
+                          }px)`;
+                        } else {
+                          cardWidth = `calc(${100 / itemsPerView}% - ${
+                            ((itemsPerView - 1) * 24) / itemsPerView
+                          }px)`;
+                        }
 
                         return (
                           <div
@@ -317,14 +324,7 @@ const TestimonialsSection = () => {
                             onMouseEnter={() => handleCardHover(globalIndex)}
                             onMouseLeave={handleCardLeave}
                             style={{
-                              width:
-                                isHovered && itemsPerView > 1
-                                  ? `calc(${200 / itemsPerView}% - ${
-                                      ((itemsPerView - 1) * 24) / itemsPerView
-                                    }px)`
-                                  : `calc(${100 / itemsPerView}% - ${
-                                      ((itemsPerView - 1) * 24) / itemsPerView
-                                    }px)`,
+                              width: cardWidth,
                               flexShrink: 0,
                               transition: "width 0.3s ease-out",
                               minWidth: 0,
@@ -333,7 +333,7 @@ const TestimonialsSection = () => {
                           >
                             <div
                               className={`bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 flex flex-col ${
-                                isHovered ? "z-30" : "z-10"
+                                isHovered ? "z-20" : "z-10"
                               }`}
                               style={{
                                 height: "320px",
@@ -341,43 +341,11 @@ const TestimonialsSection = () => {
                                 overflow: "hidden",
                               }}
                             >
-                              {/* Quote Icon */}
-                              <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 pointer-events-none z-20">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="41"
-                                  height="40"
-                                  viewBox="0 0 41 40"
-                                  fill="none"
-                                >
-                                  <g clipPath="url(#clip0_673_5014)">
-                                    <path
-                                      d="M23.1133 22.5V5H40.6133V22.75C40.6133 34.75 29.3633 36.25 29.3633 36.25L27.8633 32.75C27.8633 32.75 32.8633 32 33.8633 28C34.8633 25 32.8633 22.5 32.8633 22.5H23.1133Z"
-                                      fill="#0A5BE0"
-                                    />
-                                    <path
-                                      d="M0.613281 22.5V5H18.1133V22.75C18.1133 34.75 6.86328 36.25 6.86328 36.25L5.36328 32.75C5.36328 32.75 10.3633 32 11.3633 28C12.3633 25 10.3633 22.5 10.3633 22.5H0.613281Z"
-                                      fill="#0A5BE0"
-                                    />
-                                  </g>
-                                  <defs>
-                                    <clipPath id="clip0_673_5014">
-                                      <rect
-                                        width="40"
-                                        height="40"
-                                        fill="white"
-                                        transform="translate(0.613281)"
-                                      />
-                                    </clipPath>
-                                  </defs>
-                                </svg>
-                              </div>
-
                               {/* Content */}
-                              <div className="relative z-30 flex-1 flex flex-col">
-                                <div className="flex-1 overflow-hidden mb-4 sm:mb-6">
+                              <div className="relative z-30 flex-1 flex flex-col h-full">
+                                <div className="flex-1 overflow-hidden mb-4 sm:mb-6 min-h-0">
                                   <p
-                                    className={`text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300 ${
+                                    className={`text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300 scrollbar-hide ${
                                       isHovered
                                         ? "overflow-y-auto max-h-[180px] pr-2"
                                         : "line-clamp-4"
@@ -386,6 +354,7 @@ const TestimonialsSection = () => {
                                       wordBreak: "break-word",
                                       overflowWrap: "break-word",
                                     }}
+                                    onMouseLeave={handleTextScrollReset}
                                   >
                                     <TTSWrapper
                                       text={testimonial.text}
@@ -397,31 +366,61 @@ const TestimonialsSection = () => {
                                 </div>
 
                                 {/* Rating */}
-                                <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                                <div className="flex items-center gap-2 mb-3 sm:mb-4 bg-[#DEE8FF] px-2 py-1 rounded-full w-16">
                                   <svg
                                     width="14"
                                     height="14"
                                     viewBox="0 0 16 16"
                                     fill="none"
-                                    className="text-blue-500 sm:w-4 sm:h-4"
+                                    className="text-[#0a5be0] sm:w-4 sm:h-4"
                                   >
                                     <path
                                       d="M8 0L10.3511 5.52786L16 6.12257L11.8 9.87214L13.0557 15.4L8 12.52L2.94427 15.4L4.2 9.87214L0 6.12257L5.64886 5.52786L8 0Z"
                                       fill="currentColor"
                                     />
                                   </svg>
-                                  <span className="text-xs sm:text-sm font-semibold text-gray-900">
+                                  <span className="text-xs sm:text-sm font-semibold text-gray-900 flex items-center">
                                     <TTSWrapper
                                       text={`${testimonial.rating.toFixed(1)}`}
-                                      className="text-xs sm:text-sm font-semibold text-gray-900"
                                     >
                                       {testimonial.rating.toFixed(1)}
                                     </TTSWrapper>
                                   </span>
                                 </div>
+                                {/* Quote Icon */}
+                                <div className="absolute bottom-4 sm:bottom-6 right-0 pointer-events-none z-20">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="41"
+                                    height="40"
+                                    viewBox="0 0 41 40"
+                                    fill="none"
+                                  >
+                                    <g clipPath="url(#clip0_673_5014)">
+                                      <path
+                                        d="M23.1133 22.5V5H40.6133V22.75C40.6133 34.75 29.3633 36.25 29.3633 36.25L27.8633 32.75C27.8633 32.75 32.8633 32 33.8633 28C34.8633 25 32.8633 22.5 32.8633 22.5H23.1133Z"
+                                        fill="#0A5BE0"
+                                      />
+                                      <path
+                                        d="M0.613281 22.5V5H18.1133V22.75C18.1133 34.75 6.86328 36.25 6.86328 36.25L5.36328 32.75C5.36328 32.75 10.3633 32 11.3633 28C12.3633 25 10.3633 22.5 10.3633 22.5H0.613281Z"
+                                        fill="#0A5BE0"
+                                      />
+                                    </g>
+                                    <defs>
+                                      <clipPath id="clip0_673_5014">
+                                        <rect
+                                          width="40"
+                                          height="40"
+                                          fill="white"
+                                          transform="translate(0.613281)"
+                                        />
+                                      </clipPath>
+                                    </defs>
+                                  </svg>
+                                </div>
 
-                                {/* Author */}
-                                <div className="flex items-center gap-2 sm:gap-3">
+                                {/* Author - Fixed at bottom */}
+                                <div className="flex items-center gap-2 sm:gap-3 mt-auto">
                                   <Image
                                     src={testimonial.avatar}
                                     alt={testimonial.name}
@@ -431,10 +430,20 @@ const TestimonialsSection = () => {
                                   />
                                   <div>
                                     <h3 className="font-semibold text-gray-900 text-sm sm:text-base">
-                                      <TTSWrapper text={testimonial.name} className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.name}</TTSWrapper>
+                                      <TTSWrapper
+                                        text={testimonial.name}
+                                        className="font-semibold text-gray-900 text-sm sm:text-base"
+                                      >
+                                        {testimonial.name}
+                                      </TTSWrapper>
                                     </h3>
                                     <p className="text-xs sm:text-sm text-gray-500">
-                                      <TTSWrapper text={testimonial.location} className="text-xs sm:text-sm text-gray-500">{testimonial.location}</TTSWrapper>
+                                      <TTSWrapper
+                                        text={testimonial.location}
+                                        className="text-xs sm:text-sm text-gray-500"
+                                      >
+                                        {testimonial.location}
+                                      </TTSWrapper>
                                     </p>
                                   </div>
                                 </div>

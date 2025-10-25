@@ -7,10 +7,11 @@ import {
   ChevronDown,
   Clock,
   MapPin,
+  ChevronRight,
 } from "lucide-react";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { TopRightArrowWhite } from "@/components/helpers/svgs";
+import { ClockBlueOutline, MailBlueOutline, MapPinWithBg, PhoneBlueOutline, TopRightArrowWhite, UploadIcon } from "@/components/helpers/svgs";
 import FAQ from "@/components/sections/Common/FAQ";
 
 // Main Contact Page Component
@@ -96,8 +97,8 @@ const ContactPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {/* Location Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <MapPin className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 flex items-center justify-center mb-4">
+                  <MapPinWithBg />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Location</h3>
                 <p className="text-sm text-gray-700">
@@ -110,7 +111,7 @@ const ContactPage: React.FC = () => {
               {/* Open Hours Card */}
               <div className="bg-blue-600 rounded-2xl p-6 text-white hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-4">
-                  <Clock className="w-6 h-6 text-blue-600" />
+                  <ClockBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Open Hours</h3>
                 <p className="text-sm">
@@ -123,7 +124,7 @@ const ContactPage: React.FC = () => {
               {/* Email Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <Mail className="w-6 h-6 text-white" />
+                  <MailBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Email</h3>
                 <p className="text-sm text-gray-700 break-words">
@@ -136,7 +137,7 @@ const ContactPage: React.FC = () => {
               {/* Phone Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <Phone className="w-6 h-6 text-white" />
+                  <PhoneBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Phone</h3>
                 <p className="text-sm text-gray-700">
@@ -175,7 +176,7 @@ const ContactPage: React.FC = () => {
                 {/* Contact Options */}
                 <div className="grid sm:grid-cols-3 gap-4">
                   {/* Emergency Helpline */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
                         <svg
@@ -191,18 +192,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>
                       </div>
-                      <span className="font-semibold text-base text-black">
+                      <span className="font-semibold text-base text-black -ms-2">
                         <TTSWrapper text="Emergency Helpline">
                           Emergency Helpline
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Available 24/7 for urgent care">
                         Available 24/7 for urgent care
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm  text-black">
+                    <p className="text-sm text-black mt-3">
                       <TTSWrapper text="+44 20 7946 0958">
                         +44 20 7946 0958
                       </TTSWrapper>
@@ -210,7 +211,7 @@ const ContactPage: React.FC = () => {
                   </div>
 
                   {/* Support Email */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
                         <svg
@@ -236,18 +237,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>{" "}
                       </div>
-                      <span className="font-semibold text-sm md:text-base text-black">
+                      <span className="font-semibold text-sm md:text-base text-black -ms-2">
                         <TTSWrapper text="Support Email">
                           Support Email
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Response within 24 hours">
                         Response within 24 hours
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm text-black break-words">
+                    <p className="text-sm text-black break-words mt-3">
                       <TTSWrapper text="support@maxxcare.co.uk">
                         support@maxxcare.co.uk
                       </TTSWrapper>
@@ -255,9 +256,9 @@ const ContactPage: React.FC = () => {
                   </div>
 
                   {/* General Enquiries */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full flex items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="19"
@@ -271,18 +272,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>{" "}
                       </div>
-                      <span className="font-semibold text-sm md:text-base text-black">
+                      <span className="font-semibold text-sm md:text-base text-black -ms-2">
                         <TTSWrapper text="General Enquiries">
                           General Enquiries
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Mon-Fri 8:00 AM - 6:00 PM">
                         Mon-Fri 8:00 AM - 6:00 PM
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm text-black">
+                    <p className="text-base text-black mt-3">
                       <TTSWrapper text="+44 20 7946 0955">
                         +44 20 7946 0955
                       </TTSWrapper>
@@ -292,8 +293,8 @@ const ContactPage: React.FC = () => {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16">
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-4 text-center">
+              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16 h-[60vh]">
+                <h3 className="text-3xl font-semibold text-white mb-4 text-center pt-3">
                   <TTSWrapper text="Contact Form">Contact Form</TTSWrapper>
                 </h3>
                 <div className="space-y-3">
@@ -304,7 +305,7 @@ const ContactPage: React.FC = () => {
                       placeholder="Name*"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500"
+                      className="w-full px-3 py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
@@ -313,16 +314,18 @@ const ContactPage: React.FC = () => {
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleSelectChange}
-                      className="w-full px-3 py-2 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none pr-10"
+                      className="w-full px-3 py-3 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none pr-10"
                     >
-                      <option value="">Service Type*</option>
+                      <option value="" disabled>
+                        Service Type*
+                      </option>
                       <option value="elderly-care">Elderly Care</option>
                       <option value="post-surgery">Post-Surgery Support</option>
                       <option value="physiotherapy">Physiotherapy</option>
                       <option value="medication">Medication Management</option>
                       <option value="companionship">Companionship</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                    <ChevronRight className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#000] pointer-events-none" />
                   </div>
 
                   <div>
@@ -332,13 +335,13 @@ const ContactPage: React.FC = () => {
                       value={formData.message}
                       onChange={handleTextareaChange}
                       rows={3}
-                      className="w-full px-3 py-2 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500"
+                      className="w-full px-3 py-2 h-36 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
                   <div className="border-2 border-dashed border-white rounded-xl p-4 text-center cursor-pointert bg-transparent">
                     <div className="w-8 h-8 flex items-center justify-center mx-auto">
-                      <Upload className="w-4 h-4 text-white" />
+                      <UploadIcon />
                     </div>
                     <p className="text-white/80 text-xs px-3">
                       <TTSWrapper text="Upload medical records, referral letters, or other relevant document">
@@ -350,7 +353,7 @@ const ContactPage: React.FC = () => {
 
                   <button
                     onClick={handleSubmit}
-                    className="mx-auto bg-[#0A5BE0] text-white py-2 px-4 rounded-full flex items-center justify-center group text-sm"
+                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-5 rounded-full flex items-center justify-center group text-sm"
                   >
                     <TTSWrapper text="Submit Enquiry">
                       Submit Enquiry
@@ -367,9 +370,9 @@ const ContactPage: React.FC = () => {
         </section>
       </div>
 
-      <section className="pb-8 md:pb-12 mt-10">
+      <section className="pb-8 md:pb-12">
         <div className="max-w-full mx-auto">
-          <div className="overflow-hidden h-64 md:h-80 lg:h-80 bg-gray-200">
+          <div className="overflow-hidden h-64 md:h-80 lg:h-100 bg-gray-200">
             {/* Interactive Map with Dynamic Coordinates */}
             <iframe
               src={mapUrls.embed}

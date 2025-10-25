@@ -16,8 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" style={{ fontFamily: 'TT Hoves, Arial, Helvetica, sans-serif' }}>
-      <body className={`antialiased`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
+      <body className={`antialiased overflow-x-hidden`} style={{ fontFamily: 'Inter, Arial, Helvetica, sans-serif' }}>
         <AccessibilityProvider>
           <TTSProvider>
             <Header />
