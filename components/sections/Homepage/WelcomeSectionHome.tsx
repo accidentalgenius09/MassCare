@@ -3,11 +3,7 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 
-interface WelcomeSectionProps {
-  section?: string;
-}
-
-const WelcomeSectionHome = ({ section = "home" }: WelcomeSectionProps) => {
+const WelcomeSectionHome = () => {
   return (
     <section className="pb-2 pt-8 sm:pt-12 md:pt-16 bg-white">
       <div className="container mx-auto px-4">

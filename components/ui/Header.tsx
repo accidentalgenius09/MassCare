@@ -122,7 +122,7 @@ const Header = () => {
           {/* Accessibility Icons */}
           <button
             onClick={stepFontSize}
-            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all cursor-pointer"
+            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all duration-300 hover:bg-white/20 cursor-pointer"
             style={{
               borderRadius: "300px",
               border: "2px solid rgba(255, 255, 255, 0.2)",
@@ -167,7 +167,7 @@ const Header = () => {
 
           <button
             onClick={toggleTTS}
-            className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all border-1 cursor-pointer ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all duration-300 hover:bg-white/20 border-1 cursor-pointer ${
               isEnabled
                 ? "border-blue-500 bg-blue-500/30"
                 : "border-white/10 bg-[rgba(212,212,212,0.1)]"
@@ -217,7 +217,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button 
             onClick={toggleMobileMenu}
-            className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all backdrop-blur-sm"
+            className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
             aria-label="Toggle mobile menu"
           >
             <svg

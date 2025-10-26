@@ -60,7 +60,7 @@ const AccreditationsSection = () => {
                   <div
                     style={{
                       width: "100%",
-                      height: "80px",
+                      height: "90px",
                       borderRadius: "30px",
                       border: "1px solid #C7C7C7",
                       display: "flex",

@@ -164,7 +164,7 @@ const ServicesSection = () => {
                 </div>
 
                 {/* Explore More Link */}
-                <button className="flex items-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm transition-colors group cursor-pointer">
+                <button className="flex items-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm transition-all duration-300 hover:gap-2 hover:text-blue-600 group cursor-pointer">
                   <TTSWrapper
                     text="Explore More"
                     className="flex items-center font-medium text-xs sm:text-sm transition-colors group cursor-pointer"

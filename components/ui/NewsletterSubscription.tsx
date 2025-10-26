@@ -50,7 +50,7 @@ function Newsletter() {
             onClick={(e) => {
               handleSubmit(e);
             }}
-            className="bg-white text-[#002D72] px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0"
+            className="bg-white text-[#002D72] px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0 hover:bg-gray-100 hover:shadow-md transition-all duration-300"
           >
             <TopRightArrowBlack />
           </button>
@@ -156,7 +156,7 @@ function Newsletter() {
                 }}
                 disabled={isNavigating}
                 aria-disabled={isNavigating}
-                className={`inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm ${
+                className={`inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ${
                   isNavigating ? "opacity-60 cursor-not-allowed" : ""
                 }`}
               >

@@ -170,7 +170,7 @@ export default function QuickConnect() {
             <div className="text-center pt-4">
               <button
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none"
+                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none hover:brightness-110 hover:shadow-lg transition-all duration-300"
                 style={{
                   background: "rgba(10, 91, 224, 1)",
                   borderRadius: "300px",
@@ -201,7 +201,7 @@ export default function QuickConnect() {
                 News & Events
               </TTSWrapper>
             </h2>
-            <button className="text-black font-medium flex items-center gap-2">
+            <button className="text-black font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300">
               <TTSWrapper
                 text="Visit News Hub"
                 className="text-black font-medium flex items-center gap-1"
@@ -262,7 +262,7 @@ export default function QuickConnect() {
                       backgroundColor: "rgba(10, 91, 224, 1)",
                       borderRadius: "300px",
                     }}
-                    className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
+                    className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:brightness-110 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper
                       text="Read More"

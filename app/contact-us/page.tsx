@@ -1,17 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Phone,
-  Mail,
-  Upload,
-  ChevronDown,
-  Clock,
-  MapPin,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { ClockBlueOutline, MailBlueOutline, MapPinWithBg, PhoneBlueOutline, TopRightArrowWhite, UploadIcon } from "@/components/helpers/svgs";
+import {
+  ClockBlueOutline,
+  MailBlueOutline,
+  MapPinWithBg,
+  PhoneBlueOutline,
+  TopRightArrowWhite,
+  UploadIcon,
+} from "@/components/helpers/svgs";
 import FAQ from "@/components/sections/Common/FAQ";
 
 // Main Contact Page Component
@@ -353,7 +352,7 @@ const ContactPage: React.FC = () => {
 
                   <button
                     onClick={handleSubmit}
-                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-5 rounded-full flex items-center justify-center group text-sm"
+                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-5 rounded-full flex items-center justify-center group text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper text="Submit Enquiry">
                       Submit Enquiry

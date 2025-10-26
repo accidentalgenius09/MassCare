@@ -1,7 +1,7 @@
 "use client";
 
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { MapPin, Clock, X, ArrowUpRight } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import React from "react";
 import { ClockOutline, MapPinOutline } from "../helpers/svgs";
 
@@ -126,7 +126,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
                 onApplyNow?.(job.title);
                 onClose();
               }}
-              className="bg-[#0A5BE0] text-white px-5 py-3 rounded-full flex items-center gap-2 font-sm hover:bg-blue-700 transition-colors"
+              className="bg-[#0A5BE0] text-white px-5 py-3 rounded-full flex items-center gap-2 font-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
             >
               <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
               <ArrowUpRight className="w-5 h-5" />

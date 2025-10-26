@@ -1,8 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import {
-  FlowerDecoration,
   FlowerDecorationBig,
   TopRightArrowWhite,
 } from "@/components/helpers/svgs";
@@ -68,8 +66,8 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
               href={ctaLink}
               //   onClick={handleCtaClick}
               className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium 
-                       px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105 
-                       active:scale-100 group"
+                       px-6 py-3 rounded-full transition-all duration-300 hover:bg-blue-700 hover:shadow-lg 
+                       group"
             >
               <TTSWrapper text={ctaText}>{ctaText}</TTSWrapper>
               <TopRightArrowWhite />
@@ -115,8 +113,8 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
                 href={ctaLink}
                 // onClick={handleCtaClick}
                 className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium 
-                         px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105 
-                         active:scale-100 group"
+                         px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg 
+                         group"
               >
                 <TTSWrapper text={ctaText}>{ctaText}</TTSWrapper>
                 <TopRightArrowWhite />{" "}

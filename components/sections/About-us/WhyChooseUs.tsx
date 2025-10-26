@@ -101,7 +101,7 @@ const WhyChooseUs: React.FC = () => {
 
         {/* CTA Button */}
         <div className="flex justify-center">
-          <button className="bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full flex items-center gap-2">
+          <button className="bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full flex items-center gap-2 hover:bg-blue-700 hover:shadow-lg transition-all duration-300">
             <TTSWrapper text="Book a Consultation">
               Book a Consultation
             </TTSWrapper>

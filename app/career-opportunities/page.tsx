@@ -186,7 +186,7 @@ const applicationSteps: ApplicationStep[] = [
   },
 ];
 
-function page() {
+function CareerOpportunitiesPage() {
   const [selectedRole, setSelectedRole] = useState("All Roles");
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [selectedType, setSelectedType] = useState("All Types");
@@ -302,7 +302,7 @@ function page() {
               {/* Clear Filters Button */}
               <button
                 onClick={handleClearFilters}
-                className="px-4 py-2 border border-[#E8EFFF] rounded-full text-sm font-medium text-gray-700 bg-[#E8EFFF] hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 border border-[#E8EFFF] rounded-full text-sm font-medium text-gray-700 bg-[#E8EFFF] hover:bg-gray-50 hover:shadow-md transition-all duration-300"
               >
                 <TTSWrapper text="Clear Filters">Clear Filters</TTSWrapper>
               </button>
@@ -402,14 +402,14 @@ function page() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => handleViewDetails(job)}
-                      className="flex gap-2 items-center justify-center px-4 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 transition-colors"
+                      className="flex gap-2 items-center justify-center px-4 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-700 hover:shadow-md transition-all duration-300"
                     >
                       <TTSWrapper text="View Details">View Details</TTSWrapper>
                       <ArrowUpRight className="w-4 h-4" />
                     </button>
                     <button 
                       onClick={() => handleApplyNow(job)}
-                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0A5BE0] text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0A5BE0] text-white rounded-full text-sm font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                     >
                       <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
                       <ArrowUpRight className="w-4 h-4" />
@@ -429,7 +429,7 @@ function page() {
               </h2>
               <p className="text-lg text-black max-w-2xl mx-auto leading-relaxed">
                 <TTSWrapper text="We've built a workplace where healthcare professionals can thrive, grow, and make a meaningful impact every day.">
-                  We've built a workplace where healthcare professionals can
+                  We&apos;ve built a workplace where healthcare professionals can
                   thrive, grow, and make a meaningful impact every day.
                 </TTSWrapper>
               </p>
@@ -508,8 +508,8 @@ function page() {
           </h2>
           <p className="text-base text-black max-w-4xl mx-auto leading-relaxed">
             <TTSWrapper text="We've streamlined our hiring process to be transparent and efficient. Here's what you can expect when you apply.">
-              We've streamlined our hiring process to be transparent and
-              efficient. Here's what you can expect when you apply.
+              We&apos;ve streamlined our hiring process to be transparent and
+              efficient. Here&apos;s what you can expect when you apply.
             </TTSWrapper>
           </p>
         </div>
@@ -576,4 +576,4 @@ function page() {
   );
 }
 
-export default page;
+export default CareerOpportunitiesPage;

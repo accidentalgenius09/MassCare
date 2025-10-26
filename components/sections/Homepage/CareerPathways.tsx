@@ -99,7 +99,7 @@ const CareerPathwaysSection = () => {
               {/* CTA Button */}
               <div>
                 <button
-                  className="text-white px-6 py-3 flex items-center gap-2 group cursor-pointer"
+                  className="text-white px-6 py-3 flex items-center gap-2 group cursor-pointer hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                   style={{
                     borderRadius: "300px",
                     background: "#0A5BE0",

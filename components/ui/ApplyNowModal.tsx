@@ -1,7 +1,7 @@
 "use client";
 
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { X, ArrowUpRight, Upload } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import React, { useState } from "react";
 import { UploadOutline, XOutline } from "../helpers/svgs";
 
@@ -241,13 +241,13 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full font-medium hover:bg-blue-50 transition-colors"
+                className="px-6 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full font-medium hover:bg-blue-50 hover:border-blue-600 transition-all duration-300"
               >
                 <TTSWrapper text="Cancel">Cancel</TTSWrapper>
               </button>
               <button
                 type="submit"
-                className="px-4 py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2"
+                className="px-4 py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <TTSWrapper text="Submit Application">
                   Submit Application

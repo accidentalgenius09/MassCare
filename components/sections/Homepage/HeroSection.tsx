@@ -77,7 +77,7 @@ const HeroSection = () => {
       <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
         <div className="max-w-full mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all border border-white/30">
+            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
               <TTSWrapper text="MCM Nursing Care Agency">
                 <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
                   MCM Nursing Care Agency
@@ -87,7 +87,7 @@ const HeroSection = () => {
                 +
               </div>
             </button>
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-70 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all border border-white/30">
+            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-70 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
               <TTSWrapper text="Mass Home Care">
                 <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">Mass Home Care</span>
               </TTSWrapper>
@@ -95,7 +95,7 @@ const HeroSection = () => {
                 +
               </div>
             </button>
-              <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all border border-white/20">
+              <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
               <TTSWrapper text="Mass Training Academy">
                 <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
                   Mass Training Academy
@@ -111,7 +111,7 @@ const HeroSection = () => {
 
       {/* Floating Action Buttons */}
       <div className="fixed right-2 sm:right-4 md:right-6 top-[65%] -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3 max-w-[60px] sm:max-w-[70px] md:max-w-[80px]">
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -177,7 +177,7 @@ const HeroSection = () => {
             </defs>
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -194,7 +194,7 @@ const HeroSection = () => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="21"
@@ -211,7 +211,7 @@ const HeroSection = () => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             width="21"
             height="21"

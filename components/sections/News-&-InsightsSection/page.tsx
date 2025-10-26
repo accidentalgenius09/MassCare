@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import Image from "next/image";
@@ -19,33 +19,8 @@ function NewsAndInsightsSection() {
   const [newsCards, setNewsCards] = useState<NewsCard[]>([]);
   const [blogsCards, setBlogsCards] = useState<NewsCard[]>([]);
   const navigate = useRouter();
-  useEffect(() => {
-    if (activeTab === "news") {
-      setBlogsCards([]);
-      if (activeTab2 === 1) {
-        setNewsCards(homeCareCards);
-      } else if (activeTab2 === 2) {
-        setNewsCards(trainingCards);
-      } else if (activeTab2 === 3) {
-        setNewsCards(policiesCards);
-      } else if (activeTab2 === 4) {
-        setNewsCards(eventsCards);
-      }
-    } else if (activeTab === "blogs") {
-      setNewsCards([]);
-      if (activeTab2 === 1) {
-        setBlogsCards(eventsCards);
-      } else if (activeTab2 === 2) {
-        setBlogsCards(policiesCards);
-      } else if (activeTab2 === 3) {
-        setBlogsCards(trainingCards);
-      } else if (activeTab2 === 4) {
-        setBlogsCards(homeCareCards);
-      }
-    }
-  }, [activeTab2, activeTab]);
 
-  const homeCareCards: NewsCard[] = [
+  const homeCareCards: NewsCard[] = useMemo(() => [
     {
       id: 1,
       title:
@@ -111,9 +86,9 @@ function NewsAndInsightsSection() {
       date: "01.07.2025",
       image: "/news/news4.jpg",
     },
-  ];
+  ], []);
 
-  const policiesCards: NewsCard[] = [
+  const policiesCards: NewsCard[] = useMemo(() => [
     {
       id: 1,
       title: "Lorem Ipsum is simply dummy text of",
@@ -146,9 +121,9 @@ function NewsAndInsightsSection() {
       date: "11.07.2025",
       image: "/news/news1.png",
     },
-  ];
+  ], []);
 
-  const eventsCards: NewsCard[] = [
+  const eventsCards: NewsCard[] = useMemo(() => [
     {
       id: 1,
       title: "Lorem Ipsum is simply dummy text of the",
@@ -181,9 +156,9 @@ function NewsAndInsightsSection() {
       date: "03.07.2025",
       image: "/news/news3.jpg",
     },
-  ];
+  ], []);
 
-  const trainingCards: NewsCard[] = [
+  const trainingCards: NewsCard[] = useMemo(() => [
     {
       id: 1,
       title: "Had a great experience will do again and",
@@ -216,7 +191,7 @@ function NewsAndInsightsSection() {
       date: "05.07.2025",
       image: "/news/news2.jpg",
     },
-  ];
+  ], []);
   const tabs = [
     { id: 1, title: "Home Care" },
     {
@@ -232,6 +207,32 @@ function NewsAndInsightsSection() {
       title: "Events",
     },
   ];
+
+  useEffect(() => {
+    if (activeTab === "news") {
+      setBlogsCards([]);
+      if (activeTab2 === 1) {
+        setNewsCards(homeCareCards);
+      } else if (activeTab2 === 2) {
+        setNewsCards(trainingCards);
+      } else if (activeTab2 === 3) {
+        setNewsCards(policiesCards);
+      } else if (activeTab2 === 4) {
+        setNewsCards(eventsCards);
+      }
+    } else if (activeTab === "blogs") {
+      setNewsCards([]);
+      if (activeTab2 === 1) {
+        setBlogsCards(eventsCards);
+      } else if (activeTab2 === 2) {
+        setBlogsCards(policiesCards);
+      } else if (activeTab2 === 3) {
+        setBlogsCards(trainingCards);
+      } else if (activeTab2 === 4) {
+        setBlogsCards(homeCareCards);
+      }
+    }
+  }, [activeTab2, activeTab, homeCareCards, trainingCards, policiesCards, eventsCards]);
 
   return (
     <div className="my-10 px-4 sm:px-6 lg:px-8">
@@ -263,7 +264,7 @@ function NewsAndInsightsSection() {
               ${
                 activeTab === "news"
                   ? "bg-[#0A5BE0] text-white shadow-md"
-                  : "bg-transparent text-black"
+                  : "bg-transparent text-black hover:bg-gray-100"
               }
             `}
             >
@@ -282,7 +283,7 @@ function NewsAndInsightsSection() {
               ${
                 activeTab === "blogs"
                   ? "bg-[#0A5BE0] text-white shadow-md"
-                  : "bg-transparent text-black"
+                  : "bg-transparent text-black hover:bg-gray-100"
               }
             `}
             >

@@ -82,8 +82,8 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
             <a
               href={ctaLink}
               className="inline-flex items-center gap-2 bg-[#0A5BE0] hover:bg-[#0838A0] text-white font-medium 
-                       px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105 
-                       active:scale-100 group mt-3"
+                       px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg 
+                       group mt-3"
             >
               <TTSWrapper text={ctaText} className="text-white">
                 {ctaText}
@@ -199,8 +199,8 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
           <a
             href={ctaLink}
             className="inline-flex items-center gap-2 bg-[#0A5BE0] hover:bg-[#0838A0] text-white font-medium 
-                     px-5 py-2.5 sm:px-6 sm:py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105 
-                     active:scale-100 group text-sm sm:text-base"
+                     px-5 py-2.5 sm:px-6 sm:py-3 rounded-full transition-all duration-300 hover:shadow-lg 
+                     group text-sm sm:text-base"
           >
             <TTSWrapper text={ctaText} className="text-white">
               {ctaText}

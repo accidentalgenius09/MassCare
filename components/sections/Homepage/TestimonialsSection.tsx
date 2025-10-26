@@ -230,7 +230,7 @@ const TestimonialsSection = () => {
               ))}
             </div>
             <div className="mx-14">
-              <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 transition-all whitespace-nowrap">
+              <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
                 <TTSWrapper text="View All">View All</TTSWrapper>{" "}
                 <TopRightArrowBlack />
               </button>
@@ -241,9 +241,9 @@ const TestimonialsSection = () => {
         {/* Testimonials Container */}
         <div className="relative px-4 sm:px-8 md:px-12">
           {/* Navigation Buttons */}
-          <button
+            <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentIndex === 0}
           >
             <ChevronLeft size={20} className="text-gray-600 sm:w-6 sm:h-6" />
@@ -251,7 +251,7 @@ const TestimonialsSection = () => {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentIndex === totalSlides - 1}
           >
             <ChevronRight size={20} className="text-gray-600 sm:w-6 sm:h-6" />

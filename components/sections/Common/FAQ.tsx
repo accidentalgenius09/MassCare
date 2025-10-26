@@ -84,7 +84,7 @@ function FAQ() {
                       expandedFAQ === faq.id
                         ? "bg-white text-[#0A5BE0]"
                         : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700`}
+                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg`}
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -125,7 +125,7 @@ function FAQ() {
                       expandedFAQ === faq.id
                         ? "bg-white text-[#0A5BE0]"
                         : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700`}
+                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg`}
                   >
                     <Plus className="w-4 h-4" />
                   </button>

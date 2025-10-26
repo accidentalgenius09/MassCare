@@ -6,17 +6,14 @@ import {
   ComplianceChecksIcon,
   FlowerDecoration,
   InitialConsultationIcon,
-  OngoingSupportIcon,
-  PlacementInductionIcon,
 } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 
 // Main Component
 const MissionVisionSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
+  console.log(itemsPerView);
 
-  // Update items per view based on screen size
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640) {
