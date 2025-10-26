@@ -1,17 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Phone,
-  Mail,
-  Upload,
-  ChevronDown,
-  Clock,
-  MapPin,
-  Plus,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { TopRightArrowWhite } from "@/components/helpers/svgs";
+import {
+  ClockBlueOutline,
+  MailBlueOutline,
+  MapPinWithBg,
+  PhoneBlueOutline,
+  TopRightArrowWhite,
+  UploadIcon,
+} from "@/components/helpers/svgs";
+import FAQ from "@/components/sections/Common/FAQ";
 
 // Main Contact Page Component
 const ContactPage: React.FC = () => {
@@ -30,41 +30,6 @@ const ContactPage: React.FC = () => {
     serviceType: "",
     message: "",
   });
-
-  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
-
-  const faqData = [
-    {
-      id: 1,
-      question: "Are your caregivers trained and certified?",
-      answer:
-        "Yes, all our caregivers are fully trained and certified professionals. They undergo comprehensive background checks, complete specialized training programs, and maintain current certifications in healthcare and safety protocols.",
-    },
-    {
-      id: 2,
-      question: "How do I know if home care is right for my loved one?",
-      answer:
-        "Home care is ideal for individuals who need assistance with daily activities but prefer to remain in the comfort of their own home. We offer free consultations to assess your loved one's needs and determine if our services are the right fit.",
-    },
-    {
-      id: 3,
-      question: "Can I choose the caregiver for my loved one?",
-      answer:
-        "Absolutely! We work closely with you to match the right caregiver based on your loved one's specific needs, personality, and preferences. You have the final say in caregiver selection and can request changes if needed.",
-    },
-    {
-      id: 4,
-      question: "How is the cost of care determined?",
-      answer:
-        "Care costs are determined based on the level of care required, frequency of visits, and specific services needed. We provide transparent pricing with no hidden fees and offer flexible payment options to fit your budget.",
-    },
-    {
-      id: 5,
-      question: "Is Massscare's home care covered by insurance?",
-      answer:
-        "Many of our services may be covered by insurance, including Medicare, Medicaid, and private insurance plans. Our team will help you understand your coverage options and assist with insurance verification and claims processing.",
-    },
-  ];
 
   const handleSubmit = () => {
     console.log("Form submitted:", formData);
@@ -92,10 +57,6 @@ const ContactPage: React.FC = () => {
     });
   };
 
-  const toggleFAQ = (id: number) => {
-    setExpandedFAQ(expandedFAQ === id ? null : id);
-  };
-
   const generateMapUrls = () => {
     const { latitude, longitude } = mapConfig;
 
@@ -114,6 +75,7 @@ const ContactPage: React.FC = () => {
       <PageBanner
         title="Get In Touch With Us"
         breadcrumb="Home / Contact Us"
+        image="/common/contact-banner.jpeg"
         description="Our team of healthcare professionals is here to help you. Get in touch with us to discuss your care needs and find the right solution for you."
       />
 
@@ -134,8 +96,8 @@ const ContactPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {/* Location Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <MapPin className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 flex items-center justify-center mb-4">
+                  <MapPinWithBg />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Location</h3>
                 <p className="text-sm text-gray-700">
@@ -148,7 +110,7 @@ const ContactPage: React.FC = () => {
               {/* Open Hours Card */}
               <div className="bg-blue-600 rounded-2xl p-6 text-white hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-4">
-                  <Clock className="w-6 h-6 text-blue-600" />
+                  <ClockBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Open Hours</h3>
                 <p className="text-sm">
@@ -161,7 +123,7 @@ const ContactPage: React.FC = () => {
               {/* Email Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <Mail className="w-6 h-6 text-white" />
+                  <MailBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Email</h3>
                 <p className="text-sm text-gray-700 break-words">
@@ -174,7 +136,7 @@ const ContactPage: React.FC = () => {
               {/* Phone Card */}
               <div className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                  <Phone className="w-6 h-6 text-white" />
+                  <PhoneBlueOutline />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Phone</h3>
                 <p className="text-sm text-gray-700">
@@ -213,7 +175,7 @@ const ContactPage: React.FC = () => {
                 {/* Contact Options */}
                 <div className="grid sm:grid-cols-3 gap-4">
                   {/* Emergency Helpline */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
                         <svg
@@ -229,18 +191,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>
                       </div>
-                      <span className="font-semibold text-base text-black">
+                      <span className="font-semibold text-base text-black -ms-2">
                         <TTSWrapper text="Emergency Helpline">
                           Emergency Helpline
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Available 24/7 for urgent care">
                         Available 24/7 for urgent care
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm  text-black">
+                    <p className="text-sm text-black mt-3">
                       <TTSWrapper text="+44 20 7946 0958">
                         +44 20 7946 0958
                       </TTSWrapper>
@@ -248,7 +210,7 @@ const ContactPage: React.FC = () => {
                   </div>
 
                   {/* Support Email */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
                         <svg
@@ -274,18 +236,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>{" "}
                       </div>
-                      <span className="font-semibold text-sm md:text-base text-black">
+                      <span className="font-semibold text-sm md:text-base text-black -ms-2">
                         <TTSWrapper text="Support Email">
                           Support Email
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Response within 24 hours">
                         Response within 24 hours
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm text-black break-words">
+                    <p className="text-sm text-black break-words mt-3">
                       <TTSWrapper text="support@maxxcare.co.uk">
                         support@maxxcare.co.uk
                       </TTSWrapper>
@@ -293,9 +255,9 @@ const ContactPage: React.FC = () => {
                   </div>
 
                   {/* General Enquiries */}
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full flex items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="19"
@@ -309,18 +271,18 @@ const ContactPage: React.FC = () => {
                           />
                         </svg>{" "}
                       </div>
-                      <span className="font-semibold text-sm md:text-base text-black">
+                      <span className="font-semibold text-sm md:text-base text-black -ms-2">
                         <TTSWrapper text="General Enquiries">
                           General Enquiries
                         </TTSWrapper>
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm text-gray-600">
+                    <p className="text-[13px] text-[#999]">
                       <TTSWrapper text="Mon-Fri 8:00 AM - 6:00 PM">
                         Mon-Fri 8:00 AM - 6:00 PM
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm text-black">
+                    <p className="text-base text-black mt-3">
                       <TTSWrapper text="+44 20 7946 0955">
                         +44 20 7946 0955
                       </TTSWrapper>
@@ -330,8 +292,8 @@ const ContactPage: React.FC = () => {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16">
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-4 text-center">
+              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16 h-[60vh]">
+                <h3 className="text-3xl font-semibold text-white mb-4 text-center pt-3">
                   <TTSWrapper text="Contact Form">Contact Form</TTSWrapper>
                 </h3>
                 <div className="space-y-3">
@@ -342,7 +304,7 @@ const ContactPage: React.FC = () => {
                       placeholder="Name*"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500"
+                      className="w-full px-3 py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
@@ -351,16 +313,18 @@ const ContactPage: React.FC = () => {
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleSelectChange}
-                      className="w-full px-3 py-2 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none pr-10"
+                      className="w-full px-3 py-3 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none pr-10"
                     >
-                      <option value="">Service Type*</option>
+                      <option value="" disabled>
+                        Service Type*
+                      </option>
                       <option value="elderly-care">Elderly Care</option>
                       <option value="post-surgery">Post-Surgery Support</option>
                       <option value="physiotherapy">Physiotherapy</option>
                       <option value="medication">Medication Management</option>
                       <option value="companionship">Companionship</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                    <ChevronRight className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#000] pointer-events-none" />
                   </div>
 
                   <div>
@@ -370,13 +334,13 @@ const ContactPage: React.FC = () => {
                       value={formData.message}
                       onChange={handleTextareaChange}
                       rows={3}
-                      className="w-full px-3 py-2 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500"
+                      className="w-full px-3 py-2 h-36 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500"
                     />
                   </div>
 
                   <div className="border-2 border-dashed border-white rounded-xl p-4 text-center cursor-pointert bg-transparent">
                     <div className="w-8 h-8 flex items-center justify-center mx-auto">
-                      <Upload className="w-4 h-4 text-white" />
+                      <UploadIcon />
                     </div>
                     <p className="text-white/80 text-xs px-3">
                       <TTSWrapper text="Upload medical records, referral letters, or other relevant document">
@@ -388,7 +352,7 @@ const ContactPage: React.FC = () => {
 
                   <button
                     onClick={handleSubmit}
-                    className="mx-auto bg-[#0A5BE0] text-white py-2 px-4 rounded-full flex items-center justify-center group text-sm"
+                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-5 rounded-full flex items-center justify-center group text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper text="Submit Enquiry">
                       Submit Enquiry
@@ -405,9 +369,9 @@ const ContactPage: React.FC = () => {
         </section>
       </div>
 
-      <section className="pb-8 md:pb-12 mt-10">
+      <section className="pb-8 md:pb-12">
         <div className="max-w-full mx-auto">
-          <div className="overflow-hidden h-64 md:h-80 lg:h-80 bg-gray-200">
+          <div className="overflow-hidden h-64 md:h-80 lg:h-100 bg-gray-200">
             {/* Interactive Map with Dynamic Coordinates */}
             <iframe
               src={mapUrls.embed}
@@ -462,117 +426,7 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-8 md:py-12 px-4 md:px-8 lg:px-16 bg-white mb-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-              <TTSWrapper text="Frequently Asked Questions">
-                Frequently Asked Questions
-              </TTSWrapper>
-            </h2>
-            <p className="text-gray-600 max-w-lg">
-              <TTSWrapper text="Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry">
-                Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of
-                the printing and typesetting ndsince the 1500s, when an unknown
-                printer took a galleytext of the printing and typesetting
-                industry
-              </TTSWrapper>
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left Column */}
-            <div className="space-y-4">
-              {faqData.slice(0, 3).map((faq) => (
-                <div
-                  key={faq.id}
-                  className={`${
-                    expandedFAQ === faq.id
-                      ? "text-white bg-[#0A5BE0]"
-                      : "bg-white text-black"
-                  } rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl`}
-                >
-                  <div
-                    className="flex items-center justify-between p-4 cursor-pointer"
-                    onClick={() => toggleFAQ(faq.id)}
-                  >
-                    <h3 className={`text-md font-semibold pr-4`}>
-                      <TTSWrapper text={faq.question}>
-                        {faq.question}
-                      </TTSWrapper>
-                    </h3>
-                    <button
-                      className={`flex-shrink-0 w-8 h-8 ${
-                        expandedFAQ === faq.id
-                          ? "bg-white text-[#0A5BE0]"
-                          : "bg-[#0A5BE0] text-white"
-                      } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700`}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                  {expandedFAQ === faq.id && (
-                    <div className="px-6 pb-6 bg-[#0A5BE0] text-white">
-                      <div className="border-gray-100">
-                        <p className="leading-relaxed">
-                          <TTSWrapper text={faq.answer}>
-                            {faq.answer}
-                          </TTSWrapper>
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Right Column */}
-            <div className="space-y-4">
-              {faqData.slice(3).map((faq) => (
-                <div
-                  key={faq.id}
-                  className={`${
-                    expandedFAQ === faq.id
-                      ? "text-white bg-[#0A5BE0]"
-                      : "bg-white text-black"
-                  } rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl`}
-                >
-                  <div
-                    className="flex items-center justify-between p-4 cursor-pointer"
-                    onClick={() => toggleFAQ(faq.id)}
-                  >
-                    <h3 className="text-md font-semibold pr-4">
-                      <TTSWrapper text={faq.question}>
-                        {faq.question}
-                      </TTSWrapper>
-                    </h3>
-                    <button
-                      className={`flex-shrink-0 w-8 h-8 ${
-                        expandedFAQ === faq.id
-                          ? "bg-white text-[#0A5BE0]"
-                          : "bg-[#0A5BE0] text-white"
-                      } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700`}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                  {expandedFAQ === faq.id && (
-                    <div className="px-6 pb-6">
-                      <div>
-                        <p className="text-white leading-relaxed">
-                          <TTSWrapper text={faq.answer}>
-                            {faq.answer}
-                          </TTSWrapper>
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <FAQ />
     </>
   );
 };

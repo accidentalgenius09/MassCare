@@ -8,8 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "TT Hoves", Arial, Helvetica, sans-serif;
-  --font-mono: "TT Hoves", Arial, Helvetica, sans-serif;
+  --font-sans: "TT Hoves"
+  --font-mono: "TT Hoves"
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +22,18 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "TT Hoves", Arial, Helvetica, sans-serif;
+  font-family: "TT Hoves";
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* Ensure all containers prevent horizontal overflow */
+.container, .max-w-full, .w-full {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .list-alpha-paren {
@@ -31,5 +42,14 @@ body {
 
 .list-alpha-paren li::marker {
   content: counter(list-item, lower-alpha) ") ";
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 

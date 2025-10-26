@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
@@ -16,7 +15,6 @@ interface RecentNewsItem {
 }
 
 export default function NewsAndInsightsDetailPage() {
-  const params = useParams();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [articleHeight, setArticleHeight] = useState(0);
   const [visibleItems, setVisibleItems] = useState(3);

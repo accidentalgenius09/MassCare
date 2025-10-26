@@ -9,8 +9,8 @@ const Page: React.FC = () => {
   const router = useRouter();
   const { slug } = useParams();
   return (
-    <div className="min-h-[70vh] bg-[#012B71] w-full flex items-center justify-center px-4 pt-8 pb-20">
-      <div className="max-w-4xl w-full text-center">
+    <div className="min-h-[80vh] bg-[#012B71] w-full flex items-center justify-center px-4 pt-8 pb-20">
+      <div className="max-w-4xl w-full text-center my-auto">
         <div className="relative mb-8">
           {/* Medical Illustration */}
           <div
@@ -46,18 +46,18 @@ const Page: React.FC = () => {
                 }
                 width={
                   slug === "welcome-course"
-                    ? 200
+                    ? 220
                     : slug === "thankyou-enquiry" ||
                       slug === "application-received"
-                    ? 300
+                    ? 410
                     : 450
                 }
                 height={
                   slug === "welcome-course"
-                    ? 250
+                    ? 247
                     : slug === "thankyou-enquiry" ||
                       slug === "application-received"
-                    ? 300
+                    ? 316
                     : 300
                 }
                 className="object-contain"
@@ -67,12 +67,10 @@ const Page: React.FC = () => {
         </div>
 
         {/* Error Message */}
-        <div className="mb-8">
-          <h1
-            className={`text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4`}
-          >
+        <div className="mb-5">
+          <h1 className={`text-5xl font-semibold text-white mb-2`}>
             <TTSWrapper
-              className={`text-2xl sm:text-4xl md:text-5xl font-semibold text-white mb-4`}
+              className={`text-5xl font-semibold text-white mb-2`}
               text={`${
                 slug === "thankyou-enquiry"
                   ? "Thank You for Your Enquiry!"
@@ -92,7 +90,17 @@ const Page: React.FC = () => {
                 : "Internal Server Error"}
             </TTSWrapper>
           </h1>
-          <p className="text-blue-200 text-base max-w-2xl mx-auto text-center leading-relaxed px-4">
+          <p
+            className={`text-blue-200 text-base ${
+              slug === "welcome-course"
+                ? "max-w-lg"
+                : slug === "application-received"
+                ? "max-w-lg" 
+                : slug === "thankyou-enquiry"
+                ? "max-w-sm"
+                : "max-w-3xl"
+            } mx-auto text-center leading-relaxed px-4`}
+          >
             <TTSWrapper
               text={
                 slug === "thankyou-enquiry"
@@ -119,7 +127,7 @@ const Page: React.FC = () => {
         {/* Go Back Button */}
         <button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-6 sm:px-8 py-2 rounded-full"
+          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-10 py-3 rounded-full"
         >
           <TTSWrapper text="Go Back">Go Back </TTSWrapper>
           <TopRightArrowWhite />

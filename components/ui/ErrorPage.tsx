@@ -71,7 +71,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({
         </div>
 
         {/* Go Back Button */}
-        <button onClick={() => router.back()} className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-6 sm:px-8 py-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+        <button onClick={() => router.back()} className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-6 sm:px-8 py-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:bg-blue-700">
           <TTSWrapper text="Go Back">Go Back </TTSWrapper>
           <TopRightArrowWhite />
         </button>

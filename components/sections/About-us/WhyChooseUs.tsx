@@ -51,17 +51,16 @@ const WhyChooseUs: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-white pb-16 pt-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="container mx-auto bg-white pb-16 pt-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             <TTSWrapper text="Why Choose Us?">Why Choose Us?</TTSWrapper>
           </h2>
-          <p className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base">
+          <p className="text-black font-normal max-w-2xl mx-auto text-sm">
             <TTSWrapper
               text="We are committed to connecting healthcare professionals with meaningful opportunities while helping employers find the right talent for their teams."
-              className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base"
             >
               We are committed to connecting healthcare professionals with
               meaningful opportunities while helping employers find the right
@@ -102,7 +101,7 @@ const WhyChooseUs: React.FC = () => {
 
         {/* CTA Button */}
         <div className="flex justify-center">
-          <button className="bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full flex items-center gap-2">
+          <button className="bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full flex items-center gap-2 hover:bg-blue-700 hover:shadow-lg transition-all duration-300">
             <TTSWrapper text="Book a Consultation">
               Book a Consultation
             </TTSWrapper>

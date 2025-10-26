@@ -1,5 +1,4 @@
 import React from "react";
-import WelcomeSection from './WelcomeSection'
 import HowItWorksSection from './HowItWorksSection'
 import WhyChooseSection from './WhyChooseSection'
 import TrustedInstitutionsSection from './TrustedInstitutionsSection'
@@ -9,12 +8,13 @@ import HeroSection from "./HeroSection";
 import QuickConnect from "./QuickConnectSection";
 import ServicesSection from "./ServicesSection";
 import CareerPathwaysSection from "./CareerPathways";
+import WelcomeSectionHome from "./WelcomeSectionHome";
 
 function HomePage() {
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <HeroSection />
-      <WelcomeSection />
+      <WelcomeSectionHome />
       <HowItWorksSection />
       <WhyChooseSection />
       <TrustedInstitutionsSection />

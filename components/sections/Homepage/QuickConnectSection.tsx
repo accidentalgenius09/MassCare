@@ -117,7 +117,7 @@ export default function QuickConnect() {
                 placeholder="Name*"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 type="email"
@@ -125,7 +125,7 @@ export default function QuickConnect() {
                 placeholder="Email*"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -136,13 +136,13 @@ export default function QuickConnect() {
                 placeholder="Phone*"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <select
                 name="areaOfInterest"
                 value={formData.areaOfInterest}
                 onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                className="w-full px-6 py-4 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -164,13 +164,13 @@ export default function QuickConnect() {
               value={formData.message}
               onChange={handleInputChange}
               rows={5}
-              className="w-full px-6 py-4 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
 
             <div className="text-center pt-4">
               <button
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none"
+                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none hover:brightness-110 hover:shadow-lg transition-all duration-300"
                 style={{
                   background: "rgba(10, 91, 224, 1)",
                   borderRadius: "300px",
@@ -201,7 +201,7 @@ export default function QuickConnect() {
                 News & Events
               </TTSWrapper>
             </h2>
-            <button className="text-black font-medium flex items-center gap-2">
+            <button className="text-black font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300">
               <TTSWrapper
                 text="Visit News Hub"
                 className="text-black font-medium flex items-center gap-1"
@@ -231,24 +231,23 @@ export default function QuickConnect() {
                       {card.title}
                     </TTSWrapper>
                   </h3>
-                  <p className="text-black text-sm mb-4 leading-relaxed">
+                  <p className="text-black text-sm mb-6 leading-relaxed">
                     <TTSWrapper
                       text={card.description}
-                      className="text-black text-sm mb-4 leading-relaxed"
                     >
                       {card.description}
                     </TTSWrapper>
                   </p>
-                  <p className="text-sm text-black font-semibold">
+                  <p className="text-sm text-black font-semibold mb-4">
                     <TTSWrapper
                       text={card.date}
-                      className="text-sm text-black font-semibold"
+                      className="text-sm text-black font-semibold mb-4"
                     >
                       {card.date}
                     </TTSWrapper>
                   </p>
                 </div>
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-60 overflow-hidden">
                   <Image
                     src={card.image}
                     alt={card.title}
@@ -263,7 +262,7 @@ export default function QuickConnect() {
                       backgroundColor: "rgba(10, 91, 224, 1)",
                       borderRadius: "300px",
                     }}
-                    className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
+                    className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:brightness-110 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper
                       text="Read More"

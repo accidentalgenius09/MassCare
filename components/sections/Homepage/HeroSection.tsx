@@ -21,27 +21,21 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto text-center">
           <TTSWrapper
             text="Together, We Create a Community of"
-            className="justify-start text-white text-3xl font-normal"
+            className="justify-start text-white text-xl sm:text-2xl md:text-3xl lg:text-[45px] font-extralight"
           >
-            <div className="justify-start text-white text-3xl font-normal">
+            <div className="justify-start text-white text-xl sm:text-2xl md:text-3xl lg:text-[45px] font-extralight">
               Together, We Create a Community of
             </div>
           </TTSWrapper>
 
-          <TTSWrapper
-            text="Care that Changes Lives"
-            className="text-white text-4xl md:text-6xl lg:text-5xl font-semibold"
-          >
-            <h1 className="text-white text-4xl md:text-6xl lg:text-5xl font-semibold">
+          <TTSWrapper text="Care that Changes Lives">
+            <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold">
               Care that Changes Lives
             </h1>
           </TTSWrapper>
 
-          <TTSWrapper
-            text="You are not alone whether you are seek care, training or a new career"
-            className="text-white text-lg md:text-lg font-extralight mb-10 max-w-2xl mx-auto"
-          >
-            <p className="text-white text-lg md:text-lg font-extralight mb-10 max-w-2xl mx-auto">
+          <TTSWrapper text="You are not alone whether you are seek care, training or a new career">
+            <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-normal mb-6 sm:mb-8 md:mb-10 mx-auto mt-2 px-4">
               You are not alone whether you are seek care, training or a new
               career
             </p>
@@ -49,13 +43,15 @@ const HeroSection = () => {
 
           {/* CTA Button */}
           <div
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full 
-              border border-white/30 bg-[rgba(212,212,212,0.1)] backdrop-blur-xl 
-              text-white text-lg font-medium transition-all"
+            className="inline-flex items-center gap-2 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-full 
+              border border-white/20 bg-[rgba(212,212,212,0.1)] backdrop-blur-xl 
+              text-white text-sm sm:text-base md:text-lg font-medium transition-all"
           >
-            <Link href="/opportunities">
-              <div className="flex items-center gap-3">
-                <TTSWrapper text="Find Opportunities">Find Opportunities</TTSWrapper>
+            <Link href="/career-opportunities">
+              <div className="flex items-center text-sm sm:text-base gap-2 sm:gap-3 font-light">
+                <TTSWrapper text="Find Opportunities">
+                  Find Opportunities
+                </TTSWrapper>
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +59,7 @@ const HeroSection = () => {
                     height="11"
                     viewBox="0 0 11 11"
                     fill="none"
+                    className="w-2 h-2 sm:w-3 sm:h-3"
                   >
                     <path
                       d="M8.99987 3.41386L1.61201 10.8017L0.19781 9.38752L7.58474 2.00013H0V0H11V11H8.99987V3.41386Z"
@@ -77,80 +74,35 @@ const HeroSection = () => {
       </div>
 
       {/* Service Cards - Bottom of Background */}
-      <div className="absolute bottom-8 left-0 right-0 z-10 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap">
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] bg-opacity-10 hover:bg-opacity-20 backdrop-blur-md text-white ps-6 pe-3 py-2 rounded-full transition-all border border-white/20">
-              <TTSWrapper
-                text="MCM Nursing Care Agency"
-                className="text-base md:text-lg"
-              >
-                <span className="text-base md:text-lg">
+      <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
+        <div className="max-w-full mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
+            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
+              <TTSWrapper text="MCM Nursing Care Agency">
+                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
                   MCM Nursing Care Agency
                 </span>
               </TTSWrapper>
-              <div className="ml-3 w-8 h-8 flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal">
+                +
               </div>
             </button>
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-70 backdrop-blur-md text-white ps-6 pe-3 py-2 rounded-full transition-all border border-white/20">
-              <TTSWrapper
-                text="Mass Home Care"
-                className="text-base md:text-lg"
-              >
-                <span className="text-base md:text-lg">Mass Home Care</span>
+            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-70 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
+              <TTSWrapper text="Mass Home Care">
+                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">Mass Home Care</span>
               </TTSWrapper>
-              <div className="ml-3 w-8 h-8 flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
+                +
               </div>
             </button>
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] bg-opacity-10 hover:bg-opacity-20 backdrop-blur-md text-white ps-6 pe-3 py-2 rounded-full transition-all border border-white/20 hover:border-white/40">
-              <TTSWrapper
-                text="Mass Training Academy"
-                className="text-base md:text-lg"
-              >
-                <span className="text-base md:text-lg">
+              <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
+              <TTSWrapper text="Mass Training Academy">
+                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
                   Mass Training Academy
                 </span>
               </TTSWrapper>
-              <div className="ml-3 w-8 h-8 flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
+                +
               </div>
             </button>
           </div>
@@ -158,14 +110,15 @@ const HeroSection = () => {
       </div>
 
       {/* Floating Action Buttons */}
-      <div className="fixed right-4 md:right-3 top-[65%] -translate-y-1/2 z-50 flex flex-col gap-3">
-        <button className="w-12 h-12 flex items-center justify-center bg-white/30 border border-white/50 rounded-full shadow-lg transition-all">
+      <div className="fixed right-2 sm:right-4 md:right-6 top-[65%] -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3 max-w-[60px] sm:max-w-[70px] md:max-w-[80px]">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="21"
-            height="22"
+            width="20"
+            height="20"
             viewBox="0 0 25 25"
             fill="none"
+            className="sm:w-6 sm:h-6 md:w-[25px] md:h-[25px]"
           >
             <g clipPath="url(#clip0_673_5575)">
               <path
@@ -224,13 +177,14 @@ const HeroSection = () => {
             </defs>
           </svg>
         </button>
-        <button className="w-12 h-12 flex items-center justify-center bg-white/30 border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="21"
+            width="22"
             height="22"
             viewBox="0 0 28 28"
             fill="none"
+            className="sm:w-7 sm:h-7 md:w-[28px] md:h-[28px]"
           >
             <path
               fillRule="evenodd"
@@ -240,13 +194,14 @@ const HeroSection = () => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 flex items-center justify-center bg-white/30 border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="21"
-            height="22"
+            height="17"
             viewBox="0 0 27 22"
             fill="none"
+            className="sm:w-6 sm:h-5 md:w-[27px] md:h-[22px]"
           >
             <path
               fillRule="evenodd"
@@ -256,13 +211,14 @@ const HeroSection = () => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 flex items-center justify-center bg-white/30 border border-white/50 rounded-full shadow-lg transition-all">
+        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
           <svg
             width="21"
-            height="22"
+            height="21"
             viewBox="0 0 26 26"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="sm:w-6 sm:h-6 md:w-[27px] md:h-[27px]"
           >
             <path
               d="M22.5448 17.52C21.8892 16.9703 18.0448 14.5358 17.4058 14.6475C17.1058 14.7008 16.8763 14.9565 16.262 15.6893C15.9779 16.0499 15.666 16.3877 15.329 16.6995C14.7116 16.5504 14.114 16.3288 13.5485 16.0395C11.331 14.9599 9.53947 13.1679 8.4605 10.95C8.17118 10.3846 7.94964 9.78691 7.8005 9.1695C8.1123 8.83252 8.45009 8.52056 8.81075 8.2365C9.54275 7.62225 9.79925 7.39425 9.8525 7.09275C9.96425 6.45225 7.5275 2.60925 6.98 1.95375C6.7505 1.68225 6.542 1.5 6.275 1.5C5.501 1.5 2 5.829 2 6.39C2 6.43575 2.075 10.9425 7.76675 16.7333C13.5575 22.425 18.0642 22.5 18.11 22.5C18.671 22.5 23 18.999 23 18.225C23 17.958 22.8177 17.7495 22.5448 17.52Z"

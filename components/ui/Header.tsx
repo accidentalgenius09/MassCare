@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTTS } from "@/components/providers/TTSProvider";
@@ -11,11 +11,17 @@ const Header = () => {
   const { stepFontSize } = useAccessibility();
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 px-4 pb-6 pt-2 md:px-8 lg:px-16">
+    <nav className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 sm:pb-6 pt-2 md:px-8 lg:px-16">
       {/* Gradient Background */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -26,19 +32,20 @@ const Header = () => {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto flex items-center justify-between">
+      <div className="relative max-w-full mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center ml-2 sm:ml-5">
           <Image
             src={isHome ? "/logo-mass-care.png" : "/logo-white.png"}
             alt="Mass Care Logo"
-            width={150}
-            height={68}
+            width={120}
+            height={54}
+            className="sm:w-[150px] sm:h-[68px]"
           />
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8 font-xs">
+        <div className="hidden lg:flex items-center space-x-8 text-base font-light">
           <Link
             href="/"
             className="text-white hover:text-gray-200 transition-colors"
@@ -59,7 +66,7 @@ const Header = () => {
           </Link>
 
           <Link
-            href="/careers"
+            href="/career-opportunities"
             className="text-white hover:text-gray-200 transition-colors"
           >
             Careers
@@ -79,21 +86,23 @@ const Header = () => {
         </div>
 
         {/* Right Side Actions */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <Link
             href="/contact-us"
-            className="hidden md:flex items-center bg-neutral-300/10 rounded-[300px] border-1 border-white/50 backdrop-blur-lg px-6 py-3 transition-all"
+            className="hidden sm:flex items-center bg-neutral-300/10 rounded-[300px] backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 transition-all"
+            style={{ border: "2px solid rgba(255, 255, 255, 0.2)" }}
           >
-            <div className="flex items-center gap-3 w-full h-full">
-              <div className="justify-start text-white text-sm font-normal">
+            <div className="flex items-center gap-2 sm:gap-3 w-full h-full">
+              <div className="justify-start text-white text-sm sm:text-base font-normal">
                 Contact
               </div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="9"
-                height="9"
+                width="8"
+                height="8"
                 viewBox="0 0 11 11"
                 fill="none"
+                className="sm:w-[9px] sm:h-[9px]"
               >
                 <g clipPath="url(#clip0_699_19244)">
                   <path
@@ -113,10 +122,10 @@ const Header = () => {
           {/* Accessibility Icons */}
           <button
             onClick={stepFontSize}
-            className="w-10 h-10 flex items-center justify-center transition-all cursor-pointer"
+            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all duration-300 hover:bg-white/20 cursor-pointer"
             style={{
               borderRadius: "300px",
-              border: "1px solid rgba(255, 255, 255, 0.50)",
+              border: "2px solid rgba(255, 255, 255, 0.2)",
               background: "rgba(212, 212, 212, 0.10)",
               backdropFilter: "blur(17.5px)",
             }}
@@ -124,10 +133,11 @@ const Header = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
+              width="16"
+              height="16"
               viewBox="0 0 22 22"
               fill="none"
+              className="sm:w-[18px] sm:h-[18px]"
             >
               <g clipPath="url(#clip0_726_21864)">
                 <path
@@ -157,10 +167,10 @@ const Header = () => {
 
           <button
             onClick={toggleTTS}
-            className={`w-10 h-10 flex items-center justify-center transition-all border-1 cursor-pointer ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center transition-all duration-300 hover:bg-white/20 border-1 cursor-pointer ${
               isEnabled
                 ? "border-blue-500 bg-blue-500/30"
-                : "border-white/50 bg-[rgba(212,212,212,0.1)]"
+                : "border-white/10 bg-[rgba(212,212,212,0.1)]"
             }`}
             style={{
               borderRadius: "300px",
@@ -172,10 +182,11 @@ const Header = () => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="17"
-              height="17"
+              width="16"
+              height="16"
               viewBox="0 0 22 22"
               fill="none"
+              className="sm:w-[19px] sm:h-[19px]"
             >
               <g clipPath="url(#clip0_726_21837)">
                 <path
@@ -204,23 +215,93 @@ const Header = () => {
           </button>
 
           {/* Mobile Menu Button */}
-          <button className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all backdrop-blur-sm">
+          <button 
+            onClick={toggleMobileMenu}
+            className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
+            aria-label="Toggle mobile menu"
+          >
             <svg
-              className="w-6 h-6 text-white"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
             </svg>
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-[rgba(0,0,0,0.95)] backdrop-blur-lg border-t border-white/20">
+          <div className="px-4 py-6 space-y-4">
+            <Link
+              href="/"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/about-us"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link
+              href="/services"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Services
+            </Link>
+            <Link
+              href="/career-opportunities"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Careers
+            </Link>
+            <Link
+              href="/news-and-insights"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              News & Insights
+            </Link>
+            <Link
+              href="/testimonials"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Testimonials
+            </Link>
+            <Link
+              href="/contact-us"
+              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
