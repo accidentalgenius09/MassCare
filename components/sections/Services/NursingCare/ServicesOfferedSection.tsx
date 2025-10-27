@@ -3,7 +3,12 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 import React from "react";
 
-function ServicesOfferedSection() {
+function ServicesOfferedSection({
+  img1 = "/services/caring.jpg",
+  imgAlt1 = "Nurse Caring for the Elderly",
+  img2 = "/services/bp-2.jpg",
+  imgAlt2 = "Basic Life Support",
+}) {
   return (
     <>
       <section className="py-12 md:py-16 lg:py-20 bg-[#E8EFFF] relative overflow-hidden">
@@ -54,8 +59,8 @@ function ServicesOfferedSection() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-full px-4 sm:px-6 lg:px-32">
             <div className="flex flex-col items-center justify-center">
               <Image
-                src="/services/caring.jpg"
-                alt="Caring for the elderly"
+                src={img1}
+                alt={imgAlt1}
                 width={800}
                 height={430}
                 className="rounded-2xl w-full h-[430px] object-cover"
@@ -75,8 +80,8 @@ function ServicesOfferedSection() {
             </div>
             <div className="flex flex-col items-center justify-center">
               <Image
-                src="/services/bp-2.jpg"
-                alt="Basic life support"
+                src={img2}
+                alt={imgAlt2}
                 width={800}
                 height={430}
                 className="rounded-2xl w-full h-[430px] object-cover"
