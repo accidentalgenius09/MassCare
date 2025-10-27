@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Download } from "lucide-react";
 import TTSWrapper from "@/hooks/TTSWrapper";
 
@@ -95,6 +95,84 @@ const documents: Document[] = [
     subtitle: "Monthly Roundup - December 2024",
     link: "/common/file-sample.pdf",
   },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
+  {
+    id: "14",
+    title: "Monthly Roundup - December 2024",
+    subtitle: "Monthly Roundup - December 2024",
+    link: "/common/file-sample.pdf",
+  },
 ];
 
 const DocumentCard: React.FC<{ doc: Document }> = ({ doc }) => {
@@ -120,14 +198,33 @@ const DocumentCard: React.FC<{ doc: Document }> = ({ doc }) => {
 };
 
 export default function DocumentList() {
+  const [visibleCount, setVisibleCount] = useState(14);
+
+  const visibleDocuments = documents.slice(0, visibleCount);
+  const hasMore = documents.length > visibleCount;
+
   return (
     <div className="py-4 sm:py-6 lg:py-8">
-      <div className="max-w-7xl">
+      <div className="max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {documents.map((doc) => (
-            <DocumentCard key={doc.id} doc={doc} />
+          {visibleDocuments.map((doc, index) => (
+            <DocumentCard key={`${doc.id}-${index}`} doc={doc} />
           ))}
         </div>
+        
+        {/* View More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 10)}
+              className="px-8 py-3 bg-[#0A5BE0] text-white font-medium rounded-full flex items-center gap-2 hover:bg-[#084CC0] transition-colors"
+            >
+              <TTSWrapper text="View More" className="text-white font-medium">
+                View More
+              </TTSWrapper>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

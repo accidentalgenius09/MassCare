@@ -11,9 +11,10 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 
 // Main Component
 const MissionVisionSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
-  console.log(itemsPerView);
 
+  // Update items per view based on screen size
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640) {
@@ -78,17 +79,31 @@ const MissionVisionSection = () => {
     //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
     //   icon: <OngoingSupportIcon />,
     // },
+    // {
+    //   number: "05",
+    //   title: "Quality Promise",
+    //   description:
+    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
+    //   icon: <OngoingSupportIcon />,
+    // },
+    // {
+    //   number: "05",
+    //   title: "Quality Promise",
+    //   description:
+    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
+    //   icon: <OngoingSupportIcon />,
+    // },
   ];
 
-  // const isCarousel = steps.length > 3;
-  // const totalSlides = isCarousel ? Math.ceil(steps.length / itemsPerView) : 1;
-  // const nextSlide = () => {
-  //   setCurrentIndex((prev) => (prev + 1) % totalSlides);
-  // };
+  const isCarousel = steps.length > 3;
+  const totalSlides = isCarousel ? Math.ceil(steps.length / itemsPerView) : 1;
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+  };
 
-  // const prevSlide = () => {
-  //   setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  // };
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -96,15 +111,15 @@ const MissionVisionSection = () => {
         {/* Carousel Container */}
         <div className="relative max-w-full mx-auto">
           {/* Previous Button */}
-          {/* {isCarousel && (
+          {isCarousel && (
             <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute left-10 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={currentIndex === 0}
               aria-label="Previous slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-6 h-6 text-black"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -117,10 +132,10 @@ const MissionVisionSection = () => {
                 />
               </svg>
             </button>
-          )} */}
+          )}
           {/* Carousel Track */}
-          {/* {isCarousel ? (
-            <div className="overflow-hidden">
+          {isCarousel ? (
+            <div className="">
               <div
                 className="flex transition-transform duration-500 ease-out"
                 style={{
@@ -130,7 +145,7 @@ const MissionVisionSection = () => {
                 {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                   <div
                     key={slideIndex}
-                    className="min-w-full flex gap-4 md:gap-6 xl:gap-8"
+                    className="min-w-full px-10 flex gap-4 md:gap-6 xl:gap-8"
                   >
                     {steps
                       .slice(
@@ -179,47 +194,47 @@ const MissionVisionSection = () => {
                 ))}
               </div>
             </div>
-          ) : ( */}
-          <div className="grid grid-cols-3 gap-6 justify-between">
-            {steps.map((step, index) => (
-              <div key={index} className="min-w-0">
-                <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
-                  {/* Decorative Flower */}
-                  <div className="absolute top-2 right-2">
-                    <FlowerDecoration />
-                  </div>
+          ) : (
+            <div className="grid grid-cols-3 px-10 gap-6 justify-between">
+              {steps.map((step, index) => (
+                <div key={index} className="min-w-0">
+                  <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
+                    {/* Decorative Flower */}
+                    <div className="absolute top-2 right-2">
+                      <FlowerDecoration />
+                    </div>
 
-                  {/* Content */}
-                  <div className="relative z-10 max-w-full">
-                    <h3 className="text-2xl font-semibold text-white">
-                      <TTSWrapper
-                        text={step.title}
-                        className="text-2xl font-semibold text-white"
-                      >
-                        {step.title}
-                      </TTSWrapper>
-                    </h3>
-                    <p className="text-white text-lg font-normal mt-4">
-                      <TTSWrapper text={step.description}>
-                        {step.description}
-                      </TTSWrapper>
-                    </p>
+                    {/* Content */}
+                    <div className="relative z-10 max-w-full">
+                      <h3 className="text-2xl font-semibold text-white">
+                        <TTSWrapper
+                          text={step.title}
+                          className="text-2xl font-semibold text-white"
+                        >
+                          {step.title}
+                        </TTSWrapper>
+                      </h3>
+                      <p className="text-white text-lg font-normal mt-4">
+                        <TTSWrapper text={step.description}>
+                          {step.description}
+                        </TTSWrapper>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          {/* )}
+              ))}
+            </div>
+          )}
 
           {isCarousel && (
             <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-10 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={currentIndex === totalSlides - 1}
               aria-label="Next slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-6 h-6 text-black"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -232,7 +247,7 @@ const MissionVisionSection = () => {
                 />
               </svg>
             </button>
-          )} */}
+          )}
         </div>
       </div>
     </section>

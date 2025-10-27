@@ -70,7 +70,7 @@ function FAQ() {
                   expandedFAQ === faq.id
                     ? "text-white bg-[#0A5BE0]"
                     : "bg-white text-black"
-                } rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl`}
+                } rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300`}
               >
                 <div
                   className="flex items-center justify-between p-4 cursor-pointer"
@@ -84,7 +84,7 @@ function FAQ() {
                       expandedFAQ === faq.id
                         ? "bg-white text-[#0A5BE0]"
                         : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg`}
+                    } rounded-full flex items-center justify-center transition-all duration-300`}
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -111,7 +111,7 @@ function FAQ() {
                   expandedFAQ === faq.id
                     ? "text-white bg-[#0A5BE0]"
                     : "bg-white text-black"
-                } rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl`}
+                } rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300`}
               >
                 <div
                   className="flex items-center justify-between p-4 cursor-pointer"
@@ -125,7 +125,7 @@ function FAQ() {
                       expandedFAQ === faq.id
                         ? "bg-white text-[#0A5BE0]"
                         : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg`}
+                    } rounded-full flex items-center justify-center transition-all duration-300`}
                   >
                     <Plus className="w-4 h-4" />
                   </button>

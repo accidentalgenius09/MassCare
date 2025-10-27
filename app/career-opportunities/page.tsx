@@ -6,7 +6,7 @@ import PageBanner from "@/components/sections/Common/PageBanner";
 import JobDetailsModal from "@/components/ui/JobDetailsModal";
 import ApplyNowModal from "@/components/ui/ApplyNowModal";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import {ChevronDown, ArrowUpRight } from "lucide-react";
+import { ChevronDown, ArrowUpRight } from "lucide-react";
 import React, { useState } from "react";
 
 interface JobListing {
@@ -149,6 +149,138 @@ const jobListings: JobListing[] = [
       "NVQ Level 5",
     ],
   },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
+  {
+    id: 6,
+    category: "Critical Care",
+    title: "Registered Nurse - ICU",
+    postedTime: "2 Days ago",
+    description:
+      "Join our dynamic ICU team providing critical care to patients in our state-of-the-art facility.",
+    location: "New York, NY",
+    employmentType: "Full-time",
+    experience: "2+ years",
+    requirements: [
+      "BSC degree",
+      "Current RN license",
+      "BLS certification",
+      "ALS certification",
+      "OSCE/CBT prep",
+      "NVQ Level 2",
+      "NVQ Level 3",
+      "NVQ Level 4",
+      "NVQ Level 5",
+    ],
+  },
 ];
 
 const applicationSteps: ApplicationStep[] = [
@@ -193,7 +325,9 @@ function CareerOpportunitiesPage() {
   const [selectedJob, setSelectedJob] = useState<JobListing | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [selectedJobForApplication, setSelectedJobForApplication] = useState<JobListing | null>(null);
+  const [selectedJobForApplication, setSelectedJobForApplication] =
+    useState<JobListing | null>(null);
+  const [displayCount, setDisplayCount] = useState(6);
 
   const handleClearFilters = () => {
     setSelectedRole("All Roles");
@@ -212,9 +346,9 @@ function CareerOpportunitiesPage() {
   };
 
   const handleApplyNow = (jobOrTitle: JobListing | string) => {
-    if (typeof jobOrTitle === 'string') {
+    if (typeof jobOrTitle === "string") {
       // Called from JobDetailsModal with just the title
-      const job = jobListings.find(j => j.title === jobOrTitle);
+      const job = jobListings.find((j) => j.title === jobOrTitle);
       if (job) {
         setSelectedJobForApplication(job);
         setIsApplyModalOpen(true);
@@ -229,6 +363,10 @@ function CareerOpportunitiesPage() {
   const handleCloseApplyModal = () => {
     setIsApplyModalOpen(false);
     setSelectedJobForApplication(null);
+  };
+
+  const handleViewMore = () => {
+    setDisplayCount((prev) => prev + 3);
   };
 
   return (
@@ -310,9 +448,9 @@ function CareerOpportunitiesPage() {
           </div>
           {/* Job Listings Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {jobListings.map((job) => (
+            {jobListings.slice(0, displayCount).map((job,i) => (
               <div
-                key={job.id}
+                key={i}
                 className="rounded-2xl border border-gray-100 px-6 pb-6 hover:shadow-sm transition-shadow text-sm duration-300"
               >
                 {/* Category Tag */}
@@ -407,7 +545,7 @@ function CareerOpportunitiesPage() {
                       <TTSWrapper text="View Details">View Details</TTSWrapper>
                       <ArrowUpRight className="w-4 h-4" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleApplyNow(job)}
                       className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0A5BE0] text-white rounded-full text-sm font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                     >
@@ -419,6 +557,16 @@ function CareerOpportunitiesPage() {
               </div>
             ))}
           </div>
+          {displayCount < jobListings.length && (
+            <div className="flex items-center justify-center mt-10">
+              <button 
+                onClick={handleViewMore}
+                className="bg-[#0A5BE0] text-white cursor-pointer px-4 py-2 rounded-full hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
+              >
+                <TTSWrapper text="View More">View More</TTSWrapper>
+              </button>
+            </div>
+          )}
           {/* Our Culture & Values Section */}
           <section className="py-16 sm:py-20 md:py-24">
             <div className="text-center mb-12 sm:mb-16">
@@ -429,8 +577,8 @@ function CareerOpportunitiesPage() {
               </h2>
               <p className="text-lg text-black max-w-2xl mx-auto leading-relaxed">
                 <TTSWrapper text="We've built a workplace where healthcare professionals can thrive, grow, and make a meaningful impact every day.">
-                  We&apos;ve built a workplace where healthcare professionals can
-                  thrive, grow, and make a meaningful impact every day.
+                  We&apos;ve built a workplace where healthcare professionals
+                  can thrive, grow, and make a meaningful impact every day.
                 </TTSWrapper>
               </p>
             </div>
