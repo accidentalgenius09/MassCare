@@ -59,30 +59,6 @@ export default function NewsAndInsightsDetailPage() {
       date: "01.07.2025",
       image: "/news/news4.jpg",
     },
-    {
-      id: 3,
-      title: "Lorem Ipsum is simply dummy text of the",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "01.07.2025",
-      image: "/news/news4.jpg",
-    },
-    {
-      id: 3,
-      title: "Lorem Ipsum is simply dummy text of the",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "01.07.2025",
-      image: "/news/news4.jpg",
-    },
-    {
-      id: 3,
-      title: "Lorem Ipsum is simply dummy text of the",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "01.07.2025",
-      image: "/news/news4.jpg",
-    },
   ];
 
   // Calculate article height and determine visible items
@@ -171,7 +147,7 @@ export default function NewsAndInsightsDetailPage() {
               }}
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-black">
+                <h2 className="text-xl sm:text-2xl font-semibold text-black">
                   <TTSWrapper text="Recent News">Recent News</TTSWrapper>
                 </h2>
                 

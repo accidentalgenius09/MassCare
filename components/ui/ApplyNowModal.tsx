@@ -70,7 +70,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f]"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-md max-w-4xl w-full h-full overflow-y-auto scrollbar-hide relative">
+      <div className="bg-white rounded-md w-6xl h-full relative">
         {/* Close Button */}
         {/* Modal Content */}
         <div className="px-18 py-12">

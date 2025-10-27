@@ -18,6 +18,7 @@ function NewsAndInsightsSection() {
   const [activeTab2, setActiveTab2] = useState(1);
   const [newsCards, setNewsCards] = useState<NewsCard[]>([]);
   const [blogsCards, setBlogsCards] = useState<NewsCard[]>([]);
+  const [visibleCount, setVisibleCount] = useState(6);
   const navigate = useRouter();
 
   const homeCareCards: NewsCard[] = useMemo(() => [
@@ -61,6 +62,54 @@ function NewsAndInsightsSection() {
         "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
       date: "11.07.2025",
       image: "/news/news1.png",
+    },
+    {
+      id: 2,
+      title: "Lorem Ipsum is simply dummy text of",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "05.07.2025",
+      image: "/news/news2.jpg",
+    },
+    {
+      id: 3,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "03.07.2025",
+      image: "/news/news3.jpg",
+    },
+    {
+      id: 4,
+      title: "Lorem Ipsum is simply dummy text of the",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "01.07.2025",
+      image: "/news/news4.jpg",
+    },
+    {
+      id: 2,
+      title: "Lorem Ipsum is simply dummy text of",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "05.07.2025",
+      image: "/news/news2.jpg",
+    },
+    {
+      id: 3,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "03.07.2025",
+      image: "/news/news3.jpg",
+    },
+    {
+      id: 4,
+      title: "Lorem Ipsum is simply dummy text of the",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "01.07.2025",
+      image: "/news/news4.jpg",
     },
     {
       id: 2,
@@ -191,6 +240,70 @@ function NewsAndInsightsSection() {
       date: "05.07.2025",
       image: "/news/news2.jpg",
     },
+    {
+      id: 1,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "03.07.2025",
+      image: "/news/news3.jpg",
+    },
+    {
+      id: 2,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "11.07.2025",
+      image: "/news/news1.png",
+    },
+    {
+      id: 3,
+      title: "Lorem Ipsum is simply dummy text of the",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "01.07.2025",
+      image: "/news/news4.jpg",
+    },
+    {
+      id: 4,
+      title: "Lorem Ipsum is simply dummy text of",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "05.07.2025",
+      image: "/news/news2.jpg",
+    },
+    {
+      id: 1,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "03.07.2025",
+      image: "/news/news3.jpg",
+    },
+    {
+      id: 2,
+      title: "Had a great experience will do again and",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "11.07.2025",
+      image: "/news/news1.png",
+    },
+    {
+      id: 3,
+      title: "Lorem Ipsum is simply dummy text of the",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "01.07.2025",
+      image: "/news/news4.jpg",
+    },
+    {
+      id: 4,
+      title: "Lorem Ipsum is simply dummy text of",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
+      date: "05.07.2025",
+      image: "/news/news2.jpg",
+    },
   ], []);
   const tabs = [
     { id: 1, title: "Home Care" },
@@ -209,6 +322,7 @@ function NewsAndInsightsSection() {
   ];
 
   useEffect(() => {
+    setVisibleCount(8);
     if (activeTab === "news") {
       setBlogsCards([]);
       if (activeTab2 === 1) {
@@ -322,7 +436,7 @@ function NewsAndInsightsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {activeTab === "news"
             ? newsCards.length > 0
-              ? newsCards.map((card, i) => (
+              ? newsCards.slice(0, visibleCount).map((card, i) => (
                   <div
                     key={i}
                     className="overflow-hidden flex flex-col"
@@ -388,7 +502,7 @@ function NewsAndInsightsSection() {
                     </div>
                   </div>
                 ))
-              : [1, 2, 3, 4].map((index) => (
+              : [1, 2, 3, 4, 5, 6].slice(0, 6).map((index) => (
                   <div
                     key={index}
                     className="overflow-hidden animate-pulse h-full"
@@ -418,7 +532,7 @@ function NewsAndInsightsSection() {
                   </div>
                 ))
             : blogsCards.length > 0
-            ? blogsCards.map((card) => (
+            ? blogsCards.slice(0, visibleCount).map((card) => (
                 <div
                   key={card.id}
                   className="overflow-hidden flex flex-col"
@@ -481,7 +595,7 @@ function NewsAndInsightsSection() {
                   </div>
                 </div>
               ))
-            : [1, 2, 3, 4].map((index) => (
+            : [1, 2, 3, 4, 5, 6].slice(0, 6).map((index) => (
                 <div
                   key={index}
                   className="overflow-hidden animate-pulse h-full"
@@ -511,6 +625,21 @@ function NewsAndInsightsSection() {
                 </div>
               ))}
         </div>
+
+        {/* View More Button */}
+        {((activeTab === "news" && newsCards.length > visibleCount) ||
+          (activeTab === "blogs" && blogsCards.length > visibleCount)) && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 6)}
+              className="px-8 py-3 bg-[#0A5BE0] text-white font-medium rounded-full flex items-center gap-2 hover:bg-[#084CC0] transition-colors"
+            >
+              <TTSWrapper text="View More" className="text-white font-medium">
+                View More
+              </TTSWrapper>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
