@@ -27,7 +27,7 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
   sectionTitle = "Staffing for Healthcare Facilities",
   description1 = "From placing skilled nurses in fulfilling roles across the UK to supporting healthcare providers with dependable staffing solutions, every success story reflects our core values of compassion, commitment, and care. These moments are not just achievements—they are the heartbeats of our mission to make a real difference in the lives of both our clients and candidates.",
   ctaText = "Know More",
-  ctaLink = "#",
+  ctaLink = "/services/mcm-nursing-care",
   description2,
   //   onCtaClick,
 }) => {

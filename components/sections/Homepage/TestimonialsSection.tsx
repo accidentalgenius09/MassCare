@@ -14,7 +14,7 @@ interface Testimonial {
   avatar: string;
 }
 
-const TestimonialsSection = () => {
+const TestimonialsSection = ({ showTabs = true }) => {
   const [activeTab, setActiveTab] = useState("Client Stories");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
@@ -203,45 +203,46 @@ const TestimonialsSection = () => {
     <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-16 md:py-20 px-4">
       <div className="container mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 sm:mb-10 md:mb-12">
+        <div
+          className={`flex flex-col md:flex-row ${
+            showTabs ? "justify-between" : "justify-center"
+          } items-start md:items-center mb-8 sm:mb-10 md:mb-12`}
+        >
           <h1 className="text-5xl font-semibold text-gray-900 mb-4 md:mb-0 px-12">
-            <TTSWrapper
-              text="Testimonials"
-            >
-              Testimonials
-            </TTSWrapper>
+            <TTSWrapper text="Testimonials">Testimonials</TTSWrapper>
           </h1>
 
-          {/* Tabs and View All */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
-            <div className="flex gap-8 whitespace-nowrap">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
-                    activeTab === tab
-                      ? "border-b-2 font-bold border-gray-900"
-                      : "hover:text-gray-900 font-medium"
-                  }`}
-                >
-                  <TTSWrapper text={tab}>{tab}</TTSWrapper>
+          {showTabs && (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
+              <div className="flex gap-8 whitespace-nowrap">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
+                      activeTab === tab
+                        ? "border-b-2 font-bold border-gray-900"
+                        : "hover:text-gray-900 font-medium"
+                    }`}
+                  >
+                    <TTSWrapper text={tab}>{tab}</TTSWrapper>
+                  </button>
+                ))}
+              </div>
+              <div className="mx-14">
+                <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
+                  <TTSWrapper text="View All">View All</TTSWrapper>{" "}
+                  <TopRightArrowBlack />
                 </button>
-              ))}
+              </div>
             </div>
-            <div className="mx-14">
-              <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
-                <TTSWrapper text="View All">View All</TTSWrapper>{" "}
-                <TopRightArrowBlack />
-              </button>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Testimonials Container */}
         <div className="relative px-4 sm:px-8 md:px-12">
           {/* Navigation Buttons */}
-            <button
+          <button
             onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentIndex === 0}

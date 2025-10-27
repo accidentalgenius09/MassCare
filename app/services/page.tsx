@@ -19,6 +19,7 @@ function Services() {
         title="Mass Training Academy"
         imageSrc="/services/mass-training.jpg"
         imageAlt="Mass Training Academy"
+        ctaLink="/services/mass-training-academy"
         description1="From placing skilled nurses in fulfilling roles across the UK to supporting healthcare providers with dependable staffing solutions, every success story reflects our core values of compassion, commitment, and care. These moments are not just achievements—they are the heartbeats of our mission to make a real difference in the lives of both our clients and candidates."
         sectionTitle="Provides accredited healthcare training, NVQ (RQF) qualifications, and CPD courses to upskill professionals and support career growth."
       />

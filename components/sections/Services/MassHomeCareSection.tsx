@@ -61,7 +61,7 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
     },
   ],
   ctaText = "Know More",
-  ctaLink = "#",
+  ctaLink = "/services/mass-home-care",
 }) => {
   return (
     <section className="relative bg-white overflow-hidden py-12 md:py-16 lg:py-20 mb-10">
@@ -119,26 +119,20 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                     {/* Text Content Section */}
                     <div className="order-1 max-w-3xl space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 lg:ps-10 md:ps-8 sm:ps-4 ps-0">
                       <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-black leading-tight">
-                        <TTSWrapper
-                          text={service.title}
-                        >
+                        <TTSWrapper text={service.title}>
                           {service.title}
                         </TTSWrapper>
                       </h2>
 
                       <div className="space-y-3 sm:space-y-4">
-                      <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                      <TTSWrapper
-                            text={service.description1}
-                          >
+                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                          <TTSWrapper text={service.description1}>
                             {service.description1}
                           </TTSWrapper>
                         </p>
 
                         <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                        <TTSWrapper
-                            text={service.description2}
-                          >
+                          <TTSWrapper text={service.description2}>
                             {service.description2}
                           </TTSWrapper>
                         </p>
@@ -150,26 +144,20 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                     {/* Text Content Section */}
                     <div className="order-1 max-w-3xl lg:pe-10 md:pe-8 sm:pe-4 pe-0 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
                       <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-black leading-tight">
-                        <TTSWrapper
-                          text={service.title}
-                        >
+                        <TTSWrapper text={service.title}>
                           {service.title}
                         </TTSWrapper>
                       </h2>
 
                       <div className="space-y-3 sm:space-y-4">
-                      <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                      <TTSWrapper
-                            text={service.description1}
-                          >
+                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                          <TTSWrapper text={service.description1}>
                             {service.description1}
                           </TTSWrapper>
                         </p>
 
                         <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                        <TTSWrapper
-                            text={service.description2}
-                          >
+                          <TTSWrapper text={service.description2}>
                             {service.description2}
                           </TTSWrapper>
                         </p>
