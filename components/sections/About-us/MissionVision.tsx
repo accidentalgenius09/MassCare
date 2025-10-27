@@ -6,8 +6,6 @@ import {
   ComplianceChecksIcon,
   FlowerDecoration,
   InitialConsultationIcon,
-  OngoingSupportIcon,
-  PlacementInductionIcon,
 } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 

@@ -1,4 +1,3 @@
-import { FlowerDecoration } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 import React from "react";
@@ -48,9 +47,9 @@ function ServicesOfferedSection({
             <TTSWrapper text="Services Offered">Services Offered</TTSWrapper>
           </h2>
           <p className="text-black text-base font-normal max-w-3xl mx-auto mt-4">
-            <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we’ve achieved on our journey in healthcare staffing.">
+            <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
               Mass Care Momentous represents the proud milestones, meaningful
-              connections, and impactful moments we’ve achieved on our journey
+              connections, and impactful moments we&apos;ve achieved on our journey
               in healthcare staffing.
             </TTSWrapper>
           </p>
@@ -71,9 +70,9 @@ function ServicesOfferedSection({
                 </TTSWrapper>
               </h6>
               <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
-                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we’ve achieved on our journey in healthcare staffing.">
+                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
                   Mass Care Momentous represents the proud milestones,
-                  meaningful connections, and impactful moments we’ve achieved
+                  meaningful connections, and impactful moments we&apos;ve achieved
                   on our journey in healthcare staffing.
                 </TTSWrapper>
               </p>
@@ -92,9 +91,9 @@ function ServicesOfferedSection({
                 </TTSWrapper>
               </h6>
               <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
-                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we've achieved on our journey in healthcare staffing.">
+                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
                   Mass Care Momentous represents the proud milestones,
-                  meaningful connections, and impactful moments we've achieved
+                  meaningful connections, and impactful moments we&apos;ve achieved
                   on our journey in healthcare staffing.
                 </TTSWrapper>
               </p>

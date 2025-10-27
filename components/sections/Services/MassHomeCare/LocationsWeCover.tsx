@@ -1,6 +1,4 @@
 import React from "react";
-import { MapPin } from "lucide-react";
-import { DotMap } from "./Mapsvg";
 import Image from "next/image";
 
 interface Location {

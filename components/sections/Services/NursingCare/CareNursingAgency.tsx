@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Check } from "lucide-react";
 import { GreenCheckmark } from "@/components/helpers/svgs";
 
 interface ServiceCardProps {
