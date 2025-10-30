@@ -1,11 +1,8 @@
 import React from "react";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import {
-  ClockOutline,
-  MapPinOutline,
   TopRightArrowWhite,
 } from "@/components/helpers/svgs";
-import { Calendar, Users } from "lucide-react";
 import {
   CalendarSVG,
   ClockSVG,

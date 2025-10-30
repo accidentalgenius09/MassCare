@@ -53,9 +53,9 @@ const ClientStoriesSection = () => {
             <TTSWrapper text="Client Stories">Client Stories</TTSWrapper>
           </h2>
           <p className="text-base font-normal text-black leading-relaxed">
-            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.">
+            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s.">
               Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
+              industry. Lorem Ipsum has been the industry&#39;s standard dummy text
               ever since the 1500s.
             </TTSWrapper>
           </p>

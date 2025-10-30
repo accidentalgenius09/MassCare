@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
@@ -17,10 +17,10 @@ const TestimonialHero: React.FC = () => {
             </h1>
 
             <p className="text-base text-black font-normal max-w-lg leading-relaxed">
-              <TTSWrapper text="Over the years, we've had the privilege of working with clients from diverse backgrounds — each with unique goals, challenges, and visions. Their words reflect the impact we've made together.">
-                Over the years, we've had the privilege of working with clients
+              <TTSWrapper text="Over the years, we&#39;ve had the privilege of working with clients from diverse backgrounds — each with unique goals, challenges, and visions. Their words reflect the impact we&#39;ve made together.">
+                Over the years, we&#39;ve had the privilege of working with clients
                 from diverse backgrounds — each with unique goals, challenges,
-                and visions. Their words reflect the impact we've made together.
+                and visions. Their words reflect the impact we&#39;ve made together.
               </TTSWrapper>
             </p>
 

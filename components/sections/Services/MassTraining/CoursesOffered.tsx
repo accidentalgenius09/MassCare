@@ -1,5 +1,4 @@
 import React from "react";
-import { Check } from "lucide-react";
 import { GreenCheckmark } from "@/components/helpers/svgs";
 import Image from "next/image";
 
