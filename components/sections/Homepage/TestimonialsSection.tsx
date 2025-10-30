@@ -14,8 +14,12 @@ interface Testimonial {
   avatar: string;
 }
 
-const TestimonialsSection = ({ showTabs = true }) => {
-  const [activeTab, setActiveTab] = useState("Client Stories");
+const TestimonialsSection = ({
+  showTabs = true,
+  viewAll = true,
+  tabs = ["Client Stories", "Nurse Testimonials", "Training Feedback"],
+}) => {
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
   const [isDragging, setIsDragging] = useState(false);
@@ -92,8 +96,6 @@ const TestimonialsSection = ({ showTabs = true }) => {
       avatar: "https://i.pravatar.cc/150?img=4",
     },
   ];
-
-  const tabs = ["Client Stories", "Nurse Testimonials", "Training Feedback"];
 
   const totalSlides = Math.ceil(testimonials.length / itemsPerView);
 
@@ -215,9 +217,9 @@ const TestimonialsSection = ({ showTabs = true }) => {
           {showTabs && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
               <div className="flex gap-8 whitespace-nowrap">
-                {tabs.map((tab) => (
+                {tabs.map((tab, index) => (
                   <button
-                    key={tab}
+                    key={index}
                     onClick={() => setActiveTab(tab)}
                     className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
                       activeTab === tab
@@ -230,10 +232,12 @@ const TestimonialsSection = ({ showTabs = true }) => {
                 ))}
               </div>
               <div className="mx-14">
-                <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
-                  <TTSWrapper text="View All">View All</TTSWrapper>{" "}
-                  <TopRightArrowBlack />
-                </button>
+                {viewAll && (
+                  <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
+                    <TTSWrapper text="View All">View All</TTSWrapper>{" "}
+                    <TopRightArrowBlack />
+                  </button>
+                )}
               </div>
             </div>
           )}
