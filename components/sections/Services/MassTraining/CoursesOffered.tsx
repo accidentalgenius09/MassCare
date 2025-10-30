@@ -104,7 +104,7 @@ const CoursesOffered: React.FC = () => {
         </div>
       </div>
       <section className="relative bg-[#E8EFFF]">
-        <div className="absolute top-5 right-5">
+        <div className="hidden lg:block absolute top-5 right-5">
           {" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +150,7 @@ const CoursesOffered: React.FC = () => {
             {/* Right Column - Images and Tagline */}
             <div className="hidden lg:block relative h-full">
               {/* Desktop Images */}
-              <div className="overflow-hidden -ms-40">
+              <div className="overflow-hidden lg:-ms-30">
                 <Image
                   src="/services/who-apply-1.png"
                   width={350}
@@ -159,7 +159,7 @@ const CoursesOffered: React.FC = () => {
                   className="object-cover"
                 />
               </div>
-              <div className="-ms-32 absolute mt-20">
+              <div className="lg:-ms-32 lg:absolute lg:mt-20">
                 <Image
                   src="/services/MassHomeCare-Typo.png"
                   width={300}
@@ -168,7 +168,7 @@ const CoursesOffered: React.FC = () => {
                   className="object-cover"
                 />
               </div>
-              <div className="overflow-hidden ms-72 -mt-65">
+              <div className="overflow-hidden lg:ms-72 lg:-mt-65">
                 <Image
                   src="/services/who-apply-2.png"
                   width={400}

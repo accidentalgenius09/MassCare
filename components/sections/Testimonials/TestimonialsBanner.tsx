@@ -5,10 +5,10 @@ function TestimonialsBanner() {
   return (
     <>
       <div
-        className={`min-h-[99vh] bg-[#012B71] bg-center flex items-center justify-center pt-16 mb-20`}
+        className={`min-h-[99vh] bg-[#012B71] bg-center flex items-center justify-center pt-20 mb-20`}
       >
         <div className="container mx-auto h-full px-4">
-          <div className="flex flex-col items-center justify-center h-full text-center">
+          <div className="flex flex-col items-center justify-center h-full text-center pb-5">
             <div
               className="rounded-full px-3 sm:px-4 md:px-5 py-2 sm:py-3 text-center text-white font-extralight text-xs sm:text-sm md:text-[13px]"
               style={{ border: "1.535px solid rgba(255, 255, 255, 0.50)" }}
