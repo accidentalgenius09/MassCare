@@ -25,27 +25,27 @@ export default function Footer() {
               <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">Quick Links</h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="" className="hover:underline">
                     Home
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/about-us" className="hover:underline">
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/services" className="hover:underline">
                     Services
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/career-opportunities" className="hover:underline">
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/contact-us" className="hover:underline">
                     Contact
                   </a>
                 </li>
@@ -57,17 +57,17 @@ export default function Footer() {
               <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">Policies</h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/environment-policies" className="hover:underline">
                     Carbon Reduction
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/privacy-policy" className="hover:underline">
                     Privacy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href="/terms-and-conditions" className="hover:underline">
                     Terms
                   </a>
                 </li>

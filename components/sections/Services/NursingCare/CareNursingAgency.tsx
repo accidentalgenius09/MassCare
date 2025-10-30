@@ -19,7 +19,7 @@ interface CareNursingAgencyProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ title, description }) => {
   return (
-    <div className="bg-white p-6 h-[200px] overflow-y-auto">
+    <div className="bg-white p-6 h-[200px] overflow-y-auto scrollbar-hide">
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 mt-1">
           <div className="w-6 h-6 flex items-center justify-center">
