@@ -10,6 +10,7 @@ import {
   YoutubeIconFooter,
 } from "../helpers/svgs";
 import { XIconFooter } from "../helpers/svgs";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -25,29 +26,29 @@ export default function Footer() {
               <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">Quick Links</h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
-                  <a href="" className="hover:underline">
+                  <Link href="/" className="hover:underline">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/about-us" className="hover:underline">
+                  <Link href="/about-us" className="hover:underline">
                     About
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/services" className="hover:underline">
+                  <Link href="/services" className="hover:underline">
                     Services
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/career-opportunities" className="hover:underline">
+                  <Link href="/career-opportunities" className="hover:underline">
                     Careers
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/contact-us" className="hover:underline">
+                  <Link href="/contact-us" className="hover:underline">
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -57,19 +58,19 @@ export default function Footer() {
               <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">Policies</h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
-                  <a href="/environment-policies" className="hover:underline">
+                  <Link href="/environment-policies" className="hover:underline">
                     Carbon Reduction
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/privacy-policy" className="hover:underline">
+                  <Link href="/privacy-policy" className="hover:underline">
                     Privacy
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/terms-and-conditions" className="hover:underline">
+                  <Link href="/terms-and-conditions" className="hover:underline">
                     Terms
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -80,15 +81,15 @@ export default function Footer() {
               <div className="text-sm sm:text-base font-light space-y-3">
                 <p>
                   <span className="block text-sm">Phone</span>
-                  <a href="tel:01823216575" className="hover:underline">
+                  <Link href="tel:01823216575" className="hover:underline">
                     01823 216575
-                  </a>
+                  </Link>
                 </p>
                 <p>
                   <span className="block text-sm">Email</span>
-                  <a href="mailto:masscare@info.in" className="hover:underline">
+                  <Link href="mailto:masscare@info.in" className="hover:underline">
                     masscare@info.in
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
@@ -97,21 +98,21 @@ export default function Footer() {
             <div>
               <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Follow Us</h3>
               <div className="flex items-center space-x-4 sm:space-x-6 mb-3 sm:mb-4">
-                <a href="#" className="hover:text-blue-300">
+                <Link href="#" className="hover:text-blue-300">
                   <FacebookIconFooter />
-                </a>
-                <a href="#" className="hover:text-blue-300">
+                </Link>
+                <Link href="#" className="hover:text-blue-300">
                   <YoutubeIconFooter />
-                </a>
-                <a href="#" className="hover:text-blue-300">
+                </Link>
+                <Link href="#" className="hover:text-blue-300">
                   <InstagramIconFooter />
-                </a>
-                <a href="#" className="hover:text-blue-300">
+                </Link>
+                <Link href="#" className="hover:text-blue-300">
                   <LinkedInIconFooter />
-                </a>
-                <a href="#" className="hover:text-blue-300">
+                </Link>
+                <Link href="#" className="hover:text-blue-300">
                   <XIconFooter />
-                </a>
+                </Link>
               </div>
               {/* Example CQC image */}
               <div className="relative w-20 sm:w-24 md:w-28 h-14 sm:h-16 md:h-20">
