@@ -65,7 +65,9 @@ function MassHomeCare() {
       />
       <LocationsMap />
       <FormMHC />
-      <div className="mt-20"><TrustedPartnerBanner /></div>
+      <div className="mt-20">
+        <TrustedPartnerBanner />
+      </div>
       <TestimonialsSection showTabs={false} />
       <CQCRatingCard />
     </>
