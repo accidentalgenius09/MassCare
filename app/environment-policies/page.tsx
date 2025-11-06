@@ -19,7 +19,7 @@ function EnvironmentPoliciesPage() {
               Green / Environmental Policy
             </TTSWrapper>
           </h1>
-          <p className="text-xs mt-2">
+          <p className="text-sm mt-5">
             <TTSWrapper text="Mass Care Momentous Ltd (trading as Mass Home Care) is committed to minimizing the impact of our operations on the environment while delivering high-quality home care services. We recognize that home care services involve significant travel and energy usage, and we aim to reduce our environmental footprint as part of our corporate responsibility.">
               Mass Care Momentous Ltd (trading as Mass Home Care) is committed
               to minimizing the impact of our operations on the environment

@@ -379,7 +379,7 @@ function CareerOpportunitiesPage() {
       />
 
       <div className="min-h-screen bg-white pt-8 pb-2 sm:pt-12 sm:pb-6 md:pt-16 md:pb-10 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-full px-20 mx-auto">
+        <div className="max-w-full px-4 sm:px-8 lg:px-20 mx-auto">
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 sm:mb-12">
             <div className="mb-6 sm:mb-0">
@@ -426,7 +426,7 @@ function CareerOpportunitiesPage() {
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="appearance-none bg-white border border-gray-300 rounded-lg w-36 px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                    className="appearance-none bg-white border border-gray-300 rounded-lg w-full sm:w-36 px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
                   >
                     <option value="All Types">All Types</option>
                     <option value="Full-time">Full-time</option>
@@ -447,11 +447,11 @@ function CareerOpportunitiesPage() {
             </div>
           </div>
           {/* Job Listings Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-10">
             {jobListings.slice(0, displayCount).map((job,i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-gray-100 px-6 pb-6 hover:shadow-sm transition-shadow text-sm duration-300"
+                className="rounded-2xl border border-gray-300 px-4 sm:px-6 pb-6 hover:shadow-sm transition-shadow text-sm duration-300"
               >
                 {/* Category Tag */}
                 <div className="mb-4">
@@ -475,7 +475,7 @@ function CareerOpportunitiesPage() {
                 </div>
 
                 {/* Description */}
-                <div className="max-w-[85%]">
+                <div className="max-w-full sm:max-w-[85%]">
                   <p className="text-sm text-black mb-4 leading-relaxed">
                     <TTSWrapper text={job.description}>
                       {job.description}
@@ -537,17 +537,17 @@ function CareerOpportunitiesPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() => handleViewDetails(job)}
-                      className="flex gap-2 items-center justify-center px-4 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-700 hover:shadow-md transition-all duration-300"
+                      className="flex gap-2 items-center justify-center px-4 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-700 hover:shadow-md transition-all duration-300 w-full sm:w-auto"
                     >
                       <TTSWrapper text="View Details">View Details</TTSWrapper>
                       <ArrowUpRight className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleApplyNow(job)}
-                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0A5BE0] text-white rounded-full text-sm font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0A5BE0] text-white rounded-full text-sm font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
                     >
                       <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
                       <ArrowUpRight className="w-4 h-4" />
@@ -583,7 +583,7 @@ function CareerOpportunitiesPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {/* Compassionate Care */}
               <div className="bg-[#E8EFFF] rounded-xl p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-xl sm:text-2xl font-medium text-black mb-3 sm:mb-4">
@@ -662,20 +662,21 @@ function CareerOpportunitiesPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-4 sm:mx-8 lg:mx-24">
           {applicationSteps.map((step, index) => (
             <div
               key={step.id}
-              className={`bg-white p-6 sm:p-8 relative ${
+              className={`bg-white p-6 sm:p-8 relative rounded-xl lg:rounded-none ${
                 index === 0
-                  ? "rounded-l-xl"
+                  ? "lg:rounded-l-xl"
                   : index === applicationSteps.length - 1
-                  ? "rounded-r-xl"
+                  ? "lg:rounded-r-xl"
                   : ""
               }`}
             >
               {!step.isLast && (
                 <div
+                  className="hidden lg:block"
                   style={{
                     position: "absolute",
                     right: 0,

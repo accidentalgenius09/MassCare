@@ -134,13 +134,13 @@ function UpcomingCoursesSection() {
               </div>
 
               {/* Instructor */}
-              <p className="text-sm text-black mb-8 font-normal">
+              <p className="text-sm text-black mb-8 font-semibold">
                 Instructor:{" "}
                 <span className="font-normal">{course.instructor}</span>
               </p>
 
               {/* Enroll Button */}
-              <button className="w-1/2 bg-[#0A5BE0] text-white font-medium py-3 px-5 rounded-full flex items-center justify-center gap-2 hover:bg-[#084CC0] transition-colors">
+              <button className="lg:w-2/3 md:w-2/3 w-2/3 bg-[#0A5BE0] text-white font-medium py-3 px-5 rounded-full flex items-center justify-center gap-2 hover:bg-[#084CC0] transition-colors">
                 <TTSWrapper
                   text="Enroll Now"
                   className="text-white font-medium"

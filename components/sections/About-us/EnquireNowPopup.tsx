@@ -47,12 +47,12 @@ function EnquireNowPopup({ onClose }: EnquireNowPopupProps) {
   };
   return (
     <div
-      className="fixed inset-0 z-[9999] overflow-y-auto bg-[#012B71]/80"
+      className="fixed inset-0 z-[9999] overflow-y-auto scrollbar-hide bg-[#012B71]/80"
       onClick={handleBackdropClick}
     >
       <div className="flex items-center justify-center min-h-screen p-4 mx-52">
         <div
-          className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
@@ -62,7 +62,7 @@ function EnquireNowPopup({ onClose }: EnquireNowPopupProps) {
               className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Close"
             >
-              <X className="w-6 h-6 text-gray-600" />
+              <X className="w-6 h-6 hover:text-gray-600 text-white" />
             </button>
           )}
 

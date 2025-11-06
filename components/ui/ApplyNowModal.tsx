@@ -67,28 +67,28 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f]"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f] overflow-y-auto"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-md w-6xl h-full relative">
+      <div className="bg-white rounded-md w-full max-w-4xl max-h-[90vh] my-auto relative flex flex-col">
         {/* Close Button */}
         {/* Modal Content */}
-        <div className="px-18 py-12">
+        <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 overflow-y-auto scrollbar-hide flex-1">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center">
-              <h2 className="text-4xl font-base text-black mb-2">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex justify-between items-start gap-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-base text-black mb-2 flex-1">
                 <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
               </h2>
               <button
                 onClick={onClose}
-                className=" p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
                 aria-label="Close modal"
               >
                 <XOutline />
               </button>
             </div>
-            <p className="text-md font-extralight text-black">
+            <p className="text-sm sm:text-base font-extralight text-black">
               <TTSWrapper text={`Submit your application for the ${jobTitle}`}>
                 Submit your application for the {jobTitle} Role
               </TTSWrapper>
@@ -96,10 +96,10 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* Full Name */}
             <div>
-              <label className="block text-base font-medium text-black mb-2">
+              <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Full Name *">Full Name *</TTSWrapper>
               </label>
               <input
@@ -108,14 +108,14 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 required
               />
             </div>
 
             {/* Email Address */}
             <div>
-              <label className="block text-base font-medium text-black mb-2">
+              <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Email Address *">Email Address *</TTSWrapper>
               </label>
               <input
@@ -124,14 +124,14 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter your email address"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 required
               />
             </div>
 
             {/* Phone Number */}
             <div>
-              <label className="block text-base font-medium text-black mb-2">
+              <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Phone Number *">Phone Number *</TTSWrapper>
               </label>
               <input
@@ -140,14 +140,14 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 value={formData.phone}
                 onChange={handleInputChange}
                 placeholder="Enter Phone number"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 required
               />
             </div>
 
             {/* Experience */}
             <div>
-              <label className="block text-base font-medium text-black mb-2">
+              <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Experience *">Experience *</TTSWrapper>
               </label>
               <div className="relative">
@@ -155,10 +155,14 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   name="experience"
                   value={formData.experience}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                  className={`w-full px-4 py-2.5 sm:py-3 border ${
+                    formData.experience === ""
+                      ? "text-gray-500"
+                      : "text-black"
+                  } border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm sm:text-base`}
                   required
                 >
-                  <option value="" disabled className="text-gray-500">
+                  <option value="" disabled>
                     {" "}
                     Select your experience in this field
                   </option>
@@ -187,7 +191,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
 
             {/* Upload CV */}
             <div>
-              <label className="block text-base font-medium text-black mb-2">
+              <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Upload CV *">Upload CV *</TTSWrapper>
               </label>
               <div className="relative">
@@ -196,14 +200,14 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   name="cv"
                   onChange={handleFileChange}
                   accept=".pdf,.doc,.docx"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   required
                 />
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
-                  <div className="w-8 h-8 mx-auto mb-2">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 lg:p-8 text-center hover:border-blue-500 transition-colors">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2">
                     <UploadOutline />
-                  </div>{" "}
-                  <p className="text-sm text-[#00000066]">
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#00000066]">
                     <TTSWrapper text="Click To Upload Your CV (PDF, DOC, DOCX)">
                       Click To Upload Your CV (PDF, DOC, DOCX)
                     </TTSWrapper>
@@ -237,17 +241,17 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-2 pt-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full font-medium hover:bg-blue-50 hover:border-blue-600 transition-all duration-300"
+                className="w-full sm:w-auto px-6 py-2.5 sm:py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full font-medium hover:bg-blue-50 hover:border-blue-600 transition-all duration-300 text-sm sm:text-base"
               >
                 <TTSWrapper text="Cancel">Cancel</TTSWrapper>
               </button>
               <button
                 type="submit"
-                className="px-4 py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 <TTSWrapper text="Submit Application">
                   Submit Application

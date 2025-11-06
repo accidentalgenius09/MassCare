@@ -62,7 +62,7 @@ function ServicesOfferedSection({
                 alt={imgAlt1}
                 width={800}
                 height={430}
-                className="rounded-2xl w-full h-[430px] object-cover"
+                className="rounded-2xl w-full h-[430px] object-center lg:object-cover"
               />
               <h6 className="text-2xl font-medium text-black mt-6">
                 <TTSWrapper text="Temporary & Permanent Staffing">
@@ -83,7 +83,7 @@ function ServicesOfferedSection({
                 alt={imgAlt2}
                 width={800}
                 height={430}
-                className="rounded-2xl w-full h-[430px] object-cover"
+                className="rounded-2xl w-full h-[430px] object-fill lg:object-cover"
               />
               <h6 className="text-2xl font-medium text-black mt-6">
                 <TTSWrapper text="Specialised Healthcare Roles">
