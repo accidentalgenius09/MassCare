@@ -2,6 +2,7 @@
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -21,7 +22,7 @@ function WorkingForUs() {
     message: "",
   });
   const handleSubmit = () => {
-    alert("Form submitted successfully!");
+    toast.success("Form submitted successfully!");
   };
 
   const handleInputChange = (
@@ -47,9 +48,7 @@ function WorkingForUs() {
             <TTSWrapper text="Work for Us">Work for Us</TTSWrapper>
           </h1>
           <p className="text-white text-base">
-            <TTSWrapper
-              text="Lorem Ipsum is simply dummy text of the printing and typesetting industry"
-            >
+            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry
             </TTSWrapper>
@@ -89,7 +88,7 @@ function WorkingForUs() {
               name="areaOfInterest"
               value={formData.areaOfInterest}
               onChange={handleInputChange}
-              className="w-full px-6 py-4 rounded-lg bg-white text-black appearance-none cursor-pointer"
+              className="w-full px-6 py-4 rounded-lg bg-white text-black appearance-none cursor-pointer border border-gray-300"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                 backgroundRepeat: "no-repeat",
@@ -115,6 +114,7 @@ function WorkingForUs() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "right 1rem center",
                 backgroundSize: "1.5em 1.5em",
+                border: "1px solid black",
               }}
             >
               <option value="">Preferred Intake*</option>
@@ -136,7 +136,7 @@ function WorkingForUs() {
           <div className="text-center pt-4">
             <button
               onClick={handleSubmit}
-              className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg "
+              className="inline-flex items-center gap-2 px-8 py-3 cursor-pointer text-white font-medium rounded-lg "
               style={{
                 background: "rgba(10, 91, 224, 1)",
                 borderRadius: "300px",

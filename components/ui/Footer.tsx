@@ -20,8 +20,8 @@ export default function Footer() {
     >
       <div className="flex flex-col lg:flex-row">
         <div className="py-8 sm:py-10 md:py-12 flex-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 pb-2">
-            {/* Quick Links */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 pb-2 pt-6">
+        {/* Quick Links */}
             <div>
               <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">Quick Links</h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
@@ -115,7 +115,7 @@ export default function Footer() {
                 </Link>
               </div>
               {/* Example CQC image */}
-              <div className="relative w-20 sm:w-24 md:w-28 h-14 sm:h-16 md:h-20">
+              <div className="relative -ml-2 w-20 sm:w-24 md:w-28 h-14 sm:h-16 md:h-20">
                 <Image
                   src="/Rectangle.png"
                   alt="CQC"
@@ -131,7 +131,7 @@ export default function Footer() {
             {/* Accreditations */}
             <div className="flex-1">
               <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Accreditations</h3>
-              <div className="flex flex-wrap gap-2 sm:gap-3 max-w-2xl">
+              <div className="flex flex-wrap gap-2 sm:gap-3 max-w-full">
                 <div className="relative w-16 sm:w-20 md:w-24 h-8 sm:h-10 md:h-12 bg-white px-8 sm:px-12 md:px-16 rounded-lg">
                   <Image
                     src="/logos/careQC.png"

@@ -202,7 +202,7 @@ const TestimonialsSection = ({
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-16 md:py-20 px-4">
+    <div className="bg-[#E8EFFF] pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-22 md:pb-22 px-4">
       <div className="container mx-auto">
         {/* Header */}
         <div
@@ -268,6 +268,8 @@ const TestimonialsSection = ({
             style={{
               width: "100%",
               overflow: lastCardHovered ? "hidden" : "hidden",
+              overflowY: itemsPerView === 1 && hoveredIndex !== null ? "visible" : "hidden",
+              overflowX: "hidden",
             }}
           >
             <div
@@ -292,7 +294,7 @@ const TestimonialsSection = ({
                 {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                   <div
                     key={slideIndex}
-                    className="min-w-full flex gap-3 sm:gap-4 md:gap-6 px-2"
+                    className={`min-w-full flex gap-3 sm:gap-4 md:gap-6 px-2 ${itemsPerView === 1 ? "items-start" : ""}`}
                   >
                     {testimonials
                       .slice(
@@ -307,8 +309,12 @@ const TestimonialsSection = ({
                           isInCurrentSlide && hoveredIndex !== null;
 
                         // Calculate width based on hover state
+                        // On small screens (itemsPerView = 1), don't expand to prevent breaking
                         let cardWidth;
-                        if (isHovered) {
+                        if (itemsPerView === 1) {
+                          // On mobile, keep full width to prevent overflow
+                          cardWidth = `calc(100% - 0px)`;
+                        } else if (isHovered) {
                           cardWidth = `calc(${130 / itemsPerView}% - ${
                             ((itemsPerView - 1) * 24) / itemsPerView
                           }px)`;
@@ -332,7 +338,8 @@ const TestimonialsSection = ({
                               width: cardWidth,
                               flexShrink: 0,
                               transition: "width 0.3s ease-out",
-                              minWidth: 0,
+                              minWidth: itemsPerView === 1 ? "100%" : 0,
+                              maxWidth: itemsPerView === 1 ? "100%" : "none",
                             }}
                             className="relative"
                           >
@@ -341,18 +348,21 @@ const TestimonialsSection = ({
                                 isHovered ? "z-20" : "z-10"
                               }`}
                               style={{
-                                height: "320px",
+                                height: itemsPerView === 1 && isHovered ? "auto" : "320px",
+                                minHeight: "320px",
                                 position: "relative",
-                                overflow: "hidden",
+                                overflow: itemsPerView === 1 && isHovered ? "visible" : "hidden",
                               }}
                             >
                               {/* Content */}
-                              <div className="relative z-30 flex-1 flex flex-col h-full">
-                                <div className="flex-1 overflow-hidden mb-4 sm:mb-6 min-h-0">
+                              <div className={`relative z-30 flex flex-col ${itemsPerView === 1 && isHovered ? "" : "flex-1 h-full"}`}>
+                                <div className={`${itemsPerView === 1 && isHovered ? "" : "flex-1"} ${itemsPerView === 1 && isHovered ? "overflow-visible" : "overflow-hidden"} mb-4 sm:mb-6 ${itemsPerView === 1 && isHovered ? "" : "min-h-0"}`}>
                                   <p
                                     className={`text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300 scrollbar-hide ${
                                       isHovered
-                                        ? "overflow-y-auto max-h-[180px] pr-2"
+                                        ? itemsPerView === 1
+                                          ? "overflow-visible max-h-none pr-2"
+                                          : "overflow-x-auto overflow-y-auto max-h-[180px] pr-2"
                                         : "line-clamp-4"
                                     }`}
                                     style={{

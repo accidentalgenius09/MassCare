@@ -36,7 +36,7 @@ function Newsletter() {
     <>
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 ms-2 sm:ms-4 md:ms-6">
         <h3 className="font-semibold text-sm sm:text-base md:text-lg whitespace-nowrap">Subscribe Newsletter</h3>
-        <form className="flex w-full sm:w-auto mx-0 sm:mx-4 py-1 border border-white rounded-full">
+        <form className="flex w-full sm:w-auto mx-0 sm:mx-4 py-1 border border-white rounded-full pe-1">
           <input
             type="email"
             placeholder="Email"

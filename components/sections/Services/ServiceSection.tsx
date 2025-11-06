@@ -21,7 +21,7 @@ function ServiceSection() {
 
   return (
     <section className="py-12 container mx-auto md:py-16 lg:py-20 my-16 sm:my-20 md:my-25 bg-white">
-      <div className="max-w-full px-4 sm:px-6 lg:px-8 justify-between">
+      <div className="max-w-full px-14 sm:px-16 lg:px-24 justify-between">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-25">
           {/* Left Section - Images */}
           <div>
@@ -42,7 +42,7 @@ function ServiceSection() {
                   src="/services/service-2.jpg"
                   alt="Close-up of care professional holding elderly woman's hands"
                   fill
-                  className="object-cover"
+                  className="object-fill object-center"
                 />
               </div>
             </div>

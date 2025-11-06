@@ -4,6 +4,7 @@ import { TTSProvider } from '@/components/providers/TTSProvider';
 import { AccessibilityProvider } from '@/components/providers/AccessibilityProvider';
 import Header from '@/components/ui/Header';
 import Footer from '@/components/ui/Footer';
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Mass Care - Professional Nursing, Home Care & Training Services",
@@ -29,6 +30,7 @@ export default function RootLayout({
         <AccessibilityProvider>
           <TTSProvider>
             <Header />
+            <Toaster />
             {children}
             <Footer />
           </TTSProvider>

@@ -16,7 +16,7 @@ function PageBanner({
 }: PageBannerProps) {
   return (
     <div
-      className={`h-[40vh] sm:h-[45vh] md:h-[50vh] bg-cover bg-center flex items-center justify-center pt-16`}
+      className={`h-[40vh] sm:h-[45vh] md:h-[70vh] bg-cover bg-center flex items-center justify-center pt-16`}
       style={{
         backgroundImage: `url(${image ?? "/common/dna-banner.png"})`,
       }}

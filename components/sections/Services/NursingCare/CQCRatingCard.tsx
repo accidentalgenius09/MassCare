@@ -31,9 +31,9 @@ function CQCRatingCard() {
                   <TTSWrapper text="Mass Care Home">Mass Care Home</TTSWrapper>
                 </h4>
                 <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 inline-block mb-4">
-                  <p className="text-white text-xs sm:text-sm">
-                    <span className="font-semibold">Overall Rating: </span>
-                    <span className="font-normal">Outstanding</span>
+                  <p className="text-white">
+                    <span className="font-semibold text-lg">Overall Rating: </span>
+                    <span className="font-light text-xs sm:text-sm">Outstanding</span>
                   </p>
                 </div>
               </div>

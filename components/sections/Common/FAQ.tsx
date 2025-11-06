@@ -43,10 +43,10 @@ function FAQ() {
     },
   ];
   return (
-    <section className="py-8 md:py-12 px-20 bg-white mb-20">
+    <section className="py-8 md:py-12 px-4 sm:px-8 lg:px-20 bg-white mb-20">
       <div className="max-w-full mx-auto">
-        <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4">
             <TTSWrapper text="Frequently Asked Questions">
               Frequently Asked Questions
             </TTSWrapper>
@@ -60,9 +60,9 @@ function FAQ() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:px-4">
           {/* Left Column */}
-          <div className="space-y-4">
+          <div className="space-y-4 pt-4 pb-4">
             {faqData.slice(0, 3).map((faq) => (
               <div
                 key={faq.id}
@@ -70,13 +70,13 @@ function FAQ() {
                   expandedFAQ === faq.id
                     ? "text-white bg-[#0A5BE0]"
                     : "bg-white text-black"
-                } rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300`}
+                } rounded-2xl shadow-lg  overflow-hidden transition-all duration-300`}
               >
                 <div
-                  className="flex items-center justify-between p-4 cursor-pointer"
+                  className="flex items-center justify-between p-3 sm:p-4 cursor-pointer"
                   onClick={() => toggleFAQ(faq.id)}
                 >
-                  <h3 className={`text-md font-semibold pr-4`}>
+                  <h3 className="text-sm sm:text-md font-semibold pr-2 sm:pr-4 flex-1">
                     <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
                   </h3>
                   <button
@@ -90,9 +90,9 @@ function FAQ() {
                   </button>
                 </div>
                 {expandedFAQ === faq.id && (
-                  <div className="px-6 pb-6 bg-[#0A5BE0] text-white">
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 bg-[#0A5BE0] text-white">
                     <div className="border-gray-100">
-                      <p className="leading-relaxed">
+                      <p className="text-sm sm:text-base leading-relaxed">
                         <TTSWrapper text={faq.answer}>{faq.answer}</TTSWrapper>
                       </p>
                     </div>
@@ -103,7 +103,7 @@ function FAQ() {
           </div>
 
           {/* Right Column */}
-          <div className="space-y-4">
+          <div className="space-y-4 pt-4 pb-4">
             {faqData.slice(3).map((faq) => (
               <div
                 key={faq.id}
@@ -111,13 +111,13 @@ function FAQ() {
                   expandedFAQ === faq.id
                     ? "text-white bg-[#0A5BE0]"
                     : "bg-white text-black"
-                } rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300`}
+                } rounded-2xl shadow-lg overflow-hidden transition-all duration-300`}
               >
                 <div
-                  className="flex items-center justify-between p-4 cursor-pointer"
+                  className="flex items-center justify-between p-3 sm:p-4 cursor-pointer"
                   onClick={() => toggleFAQ(faq.id)}
                 >
-                  <h3 className="text-md font-semibold pr-4">
+                  <h3 className="text-sm sm:text-md font-semibold pr-2 sm:pr-4 flex-1">
                     <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
                   </h3>
                   <button
@@ -131,9 +131,9 @@ function FAQ() {
                   </button>
                 </div>
                 {expandedFAQ === faq.id && (
-                  <div className="px-6 pb-6">
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6">
                     <div>
-                      <p className="text-white leading-relaxed">
+                      <p className="text-white text-sm sm:text-base leading-relaxed">
                         <TTSWrapper text={faq.answer}>{faq.answer}</TTSWrapper>
                       </p>
                     </div>
