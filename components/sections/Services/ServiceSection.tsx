@@ -42,7 +42,7 @@ function ServiceSection() {
                   src="/services/service-2.jpg"
                   alt="Close-up of care professional holding elderly woman's hands"
                   fill
-                  className="object-fill object-center"
+                  className="object-cover"
                 />
               </div>
             </div>

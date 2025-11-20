@@ -45,7 +45,7 @@ const Header = () => {
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8 text-base font-light">
+        <div className="hidden lg:flex items-center space-x-10 text-sm font-light">
           <Link
             href="/"
             className="text-white hover:text-gray-200 transition-colors"

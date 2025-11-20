@@ -1,6 +1,6 @@
 "use client";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
 
 function FAQ() {
@@ -86,7 +86,11 @@ function FAQ() {
                         : "bg-[#0A5BE0] text-white"
                     } rounded-full flex items-center justify-center transition-all duration-300`}
                   >
-                    <Plus className="w-4 h-4" />
+                    {expandedFAQ === faq.id ? (
+                      <Minus className="w-4 h-4" />
+                    ) : (
+                      <Plus className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {expandedFAQ === faq.id && (

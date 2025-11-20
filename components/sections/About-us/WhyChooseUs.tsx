@@ -101,11 +101,13 @@ const WhyChooseUs: React.FC = () => {
 
         {/* CTA Button */}
         <div className="flex justify-center">
-          <button className="bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full flex items-center gap-2 hover:bg-blue-700 hover:shadow-lg transition-all duration-300">
-            <TTSWrapper text="Book a Consultation">
-              Book a Consultation
-            </TTSWrapper>
-            <TopRightArrowWhite />
+          <button className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0">
+            <span className="relative z-10 flex items-center gap-2">
+              <TTSWrapper text="Book a Consultation">
+                Book a Consultation
+              </TTSWrapper>
+              <TopRightArrowWhite />
+            </span>
           </button>
         </div>
       </div>

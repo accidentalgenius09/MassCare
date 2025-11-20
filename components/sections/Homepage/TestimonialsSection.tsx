@@ -348,21 +348,19 @@ const TestimonialsSection = ({
                                 isHovered ? "z-20" : "z-10"
                               }`}
                               style={{
-                                height: itemsPerView === 1 && isHovered ? "auto" : "320px",
+                                height: "320px",
                                 minHeight: "320px",
                                 position: "relative",
-                                overflow: itemsPerView === 1 && isHovered ? "visible" : "hidden",
+                                overflow: "hidden",
                               }}
                             >
                               {/* Content */}
-                              <div className={`relative z-30 flex flex-col ${itemsPerView === 1 && isHovered ? "" : "flex-1 h-full"}`}>
-                                <div className={`${itemsPerView === 1 && isHovered ? "" : "flex-1"} ${itemsPerView === 1 && isHovered ? "overflow-visible" : "overflow-hidden"} mb-4 sm:mb-6 ${itemsPerView === 1 && isHovered ? "" : "min-h-0"}`}>
+                              <div className="relative z-30 flex flex-col flex-1 h-full">
+                                <div className="flex-1 overflow-hidden mb-4 sm:mb-6 min-h-0">
                                   <p
                                     className={`text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300 scrollbar-hide ${
                                       isHovered
-                                        ? itemsPerView === 1
-                                          ? "overflow-visible max-h-none pr-2"
-                                          : "overflow-x-auto overflow-y-auto max-h-[180px] pr-2"
+                                        ? "overflow-x-auto overflow-y-auto max-h-[180px] pr-2"
                                         : "line-clamp-4"
                                     }`}
                                     style={{

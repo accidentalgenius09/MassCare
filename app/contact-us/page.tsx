@@ -292,7 +292,7 @@ const ContactPage: React.FC = () => {
               </div>
 
               {/* Right Side - Contact Form */}
-              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16 h-[60vh]">
+              <div className="bg-[#012B71] rounded-3xl p-4 md:p-6 lg:p-8 absolute right-0 me-16 h-auto pb-4 md:pb-6 lg:pb-8">
                 <h3 className="text-3xl font-semibold text-white mb-4 text-center pt-3">
                   <TTSWrapper text="Contact Form">Contact Form</TTSWrapper>
                 </h3>
@@ -352,7 +352,7 @@ const ContactPage: React.FC = () => {
 
                   <button
                     onClick={handleSubmit}
-                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-5 rounded-full flex items-center justify-center group text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
+                    className="mx-auto bg-[#0A5BE0] text-white py-3 px-4 mt-3 rounded-full flex items-center justify-center group text-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper text="Submit Enquiry">
                       Submit Enquiry

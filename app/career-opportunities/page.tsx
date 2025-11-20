@@ -7,7 +7,10 @@ import JobDetailsModal from "@/components/ui/JobDetailsModal";
 import ApplyNowModal from "@/components/ui/ApplyNowModal";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { ChevronDown, ArrowUpRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { FilterDropdown } from "@/components/sections/Common/FilterDropdown";
+import api from "@/service/RestApiWrapper";
+import restApiWrapper from "@/service/RestApiWrapper";
 
 interface JobListing {
   id: number;
@@ -30,6 +33,22 @@ interface ApplicationStep {
   description: string;
   isLast: boolean;
 }
+
+const roleOptions = [
+  "All Roles",
+  "Registered Nurse",
+  "Critical Care",
+  "Home Care",
+];
+
+const locationOptions = [
+  "All Locations",
+  "New York, NY",
+  "London, UK",
+  "Manchester, UK",
+];
+
+const typeOptions = ["All Types", "Full-time", "Part-time", "Contract"];
 
 const jobListings: JobListing[] = [
   {
@@ -369,6 +388,40 @@ function CareerOpportunitiesPage() {
     setDisplayCount((prev) => prev + 3);
   };
 
+  useEffect(() => {
+    setDisplayCount(6);
+  }, [selectedRole, selectedLocation, selectedType]);
+
+  // Fetch careers data from API
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        const response = await restApiWrapper.get("/careers");
+        console.log("Careers API Response:", response);
+      } catch (error) {
+        console.error("Error fetching careers:", error);
+      }
+    };
+
+    fetchCareers();
+  }, []);
+
+  const filteredJobs = jobListings.filter((job) => {
+    const roleMatch =
+      selectedRole === "All Roles" ||
+      job.category === selectedRole ||
+      job.title.toLowerCase().includes(selectedRole.toLowerCase());
+    const locationMatch =
+      selectedLocation === "All Locations" || job.location === selectedLocation;
+    const typeMatch =
+      selectedType === "All Types" || job.employmentType === selectedType;
+
+    return roleMatch && locationMatch && typeMatch;
+  });
+
+  const visibleJobs = filteredJobs.slice(0, displayCount);
+  const canViewMore = displayCount < filteredJobs.length;
+
   return (
     <>
       <PageBanner
@@ -391,50 +444,29 @@ function CareerOpportunitiesPage() {
             {/* Filter Section */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
               <div className="flex flex-wrap gap-3 sm:gap-4">
-                {/* Role Filter */}
-                <div className="relative">
-                  <select
-                    value={selectedRole}
-                    onChange={(e) => setSelectedRole(e.target.value)}
-                    className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                  >
-                    <option value="All Roles">All Roles</option>
-                    <option value="Registered Nurse">Registered Nurse</option>
-                    <option value="Critical Care">Critical Care</option>
-                    <option value="Home Care">Home Care</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                </div>
+                <FilterDropdown
+                  value={selectedRole}
+                  options={roleOptions}
+                  onChange={setSelectedRole}
+                  className="mt-1"
+                  widthClass="w-48"
+                />
 
-                {/* Location Filter */}
-                <div className="relative">
-                  <select
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                  >
-                    <option value="All Locations">All Locations</option>
-                    <option value="New York, NY">New York, NY</option>
-                    <option value="London, UK">London, UK</option>
-                    <option value="Manchester, UK">Manchester, UK</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                </div>
+                <FilterDropdown
+                  value={selectedLocation}
+                  options={locationOptions}
+                  onChange={setSelectedLocation}
+                  className="mt-1"
+                  widthClass="w-48"
+                />
 
-                {/* Type Filter */}
-                <div className="relative">
-                  <select
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                    className="appearance-none bg-white border border-gray-300 rounded-lg w-full sm:w-36 px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                  >
-                    <option value="All Types">All Types</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Contract">Contract</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                </div>
+                <FilterDropdown
+                  value={selectedType}
+                  options={typeOptions}
+                  onChange={setSelectedType}
+                  className="mt-1"
+                  widthClass="w-48"
+                />
               </div>
 
               {/* Clear Filters Button */}
@@ -448,10 +480,10 @@ function CareerOpportunitiesPage() {
           </div>
           {/* Job Listings Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-10">
-            {jobListings.slice(0, displayCount).map((job,i) => (
+            {visibleJobs.map((job, i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-gray-300 px-4 sm:px-6 pb-6 hover:shadow-sm transition-shadow text-sm duration-300"
+                className="rounded-2xl border border-gray-100 px-4 sm:px-6 pb-6 shadow-sm text-sm"
               >
                 {/* Category Tag */}
                 <div className="mb-4">
@@ -557,9 +589,24 @@ function CareerOpportunitiesPage() {
               </div>
             ))}
           </div>
-          {displayCount < jobListings.length && (
+          {filteredJobs.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                <TTSWrapper text="No openings match your filters">
+                  No openings match your filters
+                </TTSWrapper>
+              </h3>
+              <p className="text-sm text-gray-500 max-w-sm">
+                <TTSWrapper text="Try adjusting the role, location, or job type filters to discover more opportunities.">
+                  Try adjusting the role, location, or job type filters to
+                  discover more opportunities.
+                </TTSWrapper>
+              </p>
+            </div>
+          )}
+          {canViewMore && (
             <div className="flex items-center justify-center mt-10">
-              <button 
+              <button
                 onClick={handleViewMore}
                 className="bg-[#0A5BE0] text-white cursor-pointer px-4 py-2 rounded-full hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
               >
@@ -701,6 +748,8 @@ function CareerOpportunitiesPage() {
           ))}
         </div>
       </section>
+
+      {/* FAQ Section */}
       <FAQ />
 
       {/* Job Details Modal */}
@@ -724,5 +773,5 @@ function CareerOpportunitiesPage() {
     </>
   );
 }
-
 export default CareerOpportunitiesPage;
+

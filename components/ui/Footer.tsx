@@ -174,7 +174,7 @@ export default function Footer() {
           </div>
         </div>
         <div
-          className="flex justify-end mx-4 sm:mx-6 md:mx-8 lg:mx-10 w-full lg:w-1/4"
+          className="flex justify-end w-full lg:w-1/4"
           style={{
             background: "linear-gradient(180deg, #083082 0%, #012367 100%)",
             height: "100%",

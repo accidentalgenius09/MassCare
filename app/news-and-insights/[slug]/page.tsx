@@ -183,7 +183,7 @@ export default function NewsAndInsightsDetailPage() {
               </div>
 
               {/* Carousel Container */}
-              <div className="flex-1 overflow-hidden w-64">
+              <div className="flex-1 overflow-hidden w-80">
                 <div className="space-y-6">
                   {getDisplayItems().map((card, i) => (
                     <div

@@ -407,10 +407,10 @@ function NewsAndInsightsSection() {
           </div>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="flex justify-end mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
-            <div className="flex gap-4 sm:gap-6 whitespace-nowrap">
+            <div className="flex gap-6 whitespace-nowrap mt-5">
               {tabs.map((tab: { id: number; title: string }) => (
                 <button
                   key={tab.id}

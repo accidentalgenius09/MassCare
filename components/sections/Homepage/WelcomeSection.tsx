@@ -38,14 +38,14 @@ const WelcomeSection = ({ section = "home" }: WelcomeSectionProps) => {
               </TTSWrapper>
             </div>
 
-            <div className="max-w-2xl">
+            <div className="max-w-[600px]">
               <TTSWrapper
                 text="Mass Care Agency is a registered nursing agency; we are dedicated to the health profession, and we are passionate about caring for vulnerable adults. This passion comes from within the heart and means a lot to us. We aim to support the healthcare industry all over the UK by supplying quality health care professionals. We will fulfil your staffing needs when you require, and we are available 24 hours a day 7 days a week. <br /> <br />
                   You can also book your staffing requirement by calling one of
                   our friendly team members or using the booking form provided
                   on this site."
               >
-                <p className="text-black font-light text-sm sm:text-base">
+                <p className="text-black font-normal text-xs sm:text-sm">
                   Mass Care Agency is a registered nursing agency; we are
                   dedicated to the health profession, and we are passionate
                   about caring for vulnerable adults. This passion comes from

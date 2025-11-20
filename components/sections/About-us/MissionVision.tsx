@@ -195,26 +195,21 @@ const MissionVisionSection = () => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-3 px-10 gap-6 justify-between">
+            <div className="grid grid-cols-3 px-10 gap-3 justify-between">
               {steps.map((step, index) => (
                 <div key={index} className="min-w-0">
-                  <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
+                  <div className="bg-[#012367] scrollbar-hide p-4 md:p-6 rounded-3xl h-auto md:h-60 max-w-full border border-gray-200 relative">
                     {/* Decorative Flower */}
-                    <div className="absolute top-2 right-2">
+                    <div className="absolute top-6 right-3">
                       <FlowerDecoration />
                     </div>
 
                     {/* Content */}
                     <div className="relative z-10 max-w-full">
-                      <h3 className="text-2xl font-semibold text-white">
-                        <TTSWrapper
-                          text={step.title}
-                          className="text-2xl font-semibold text-white"
-                        >
-                          {step.title}
-                        </TTSWrapper>
+                      <h3 className="text-3xl font-semibold text-white">
+                        <TTSWrapper text={step.title}>{step.title}</TTSWrapper>
                       </h3>
-                      <p className="text-white text-lg font-normal mt-4">
+                      <p className="text-white text-xl font-normal mt-4">
                         <TTSWrapper text={step.description}>
                           {step.description}
                         </TTSWrapper>

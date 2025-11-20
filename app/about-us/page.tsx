@@ -19,10 +19,17 @@ export default function AboutUsPage() {
         breadcrumb="Home / About Us"
         description="Lorem Ipsum 8 years of meaningful care... care without compromise."
       />
-      <WelcomeSection section="aboutus" />
-      <MissionVisionSection />
-      <ServicesSection />
-      <WhyChooseUs />
+      <div className="px-20">
+        <WelcomeSection section="aboutus" />
+      </div>
+      <div className="px-12">
+        {" "}
+        <MissionVisionSection />
+      </div>
+      <div className="px-20">
+        <ServicesSection />
+        <WhyChooseUs />
+      </div>
     </>
   );
 }
