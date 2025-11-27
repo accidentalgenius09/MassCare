@@ -9,6 +9,8 @@ import {
   PlacementInductionIcon,
 } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { HomeData } from "@/types/Home.type";
+import Image from "next/image";
 
 // Decorative flower component (from your SVG)
 const FlowerDecoration = () => (
@@ -27,7 +29,7 @@ const FlowerDecoration = () => (
 );
 
 // Main Component
-const HowItWorksSection = () => {
+const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(5);
 
@@ -86,7 +88,7 @@ const HowItWorksSection = () => {
     },
   ];
 
-  const totalSlides = Math.ceil(steps.length / itemsPerView);
+  const totalSlides = Math.ceil(homeData?.work_steps?.length / itemsPerView);
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
   };
@@ -101,19 +103,18 @@ const HowItWorksSection = () => {
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             <TTSWrapper
-              text="How It Works"
+              text={homeData.home_cms.how_it_works_title || ""}
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
             >
-              How It Works
+              {homeData.home_cms.how_it_works_title || ""}
             </TTSWrapper>
           </h2>
           <p className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4">
             <TTSWrapper
-              text="Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+              text={homeData.home_cms.how_it_works_subtitle || ""}
               className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4"
             >
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry
+              {homeData.home_cms.how_it_works_subtitle || ""}
             </TTSWrapper>
           </p>
         </div>
@@ -121,7 +122,7 @@ const HowItWorksSection = () => {
         {/* Carousel Container */}
         <div className="relative max-w-full mx-auto">
           {/* Previous Button */}
-          {steps.length > 5 && (
+          {homeData?.work_steps?.length > 5 && (
             <button
               onClick={prevSlide}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -156,7 +157,7 @@ const HowItWorksSection = () => {
                   key={slideIndex}
                   className="min-w-full flex gap-6 justify-center"
                 >
-                  {steps
+                  {homeData?.work_steps
                     .slice(
                       slideIndex * itemsPerView,
                       (slideIndex + 1) * itemsPerView
@@ -178,7 +179,14 @@ const HowItWorksSection = () => {
                           </div>
 
                           {/* Icon */}
-                          <div className="flex mb-3 sm:mb-4">{step.icon}</div>
+                          <div className="flex mb-3 sm:mb-4">
+                            <Image
+                              src={step.image_value}
+                              alt={step.image_alt_text_value}
+                              width={100}
+                              height={100}
+                            />
+                          </div>
                           <div className="w-full max-w-[120px] sm:max-w-[140px] absolute bottom-3 sm:bottom-4">
                             <h3 className="w-full text-sm sm:text-base md:text-lg font-semibold text-gray-900">
                               <TTSWrapper
@@ -192,10 +200,10 @@ const HowItWorksSection = () => {
                           <div className="absolute right-1 sm:right-2 bottom-3 sm:bottom-4">
                             <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
                               <TTSWrapper
-                                text={step.number}
+                                text={step.id.toString()}
                                 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
                               >
-                                {step.number}
+                                {step.id.toString()}
                               </TTSWrapper>
                             </div>
                           </div>

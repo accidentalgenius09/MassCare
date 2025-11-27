@@ -5,8 +5,8 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 
 interface ServiceItem {
   title: string;
-  description1: string;
-  description2: string;
+  description1?: string;
+  description2?: string;
   imageSrc: string;
   imageAlt: string;
 }
@@ -125,17 +125,20 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                       </h2>
 
                       <div className="space-y-3 sm:space-y-4">
-                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                          <TTSWrapper text={service.description1}>
-                            {service.description1}
-                          </TTSWrapper>
-                        </p>
-
-                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                          <TTSWrapper text={service.description2}>
-                            {service.description2}
-                          </TTSWrapper>
-                        </p>
+                        {service.description1 && (
+                          <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                            <TTSWrapper text={service.description1}>
+                              {service.description1}
+                            </TTSWrapper>
+                          </p>
+                        )}
+                        {service.description2 && (
+                          <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                            <TTSWrapper text={service.description2}>
+                              {service.description2}
+                            </TTSWrapper>
+                          </p>
+                        )}
                       </div>
                     </div>
                   </>
@@ -150,17 +153,21 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                       </h2>
 
                       <div className="space-y-3 sm:space-y-4">
-                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                          <TTSWrapper text={service.description1}>
-                            {service.description1}
-                          </TTSWrapper>
-                        </p>
+                        {service.description1 && (
+                          <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                            <TTSWrapper text={service.description1}>
+                              {service.description1}
+                            </TTSWrapper>
+                          </p>
+                        )}
 
-                        <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
-                          <TTSWrapper text={service.description2}>
-                            {service.description2}
-                          </TTSWrapper>
-                        </p>
+                        {service.description2 && (
+                          <p className="text-sm sm:text-base text-black font-normal leading-relaxed">
+                            <TTSWrapper text={service.description2}>
+                              {service.description2}
+                            </TTSWrapper>
+                          </p>
+                        )}
                       </div>
                     </div>
 

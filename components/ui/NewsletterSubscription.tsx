@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { TopRightArrowBlack, TopRightArrowWhite } from "../helpers/svgs";
 import { usePathname, useRouter } from "next/navigation";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import toast from "react-hot-toast";
+import restApiWrapper from "@/service/RestApiWrapper";
 
 function Newsletter() {
   const [email, setEmail] = useState("");
@@ -12,11 +14,44 @@ function Newsletter() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // Email validation function
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (email) {
-      setSubscribedEmail(email);
-      setShowModal(true);
+    if (!email) {
+      return;
+    }
+
+    // Validate email format first
+    if (!isValidEmail(email)) {
+      toast.error("Email format is not correct");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      const response = await restApiWrapper.post(
+        "/newsletter-subscription",
+        formData
+      );
+
+      if (response.status === 200 || response.data) {
+        setSubscribedEmail(email);
+        setShowModal(true);
+      } else {
+        toast.error(
+          response.message ||
+            response.data?.message ||
+            "Subscription failed. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
     }
   };
 
@@ -35,7 +70,9 @@ function Newsletter() {
   return (
     <>
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 ms-2 sm:ms-4 md:ms-6">
-        <h3 className="font-semibold text-sm sm:text-base md:text-lg whitespace-nowrap">Subscribe Newsletter</h3>
+        <h3 className="font-semibold text-sm sm:text-base md:text-lg whitespace-nowrap">
+          Subscribe Newsletter
+        </h3>
         <form className="flex w-full sm:w-auto mx-0 sm:mx-4 py-1 border border-white rounded-full pe-1">
           <input
             type="email"

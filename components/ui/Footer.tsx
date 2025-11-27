@@ -3,13 +3,7 @@
 import Image from "next/image";
 import LocationCard from "./FooterLogo";
 import Newsletter from "./NewsletterSubscription";
-import {
-  FacebookIconFooter,
-  InstagramIconFooter,
-  LinkedInIconFooter,
-  YoutubeIconFooter,
-} from "../helpers/svgs";
-import { XIconFooter } from "../helpers/svgs";
+import { FacebookIconFooter, InstagramIconFooter } from "../helpers/svgs";
 import Link from "next/link";
 
 export default function Footer() {
@@ -20,10 +14,12 @@ export default function Footer() {
     >
       <div className="flex flex-col lg:flex-row">
         <div className="py-8 sm:py-10 md:py-12 flex-1">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 pb-2 pt-6">
-        {/* Quick Links */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 pb-2 pt-6">
+            {/* Quick Links */}
             <div>
-              <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">Quick Links</h3>
+              <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">
+                Quick Links
+              </h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
                   <Link href="/" className="hover:underline">
@@ -41,7 +37,10 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/career-opportunities" className="hover:underline">
+                  <Link
+                    href="/career-opportunities"
+                    className="hover:underline"
+                  >
                     Careers
                   </Link>
                 </li>
@@ -55,10 +54,15 @@ export default function Footer() {
 
             {/* Policies */}
             <div>
-              <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">Policies</h3>
+              <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
+                Policies
+              </h3>
               <ul className="space-y-2 text-sm sm:text-base font-light">
                 <li>
-                  <Link href="/environment-policies" className="hover:underline">
+                  <Link
+                    href="/environment-policies"
+                    className="hover:underline"
+                  >
                     Carbon Reduction
                   </Link>
                 </li>
@@ -68,7 +72,10 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms-and-conditions" className="hover:underline">
+                  <Link
+                    href="/terms-and-conditions"
+                    className="hover:underline"
+                  >
                     Terms
                   </Link>
                 </li>
@@ -77,7 +84,9 @@ export default function Footer() {
 
             {/* Contact */}
             <div>
-              <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">Contact</h3>
+              <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
+                Contact
+              </h3>
               <div className="text-sm sm:text-base font-light space-y-3">
                 <p>
                   <span className="block text-sm">Phone</span>
@@ -87,7 +96,10 @@ export default function Footer() {
                 </p>
                 <p>
                   <span className="block text-sm">Email</span>
-                  <Link href="mailto:masscare@info.in" className="hover:underline">
+                  <Link
+                    href="mailto:masscare@info.in"
+                    className="hover:underline"
+                  >
                     masscare@info.in
                   </Link>
                 </p>
@@ -96,22 +108,23 @@ export default function Footer() {
 
             {/* Follow Us */}
             <div>
-              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Follow Us</h3>
+              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">
+                Follow Us
+              </h3>
               <div className="flex items-center space-x-4 sm:space-x-6 mb-3 sm:mb-4">
-                <Link href="#" className="hover:text-blue-300">
+                <Link
+                  href="https://www.facebook.com/masscare.momentous.9"
+                  target="_blank"
+                  className="hover:text-blue-300"
+                >
                   <FacebookIconFooter />
                 </Link>
-                <Link href="#" className="hover:text-blue-300">
-                  <YoutubeIconFooter />
-                </Link>
-                <Link href="#" className="hover:text-blue-300">
+                <Link
+                  href="https://www.instagram.com/masscaremomentous/"
+                  target="_blank"
+                  className="hover:text-blue-300"
+                >
                   <InstagramIconFooter />
-                </Link>
-                <Link href="#" className="hover:text-blue-300">
-                  <LinkedInIconFooter />
-                </Link>
-                <Link href="#" className="hover:text-blue-300">
-                  <XIconFooter />
                 </Link>
               </div>
               {/* Example CQC image */}
@@ -127,12 +140,14 @@ export default function Footer() {
           </div>
 
           {/* Bottom Section */}
-          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 sm:gap-8">
+          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col lg:flex-row lg:items-center gap-6 sm:gap-8">
             {/* Accreditations */}
             <div className="flex-1">
-              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Accreditations</h3>
-              <div className="flex flex-wrap gap-2 sm:gap-3 max-w-full">
-                <div className="relative w-16 sm:w-20 md:w-24 h-8 sm:h-10 md:h-12 bg-white px-8 sm:px-12 md:px-16 rounded-lg">
+              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">
+                Accreditations
+              </h3>
+              <div className="flex flex-nowrap gap-2 sm:gap-3 max-w-full">
+                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
                   <Image
                     src="/logos/careQC.png"
                     alt="Care Quality Commission"
@@ -140,7 +155,7 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <div className="relative w-16 sm:w-20 md:w-24 h-8 sm:h-10 md:h-12 bg-white px-8 sm:px-12 md:px-16 rounded-lg">
+                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
                   <Image
                     src="/logos/cpd.png"
                     alt="CPD"
@@ -148,7 +163,7 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <div className="relative w-16 sm:w-20 md:w-24 h-8 sm:h-10 md:h-12 bg-white px-8 sm:px-12 md:px-16 rounded-lg">
+                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
                   <Image
                     src="/logos/skillsforcare.png"
                     alt="Accreditation 2"
@@ -156,7 +171,7 @@ export default function Footer() {
                     className="object-contain"
                   />
                 </div>
-                <div className="relative w-16 sm:w-20 md:w-24 h-8 sm:h-10 md:h-12 bg-white px-8 sm:px-12 md:px-16 rounded-lg">
+                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
                   <Image
                     src="/logos/dbs.png"
                     alt="DBS"
@@ -174,7 +189,7 @@ export default function Footer() {
           </div>
         </div>
         <div
-          className="flex justify-end mx-4 sm:mx-6 md:mx-8 lg:mx-10 w-full lg:w-1/4"
+          className="flex justify-end w-full lg:w-1/4 -me-10"
           style={{
             background: "linear-gradient(180deg, #083082 0%, #012367 100%)",
             height: "100%",

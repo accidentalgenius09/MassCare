@@ -4,22 +4,26 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TopRightArrowBlack } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
+import { Testimonial } from "@/types/Home.type";
 
-interface Testimonial {
-  id: number;
-  name: string;
-  location: string;
-  rating: number;
-  text: string;
-  avatar: string;
+interface TestimonialsSectionProps {
+  testimonials: Testimonial[];
+  title: string;
+  showTabs?: boolean;
+  viewAll?: boolean;
+  tabs?: string[];
 }
 
+const VIEW_ALL = "all";
+
 const TestimonialsSection = ({
+  testimonials,
+  title,
   showTabs = true,
   viewAll = true,
   tabs = ["Client Stories", "Nurse Testimonials", "Training Feedback"],
-}) => {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+}: TestimonialsSectionProps) => {
+  const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
   const [isDragging, setIsDragging] = useState(false);
@@ -27,77 +31,74 @@ const TestimonialsSection = ({
   const [scrollLeft, setScrollLeft] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [lastCardHovered, setLastCardHovered] = useState(false);
+  const [testimonialCategories, setTestimonialCategories] = useState<
+    Array<{ id: number; title: string }>
+  >([]);
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoScrollInterval = useRef<NodeJS.Timeout | null>(null);
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: "Selina",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been Lorem Ipsum is simply dummy text of the printing and typesetting",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 2,
-      name: "Steeev",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the i dummy text of the printing and typesetting industry. Lorem Ipsum has been the itext of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i  dummy text of the printing and typesetting industry. Lorem Ipsum has been the i ndustry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 3,
-      name: "Stanly",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took",
-      avatar: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-      id: 4,
-      name: "Stella",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took",
-      avatar: "https://i.pravatar.cc/150?img=4",
-    },
-    {
-      id: 5,
-      name: "Selina",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been Lorem Ipsum is simply dummy text of the printing and typesetting",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 6,
-      name: "Steeev",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 7,
-      name: "Stanly",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took",
-      avatar: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-      id: 8,
-      name: "Stella",
-      location: "UK",
-      rating: 5.0,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took",
-      avatar: "https://i.pravatar.cc/150?img=4",
-    },
-  ];
+  // Extract testimonial categories from homeData.testimonials
+  useEffect(() => {
+    if (!testimonials) {
+      setTestimonialCategories([]);
+      return;
+    }
 
-  const totalSlides = Math.ceil(testimonials.length / itemsPerView);
+    const categories: Array<{ id: number; title: string }> = [];
+    const categoryIds = new Set<number>();
+
+    testimonials.forEach((testimonial) => {
+      if (
+        testimonial.testimonial_category &&
+        !categoryIds.has(testimonial.testimonial_category.id)
+      ) {
+        categories.push({
+          id: testimonial.testimonial_category.id,
+          title: testimonial.testimonial_category.title,
+        });
+        categoryIds.add(testimonial.testimonial_category.id);
+      }
+    });
+
+    setTestimonialCategories(categories);
+
+    // Set initial active tab only if it hasn't been set yet
+    if (activeTab === undefined) {
+      if (categories.length > 0) {
+        setActiveTab(categories[0].title);
+      } else if (tabs.length > 0) {
+        setActiveTab(tabs[0]);
+      } else {
+        setActiveTab(VIEW_ALL);
+      }
+    }
+  }, [testimonials, activeTab, tabs]);
+
+  // Filter testimonials based on active tab
+  const filteredTestimonials = React.useMemo(() => {
+    if (!testimonials) return [];
+
+    // If View All is selected or no active tab, show all testimonials
+    if (!activeTab || activeTab === VIEW_ALL) {
+      return testimonials;
+    }
+
+    // Filter testimonials by active tab category
+    return testimonials.filter((testimonial) => {
+      if (testimonial.testimonial_category) {
+        return testimonial.testimonial_category.title === activeTab;
+      } else {
+        return true; // Include testimonials without category
+      }
+    });
+  }, [testimonials, activeTab]);
+
+  const totalSlides = Math.ceil(filteredTestimonials.length / itemsPerView);
+
+  // Reset current index when active tab changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [activeTab]);
 
   // Update items per view based on screen size
   useEffect(() => {
@@ -211,29 +212,52 @@ const TestimonialsSection = ({
           } items-start md:items-center mb-8 sm:mb-10 md:mb-12`}
         >
           <h1 className="text-5xl font-semibold text-gray-900 mb-4 md:mb-0 px-12">
-            <TTSWrapper text="Testimonials">Testimonials</TTSWrapper>
+            <TTSWrapper text={title || ""}>{title || ""}</TTSWrapper>
           </h1>
 
-          {showTabs && (
+          {showTabs && testimonialCategories.length > 0 && (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
               <div className="flex gap-8 whitespace-nowrap">
-                {tabs.map((tab, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveTab(tab)}
-                    className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
-                      activeTab === tab
-                        ? "border-b-2 font-bold border-gray-900"
-                        : "hover:text-gray-900 font-medium"
-                    }`}
-                  >
-                    <TTSWrapper text={tab}>{tab}</TTSWrapper>
-                  </button>
-                ))}
+                {testimonialCategories.length > 0
+                  ? testimonialCategories.map((category) => (
+                      <button
+                        key={category.id}
+                        onClick={() => setActiveTab(category.title)}
+                        className={`text-xs sm:text-sm text-black cursor-pointer transition-colors pb-1 ${
+                          activeTab === category.title
+                            ? "border-b-2 font-bold border-gray-900"
+                            : "hover:text-gray-900 font-medium"
+                        }`}
+                      >
+                        <TTSWrapper text={category.title}>
+                          {category.title}
+                        </TTSWrapper>
+                      </button>
+                    ))
+                  : tabs.map((tab, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveTab(tab)}
+                        className={`text-xs sm:text-sm text-black transition-colors pb-1 ${
+                          activeTab === tab
+                            ? "border-b-2 font-bold border-gray-900"
+                            : "hover:text-gray-900 font-medium"
+                        }`}
+                      >
+                        <TTSWrapper text={tab}>{tab}</TTSWrapper>
+                      </button>
+                    ))}
               </div>
               <div className="mx-14">
                 {viewAll && (
-                  <button className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-900 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap">
+                  <button
+                    onClick={() => setActiveTab(VIEW_ALL)}
+                    className={`flex items-center gap-2 text-xs cursor-pointer sm:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                      activeTab === VIEW_ALL || !activeTab
+                        ? "text-blue-600 gap-3 font-bold"
+                        : "text-gray-900 hover:gap-3 hover:text-blue-600"
+                    }`}
+                  >
                     <TTSWrapper text="View All">View All</TTSWrapper>{" "}
                     <TopRightArrowBlack />
                   </button>
@@ -246,21 +270,31 @@ const TestimonialsSection = ({
         {/* Testimonials Container */}
         <div className="relative px-4 sm:px-8 md:px-12">
           {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={currentIndex === 0}
-          >
-            <ChevronLeft size={20} className="text-gray-600 sm:w-6 sm:h-6" />
-          </button>
+          {filteredTestimonials.length > 4 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={currentIndex === 0}
+              >
+                <ChevronLeft
+                  size={20}
+                  className="text-gray-600 sm:w-6 sm:h-6"
+                />
+              </button>
 
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={currentIndex === totalSlides - 1}
-          >
-            <ChevronRight size={20} className="text-gray-600 sm:w-6 sm:h-6" />
-          </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 z-20 rounded-full p-1.5 sm:p-2 transition-all duration-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={currentIndex === totalSlides - 1}
+              >
+                <ChevronRight
+                  size={20}
+                  className="text-gray-600 sm:w-6 sm:h-6"
+                />
+              </button>
+            </>
+          )}
 
           {/* Carousel */}
           <div
@@ -268,7 +302,10 @@ const TestimonialsSection = ({
             style={{
               width: "100%",
               overflow: lastCardHovered ? "hidden" : "hidden",
-              overflowY: itemsPerView === 1 && hoveredIndex !== null ? "visible" : "hidden",
+              overflowY:
+                itemsPerView === 1 && hoveredIndex !== null
+                  ? "visible"
+                  : "hidden",
               overflowX: "hidden",
             }}
           >
@@ -294,9 +331,11 @@ const TestimonialsSection = ({
                 {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                   <div
                     key={slideIndex}
-                    className={`min-w-full flex gap-3 sm:gap-4 md:gap-6 px-2 ${itemsPerView === 1 ? "items-start" : ""}`}
+                    className={`min-w-full flex gap-3 sm:gap-4 md:gap-6 px-2 ${
+                      itemsPerView === 1 ? "items-start" : ""
+                    }`}
                   >
-                    {testimonials
+                    {filteredTestimonials
                       .slice(
                         slideIndex * itemsPerView,
                         (slideIndex + 1) * itemsPerView
@@ -348,21 +387,19 @@ const TestimonialsSection = ({
                                 isHovered ? "z-20" : "z-10"
                               }`}
                               style={{
-                                height: itemsPerView === 1 && isHovered ? "auto" : "320px",
+                                height: "320px",
                                 minHeight: "320px",
                                 position: "relative",
-                                overflow: itemsPerView === 1 && isHovered ? "visible" : "hidden",
+                                overflow: "hidden",
                               }}
                             >
                               {/* Content */}
-                              <div className={`relative z-30 flex flex-col ${itemsPerView === 1 && isHovered ? "" : "flex-1 h-full"}`}>
-                                <div className={`${itemsPerView === 1 && isHovered ? "" : "flex-1"} ${itemsPerView === 1 && isHovered ? "overflow-visible" : "overflow-hidden"} mb-4 sm:mb-6 ${itemsPerView === 1 && isHovered ? "" : "min-h-0"}`}>
+                              <div className="relative z-30 flex flex-col flex-1 h-full">
+                                <div className="flex-1 overflow-hidden mb-4 sm:mb-6 min-h-0">
                                   <p
                                     className={`text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300 scrollbar-hide ${
                                       isHovered
-                                        ? itemsPerView === 1
-                                          ? "overflow-visible max-h-none pr-2"
-                                          : "overflow-x-auto overflow-y-auto max-h-[180px] pr-2"
+                                        ? "overflow-x-auto overflow-y-auto max-h-[180px] pr-2"
                                         : "line-clamp-4"
                                     }`}
                                     style={{
@@ -372,10 +409,10 @@ const TestimonialsSection = ({
                                     onMouseLeave={handleTextScrollReset}
                                   >
                                     <TTSWrapper
-                                      text={testimonial.text}
+                                      text={testimonial.description}
                                       className="text-gray-700 text-xs sm:text-sm leading-relaxed transition-all duration-300"
                                     >
-                                      {testimonial.text}
+                                      {testimonial.description}
                                     </TTSWrapper>
                                   </p>
                                 </div>
@@ -395,10 +432,8 @@ const TestimonialsSection = ({
                                     />
                                   </svg>
                                   <span className="text-xs sm:text-sm font-semibold text-gray-900 flex items-center">
-                                    <TTSWrapper
-                                      text={`${testimonial.rating.toFixed(1)}`}
-                                    >
-                                      {testimonial.rating.toFixed(1)}
+                                    <TTSWrapper text={`${testimonial.rating}`}>
+                                      {testimonial.rating}
                                     </TTSWrapper>
                                   </span>
                                 </div>
@@ -437,8 +472,8 @@ const TestimonialsSection = ({
                                 {/* Author - Fixed at bottom */}
                                 <div className="flex items-center gap-2 sm:gap-3 mt-auto">
                                   <Image
-                                    src={testimonial.avatar}
-                                    alt={testimonial.name}
+                                    src={testimonial.image_value}
+                                    alt={testimonial.image_alt_text_value}
                                     width={48}
                                     height={48}
                                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
@@ -454,10 +489,10 @@ const TestimonialsSection = ({
                                     </h3>
                                     <p className="text-xs sm:text-sm text-gray-500">
                                       <TTSWrapper
-                                        text={testimonial.location}
+                                        text={testimonial.place}
                                         className="text-xs sm:text-sm text-gray-500"
                                       >
-                                        {testimonial.location}
+                                        {testimonial.place}
                                       </TTSWrapper>
                                     </p>
                                   </div>

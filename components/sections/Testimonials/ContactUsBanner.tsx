@@ -3,16 +3,19 @@ import React from "react";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { useRouter } from "next/navigation";
+import { TestimonialsPageData } from "@/types/Testimonials.type";
 interface ContactUsBannerProps {
   title?: string;
   description?: string;
   buttonText?: string;
+  testimonialsData?: TestimonialsPageData;
 }
 
 const ContactUsBanner: React.FC<ContactUsBannerProps> = ({
   title = "Contact Us",
   description = "Dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has the leap into electronic typesetting, remaining essentially unchanged.",
   buttonText = "Contact Us",
+  testimonialsData,
 }) => {
   const navigate = useRouter();
   return (
@@ -20,7 +23,10 @@ const ContactUsBanner: React.FC<ContactUsBannerProps> = ({
       <div className="container mx-auto px-4 sm:px-6 lg:px-32">
         <div
           style={{
-            backgroundImage: "url('/testimonials/Frame-3.png')",
+            backgroundImage: testimonialsData?.testimonial_cms
+              ?.section5_image_value
+              ? `url("${testimonialsData.testimonial_cms.section5_image_value}")`
+              : "none",
             backgroundSize: "auto 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right center",

@@ -1,75 +1,12 @@
 import React from "react";
 import { GreenCheckmark } from "@/components/helpers/svgs";
 import Image from "next/image";
+import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
+import TTSWrapper from "@/hooks/TTSWrapper";
 
-interface Course {
-  id: number;
-  title: string;
-  image: string;
-}
-
-interface Requirement {
-  title: string;
-  description: string;
-}
-
-const CoursesOffered: React.FC = () => {
-  const courses: Course[] = [
-    {
-      id: 1,
-      title: "All in One Day Mandatory Training",
-      image: "/services/traning.png",
-    },
-    {
-      id: 2,
-      title: "Education Training",
-      image: "/services/traning3.png",
-    },
-    {
-      id: 3,
-      title: "Manual & Patient Handling",
-      image: "/services/traning4.png",
-    },
-    {
-      id: 4,
-      title: "Safeguarding Vulnerable Adults & Children",
-      image: "/services/traning1.png",
-    },
-  ];
-
-  const requirements: Requirement[] = [
-    {
-      title: "Medication Support",
-      description:
-        "Registered nurses, healthcare assistants, and medical professionals with valid UK qualifications and registration.",
-    },
-    {
-      title: "Care Workers & Support Staff",
-      description:
-        "Experienced elderly care workers, respite care providers, and support workers for vulnerable adults.",
-    },
-    {
-      title: "Right to Work in the UK",
-      description:
-        "All applicants must have the legal right to work in the United Kingdom with appropriate documentation.",
-    },
-    {
-      title: "Enhanced DBS Check",
-      description:
-        "Current or willingness to obtain an Enhanced DBS Disclosure and Barring Service check for vulnerable adult care.",
-    },
-    {
-      title: "Professional References",
-      description:
-        "Minimum of two professional references from healthcare settings or previous care work experience.",
-    },
-    {
-      title: "Commitment to Quality Care",
-      description:
-        "Passionate individuals dedicated to providing compassionate, high-quality care for vulnerable adults.",
-    },
-  ];
-
+const CoursesOffered: React.FC<{
+  MCMData: McmNursingCareAgencyServiceDetail;
+}> = ({ MCMData }) => {
   return (
     <>
       <div className="py-8 sm:py-12">
@@ -77,22 +14,28 @@ const CoursesOffered: React.FC = () => {
           {/* Courses Section */}
           <section className="mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
-              Courses Offered
+              <TTSWrapper
+                text={MCMData?.service_detail_cms?.courses_offered_title}
+              >
+                {MCMData?.service_detail_cms?.courses_offered_title}
+              </TTSWrapper>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {courses.map((course) => (
+              {MCMData.offered_courses.map((course) => (
                 <div key={course.id} className="rounded-lg overflow-hidden">
                   <div className="relative h-64 sm:h-80 lg:h-96">
                     <Image
-                      src={course.image}
+                      src={course.image_value}
                       fill
-                      alt={course.title}
+                      alt={course.image_alt_text_value}
                       className="w-full h-full object-cover rounded-2xl"
                     />
                   </div>
                   <div className="py-4 w-full sm:w-2/3">
                     <h3 className="text-base sm:text-lg font-medium text-black leading-tight">
-                      {course.title}
+                      <TTSWrapper text={course.title}>
+                        {course.title}
+                      </TTSWrapper>
                     </h3>
                   </div>
                 </div>
@@ -124,10 +67,14 @@ const CoursesOffered: React.FC = () => {
             {/* Left Column - Requirements */}
             <div className="bg-[#F5F8FF] p-6 sm:p-8 max-w-lg mx-auto lg:mx-0">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
-                Who Can Apply?
+                <TTSWrapper
+                  text={MCMData?.service_detail_cms?.who_can_apply_title}
+                >
+                  {MCMData?.service_detail_cms?.who_can_apply_title}
+                </TTSWrapper>
               </h2>
               <div className="space-y-6 sm:space-y-8">
-                {requirements.map((req, index) => (
+                {MCMData?.who_can_applies?.map((req, index) => (
                   <div key={index} className="flex gap-4">
                     <div className="flex-shrink-0">
                       <div className="flex items-center justify-center">
@@ -136,10 +83,12 @@ const CoursesOffered: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-xl sm:text-2xl text-black mb-1">
-                        {req.title}
+                        <TTSWrapper text={req.title}>{req.title}</TTSWrapper>
                       </h3>
                       <p className="text-sm text-black leading-relaxed">
-                        {req.description}
+                        <TTSWrapper text={req.subtitle}>
+                          {req.subtitle}
+                        </TTSWrapper>
                       </p>
                     </div>
                   </div>
@@ -152,10 +101,13 @@ const CoursesOffered: React.FC = () => {
               {/* Desktop Images */}
               <div className="overflow-hidden lg:-ms-30">
                 <Image
-                  src="/services/who-apply-1.png"
+                  src={MCMData?.service_detail_cms?.apply_section_img_one_value}
                   width={350}
                   height={400}
-                  alt="Caregiver with elderly person"
+                  alt={
+                    MCMData?.service_detail_cms
+                      ?.apply_section_img_one_alt_text_value
+                  }
                   className="object-cover"
                 />
               </div>
@@ -170,10 +122,13 @@ const CoursesOffered: React.FC = () => {
               </div>
               <div className="overflow-hidden lg:ms-72 lg:-mt-65">
                 <Image
-                  src="/services/who-apply-2.png"
+                  src={MCMData?.service_detail_cms?.apply_section_img_two_value}
                   width={400}
                   height={500}
-                  alt="Caregivers with patient outdoors"
+                  alt={
+                    MCMData?.service_detail_cms
+                      ?.apply_section_img_two_alt_text_value
+                  }
                   className="object-cover"
                 />
               </div>
@@ -183,19 +138,25 @@ const CoursesOffered: React.FC = () => {
             <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
               <div className="rounded-lg overflow-hidden">
                 <Image
-                  src="/services/who-apply-1.png"
+                  src={MCMData?.service_detail_cms?.apply_section_img_one_value}
                   width={350}
                   height={400}
-                  alt="Caregiver with elderly person"
+                  alt={
+                    MCMData?.service_detail_cms
+                      ?.apply_section_img_one_alt_text_value
+                  }
                   className="w-full h-auto object-cover"
                 />
               </div>
               <div className="rounded-lg overflow-hidden">
                 <Image
-                  src="/services/who-apply-2.png"
+                  src={MCMData?.service_detail_cms?.apply_section_img_two_value}
                   width={400}
                   height={500}
-                  alt="Caregivers with patient outdoors"
+                  alt={
+                    MCMData?.service_detail_cms
+                      ?.apply_section_img_two_alt_text_value
+                  }
                   className="w-full h-auto object-cover"
                 />
               </div>

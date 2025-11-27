@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { HomeData } from "@/types/Home.type";
 
-const TrustedInstitutionsSection = () => {
+const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
   const [gap, setGap] = useState(32);
@@ -13,27 +14,7 @@ const TrustedInstitutionsSection = () => {
   const [scrollLeft, setScrollLeft] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoScrollInterval = useRef<NodeJS.Timeout | null>(null);
-
-  const institutions = [
-    { name: "NHS", logo: "/logos/nhs.png" },
-    { name: "care", logo: "/logos/careuk.png" },
-    { name: "CGS", logo: "/logos/cgs.png" },
-    { name: "TRAINING ACADEMY UK", logo: "/logos/training.png" },
-    { name: "NHS", logo: "/logos/nhs.png" },
-    { name: "care", logo: "/logos/careuk.png" },
-    { name: "CGS", logo: "/logos/cgs.png" },
-    { name: "TRAINING ACADEMY UK", logo: "/logos/training.png" },
-    { name: "NHS", logo: "/logos/nhs.png" },
-    { name: "care", logo: "/logos/careuk.png" },
-    { name: "CGS", logo: "/logos/cgs.png" },
-    { name: "TRAINING ACADEMY UK", logo: "/logos/training.png" },
-    { name: "NHS", logo: "/logos/nhs.png" },
-    { name: "care", logo: "/logos/careuk.png" },
-    { name: "CGS", logo: "/logos/cgs.png" },
-    { name: "TRAINING ACADEMY UK", logo: "/logos/training.png" },
-  ];
-
-  const totalSlides = Math.ceil(institutions.length / itemsPerView);
+  const totalSlides = Math.ceil(homeData.trusted_institutions.length / itemsPerView);
 
   // Update items per view based on screen size
   useEffect(() => {
@@ -121,10 +102,10 @@ const TrustedInstitutionsSection = () => {
         <div className="text-center mb-6 lg:mb-0 lg:mr-4 lg:text-left flex-shrink-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center lg:whitespace-nowrap">
             <TTSWrapper
-              text="Trusted by UK Institutions"
+              text={homeData.home_cms.uk_institution_title || ""}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900"
             >
-              Trusted by UK Institutions
+              {homeData.home_cms.uk_institution_title || ""}
             </TTSWrapper>
           </h2>
         </div>
@@ -150,7 +131,7 @@ const TrustedInstitutionsSection = () => {
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                 <div key={slideIndex} className="min-w-full flex gap-4 sm:gap-6 md:gap-8">
-                  {institutions
+                  {homeData.trusted_institutions
                     .slice(
                       slideIndex * itemsPerView,
                       (slideIndex + 1) * itemsPerView
@@ -167,8 +148,8 @@ const TrustedInstitutionsSection = () => {
                         className="flex justify-center items-center"
                       >
                         <Image
-                          src={institution.logo}
-                          alt={institution.name}
+                          src={institution.icon_value || ""}
+                          alt={institution.icon_alt_text_value || ""}
                           width={100}
                           height={100}
                           className="object-contain max-h-[60px] sm:max-h-[70px] md:max-h-[80px] w-auto pointer-events-none select-none"

@@ -1,9 +1,10 @@
 "use client";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
+import { Faq } from "@/types/Career.type";
 
-function FAQ() {
+function FAQ({ title, description, faqList }: { title?: string, description?: string, faqList?: Faq[] }) {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
   const toggleFAQ = (id: number) => {
@@ -41,36 +42,45 @@ function FAQ() {
       answer:
         "Many of our services may be covered by insurance, including Medicare, Medicaid, and private insurance plans. Our team will help you understand your coverage options and assist with insurance verification and claims processing.",
     },
+
   ];
+
+  // Calculate midpoint to split FAQ data equally
+  // Use faqList if provided, otherwise use faqData
+  const dataToUse = faqList && faqList.length > 0 ? faqList : faqData;
+  const midpoint = Math.ceil(dataToUse.length / 2);
+  const leftColumnFAQs = dataToUse.slice(0, midpoint);
+  const rightColumnFAQs = dataToUse.slice(midpoint);
+
   return (
-    <section className="py-8 md:py-12 px-4 sm:px-8 lg:px-20 bg-white mb-20">
+    <section className="py-8 md:py-12 px-4 sm:px-8 lg:px-20 bg-white pb-20">
       <div className="max-w-full mx-auto">
         <div className="mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4">
-            <TTSWrapper text="Frequently Asked Questions">
-              Frequently Asked Questions
+            <TTSWrapper text={title ? title : "Frequently Asked Questions"}>
+              {title ? title : "Frequently Asked Questions"}
             </TTSWrapper>
           </h2>
-          <p className="text-gray-600 max-w-lg">
-            <TTSWrapper text="Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry">
-              Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of
-              the printing and typesetting ndsince the 1500s, when an unknown
-              printer took a galleytext of the printing and typesetting industry
-            </TTSWrapper>
-          </p>
+          <TTSWrapper text={description ? description : "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry"}>
+            <div
+              className="text-gray-600 max-w-lg prose prose-sm"
+              dangerouslySetInnerHTML={{
+                __html: description || "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry"
+              }}
+            />
+          </TTSWrapper>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:px-4">
           {/* Left Column */}
           <div className="space-y-4 pt-4 pb-4">
-            {faqData.slice(0, 3).map((faq) => (
+            {leftColumnFAQs.map((faq) => (
               <div
                 key={faq.id}
-                className={`${
-                  expandedFAQ === faq.id
-                    ? "text-white bg-[#0A5BE0]"
-                    : "bg-white text-black"
-                } rounded-2xl shadow-lg  overflow-hidden transition-all duration-300`}
+                className={`${expandedFAQ === faq.id
+                  ? "text-white bg-[#0A5BE0]"
+                  : "bg-white text-black"
+                  } rounded-2xl shadow-lg  overflow-hidden transition-all duration-300`}
               >
                 <div
                   className="flex items-center justify-between p-3 sm:p-4 cursor-pointer"
@@ -80,21 +90,31 @@ function FAQ() {
                     <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
                   </h3>
                   <button
-                    className={`flex-shrink-0 w-8 h-8 ${
-                      expandedFAQ === faq.id
-                        ? "bg-white text-[#0A5BE0]"
-                        : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300`}
+                    className={`flex-shrink-0 w-8 h-8 ${expandedFAQ === faq.id
+                      ? "bg-white text-[#0A5BE0]"
+                      : "bg-[#0A5BE0] text-white"
+                      } rounded-full flex items-center justify-center transition-all duration-300`}
                   >
-                    <Plus className="w-4 h-4" />
+                    {expandedFAQ === faq.id ? (
+                      <Minus className="w-4 h-4" />
+                    ) : (
+                      <Plus className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {expandedFAQ === faq.id && (
                   <div className="px-4 sm:px-6 pb-4 sm:pb-6 bg-[#0A5BE0] text-white">
                     <div className="border-gray-100">
-                      <p className="text-sm sm:text-base leading-relaxed">
-                        <TTSWrapper text={faq.answer}>{faq.answer}</TTSWrapper>
-                      </p>
+                      <div className="text-sm sm:text-base leading-relaxed">
+                        <TTSWrapper text={faq.answer}>
+                          <div
+                            className="text-sm sm:text-base leading-relaxed prose prose-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: faq.answer || ""
+                            }}
+                          />
+                        </TTSWrapper>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -104,14 +124,13 @@ function FAQ() {
 
           {/* Right Column */}
           <div className="space-y-4 pt-4 pb-4">
-            {faqData.slice(3).map((faq) => (
+            {rightColumnFAQs.map((faq) => (
               <div
                 key={faq.id}
-                className={`${
-                  expandedFAQ === faq.id
-                    ? "text-white bg-[#0A5BE0]"
-                    : "bg-white text-black"
-                } rounded-2xl shadow-lg overflow-hidden transition-all duration-300`}
+                className={`${expandedFAQ === faq.id
+                  ? "text-white bg-[#0A5BE0]"
+                  : "bg-white text-black"
+                  } rounded-2xl shadow-lg overflow-hidden transition-all duration-300`}
               >
                 <div
                   className="flex items-center justify-between p-3 sm:p-4 cursor-pointer"
@@ -121,21 +140,31 @@ function FAQ() {
                     <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
                   </h3>
                   <button
-                    className={`flex-shrink-0 w-8 h-8 ${
-                      expandedFAQ === faq.id
-                        ? "bg-white text-[#0A5BE0]"
-                        : "bg-[#0A5BE0] text-white"
-                    } rounded-full flex items-center justify-center transition-all duration-300`}
+                    className={`flex-shrink-0 w-8 h-8 ${expandedFAQ === faq.id
+                      ? "bg-white text-[#0A5BE0]"
+                      : "bg-[#0A5BE0] text-white"
+                      } rounded-full flex items-center justify-center transition-all duration-300`}
                   >
-                    <Plus className="w-4 h-4" />
+                    {expandedFAQ === faq.id ? (
+                      <Minus className="w-4 h-4" />
+                    ) : (
+                      <Plus className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {expandedFAQ === faq.id && (
-                  <div className="px-4 sm:px-6 pb-4 sm:pb-6">
-                    <div>
-                      <p className="text-white text-sm sm:text-base leading-relaxed">
-                        <TTSWrapper text={faq.answer}>{faq.answer}</TTSWrapper>
-                      </p>
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 bg-[#0A5BE0] text-white">
+                    <div className="border-gray-100">
+                      <div className="text-sm sm:text-base leading-relaxed">
+                        <TTSWrapper text={faq.answer}>
+                          <div
+                            className="text-sm sm:text-base leading-relaxed prose prose-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: faq.answer || ""
+                            }}
+                          />
+                        </TTSWrapper>
+                      </div>
                     </div>
                   </div>
                 )}

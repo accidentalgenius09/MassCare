@@ -15,10 +15,10 @@ const Page: React.FC = () => {
           {/* Medical Illustration */}
           <div
             className={`flex items-center justify-center ${
-              slug === "thankyou-enquiry" || slug === "application-received"
-                ? "mt-16"
-                : slug === "welcome-course"
-                ? "mt-20"
+              slug === "thankyou-enquiry" ||
+              slug === "application-received" ||
+              slug === "welcome-course"
+                ? "mt-24"
                 : "mt-10"
             }
             }`}
@@ -46,18 +46,18 @@ const Page: React.FC = () => {
                 }
                 width={
                   slug === "welcome-course"
-                    ? 220
+                    ? 200
                     : slug === "thankyou-enquiry" ||
                       slug === "application-received"
-                    ? 410
+                    ? 300
                     : 450
                 }
                 height={
                   slug === "welcome-course"
-                    ? 247
+                    ? 200
                     : slug === "thankyou-enquiry" ||
                       slug === "application-received"
-                    ? 316
+                    ? 300
                     : 300
                 }
                 className="object-contain"
@@ -68,9 +68,8 @@ const Page: React.FC = () => {
 
         {/* Error Message */}
         <div className="mb-5">
-          <h1 className={`text-5xl font-semibold text-white mb-2`}>
+          <h1 className={`text-[40px] font-semibold text-white mb-2`}>
             <TTSWrapper
-              className={`text-5xl font-semibold text-white mb-2`}
               text={`${
                 slug === "thankyou-enquiry"
                   ? "Thank You for Your Enquiry!"
@@ -91,13 +90,13 @@ const Page: React.FC = () => {
             </TTSWrapper>
           </h1>
           <p
-            className={`text-blue-200 text-base ${
+            className={`text-white text-base ${
               slug === "welcome-course"
-                ? "max-w-lg"
+                ? "max-w-[450px]"
                 : slug === "application-received"
-                ? "max-w-lg" 
+                ? "max-w-lg"
                 : slug === "thankyou-enquiry"
-                ? "max-w-sm"
+                ? "max-w-[400px]"
                 : "max-w-3xl"
             } mx-auto text-center leading-relaxed px-4`}
           >
@@ -111,7 +110,7 @@ const Page: React.FC = () => {
                   ? "Your enrollment has been successfully completed. Get ready to begin your healthcare education journey."
                   : "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndustry. Lorem Ipsum has been the industry standard dummy text ever since"
               }
-              className="text-blue-200 text-base max-w-2xl mx-auto text-center leading-relaxed"
+              className="text-white text-base max-w-2xl mx-auto text-center leading-relaxed"
             >
               {slug === "thankyou-enquiry"
                 ? "We've received your enquiry and will get back to you as soon as possible."

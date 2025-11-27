@@ -2,9 +2,9 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 import React from "react";
 
 interface PageBannerProps {
-  title: string;
+  title?: string;
   breadcrumb: string;
-  description: string;
+  description?: string;
   image?: string;
 }
 
@@ -29,12 +29,16 @@ function PageBanner({
           >
             <TTSWrapper text={breadcrumb}>{breadcrumb}</TTSWrapper>
           </div>
-          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mt-3 sm:mt-4">
-            <TTSWrapper text={title}>{title}</TTSWrapper>
-          </h1>
-          <p className="text-white text-sm sm:text-base md:text-lg font-normal mt-3 sm:mt-4 max-w-2xl px-4">
-            <TTSWrapper text={description}>{description}</TTSWrapper>
-          </p>
+          {title && (
+            <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mt-3 sm:mt-4">
+              <TTSWrapper text={title}>{title}</TTSWrapper>
+            </h1>
+          )}
+          {description && (
+            <p className="text-white text-sm sm:text-base md:text-lg font-normal mt-3 sm:mt-4 max-w-2xl px-4">
+              <TTSWrapper text={description}>{description}</TTSWrapper>
+            </p>
+          )}
         </div>
       </div>
     </div>

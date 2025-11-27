@@ -2,7 +2,7 @@
 
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { ArrowUpRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UploadOutline, XOutline } from "../helpers/svgs";
 
 interface ApplyNowModalProps {
@@ -25,6 +25,19 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
     agreeToTerms: false,
   });
 
+  const [isExperienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
+  const experienceDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const dropdownCloseTimeoutRef = useRef<number | null>(null);
+
+  const experienceOptions = [
+    { value: "0-1", label: "0-1 years" },
+    { value: "1-2", label: "1-2 years" },
+    { value: "2-5", label: "2-5 years" },
+    { value: "5-10", label: "5-10 years" },
+    { value: "10+", label: "10+ years" },
+  ];
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -41,6 +54,41 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       }));
     }
   };
+
+  const handleExperienceSelect = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      experience: value,
+    }));
+    if (dropdownCloseTimeoutRef.current) {
+      window.clearTimeout(dropdownCloseTimeoutRef.current);
+    }
+
+    dropdownCloseTimeoutRef.current = window.setTimeout(() => {
+      setExperienceDropdownOpen(false);
+      dropdownCloseTimeoutRef.current = null;
+    }, 150);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        experienceDropdownRef.current &&
+        !experienceDropdownRef.current.contains(event.target as Node)
+      ) {
+        setExperienceDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      if (dropdownCloseTimeoutRef.current) {
+        window.clearTimeout(dropdownCloseTimeoutRef.current);
+        dropdownCloseTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -70,7 +118,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f] overflow-y-auto"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-md w-full max-w-4xl max-h-[90vh] my-auto relative flex flex-col">
+      <div className="bg-white rounded-md w-[98%] max-w-6xl max-h-[90vh] my-auto relative flex flex-col">
         {/* Close Button */}
         {/* Modal Content */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 overflow-y-auto scrollbar-hide flex-1">
@@ -150,42 +198,95 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
               <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Experience *">Experience *</TTSWrapper>
               </label>
-              <div className="relative">
-                <select
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleInputChange}
-                  className={`w-full px-4 py-2.5 sm:py-3 border ${
+              <div
+                className="relative"
+                ref={experienceDropdownRef}
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExperienceDropdownOpen((prev) => !prev)
+                  }
+                  className={`w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base flex items-center justify-between ${
                     formData.experience === ""
-                      ? "text-gray-500"
+                      ? "text-gray-500  bg-white"
                       : "text-black"
-                  } border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-sm sm:text-base`}
-                  required
+                  }`}
+                  aria-haspopup="listbox"
+                  aria-expanded={isExperienceDropdownOpen}
+                  aria-label="Select your experience in this field"
                 >
-                  <option value="" disabled>
-                    {" "}
-                    Select your experience in this field
-                  </option>
-                  <option value="0-1">0-1 years</option>
-                  <option value="1-2">1-2 years</option>
-                  <option value="2-5">2-5 years</option>
-                  <option value="5-10">5-10 years</option>
-                  <option value="10+">10+ years</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <span>
+                    {formData.experience
+                      ? experienceOptions.find(
+                          (option) =>
+                            option.value === formData.experience
+                        )?.label
+                      : "Select your experience in this field"}
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="8"
                     height="5"
                     viewBox="0 0 8 5"
                     fill="none"
+                    className={`transition-transform ${
+                      isExperienceDropdownOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <path
                       d="M0.142787 0.938336L3.55548 4.80157C3.61049 4.86381 3.67873 4.91376 3.75551 4.94802C3.8323 4.98227 3.91581 5 4.00032 5C4.08483 5 4.16835 4.98227 4.24513 4.94802C4.32191 4.91376 4.39015 4.86381 4.44516 4.80157L7.85786 0.938336C8.18355 0.569585 7.91352 0 7.41302 0H0.586647C0.0861442 0 -0.183883 0.569585 0.142787 0.938336Z"
                       fill="#212121"
                     />
                   </svg>
-                </div>
+                </button>
+                {isExperienceDropdownOpen && (
+                  <ul
+                    role="listbox"
+                    className="absolute z-30 mt-2 w-full rounded-xl border border-gray-200 bg-white py-2 shadow-lg focus:outline-none"
+                  >
+                    {experienceOptions.map((option) => {
+                      const isSelected =
+                        formData.experience === option.value;
+                      return (
+                        <li key={option.value}>
+                          <button
+                            type="button"
+                            role="option"
+                            aria-selected={isSelected}
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              handleExperienceSelect(option.value);
+                            }}
+                            onKeyDown={(event) => {
+                              if (
+                                event.key === "Enter" ||
+                                event.key === " "
+                              ) {
+                                event.preventDefault();
+                                handleExperienceSelect(option.value);
+                              }
+                            }}
+                            className={`w-full text-left px-4 py-2 text-sm sm:text-base transition ${
+                              isSelected
+                                ? "bg-blue-50 text-blue-700"
+                                : "text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            {option.label}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                <input
+                  type="hidden"
+                  name="experience"
+                  value={formData.experience}
+                  required
+                />
               </div>
             </div>
 

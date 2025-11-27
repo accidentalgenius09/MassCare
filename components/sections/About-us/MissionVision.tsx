@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  CandidateMatchingIcon,
-  ComplianceChecksIcon,
-  FlowerDecoration,
-  InitialConsultationIcon,
-} from "../../helpers/svgs";
+import { FlowerDecoration } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { AboutUsDataType } from "@/types/Aboutus.type";
 
 // Main Component
-const MissionVisionSection = () => {
+const MissionVisionSection = ({
+  aboutUsData,
+}: {
+  aboutUsData: AboutUsDataType;
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
 
@@ -33,66 +33,17 @@ const MissionVisionSection = () => {
 
   const steps = [
     {
-      number: "01",
-      title: "Mission",
-      description: "To champion local communities, avoid outsourcing...",
-      icon: <InitialConsultationIcon />,
+      title: aboutUsData?.about_cms?.section2_title1,
+      description: aboutUsData?.about_cms?.section2_description1,
     },
     {
-      number: "02",
-      title: "Vision",
-      description: "To champion local communities, avoid outsourcing...",
-      icon: <CandidateMatchingIcon />,
+      title: aboutUsData?.about_cms?.section2_title2,
+      description: aboutUsData?.about_cms?.section2_description2,
     },
     {
-      number: "03",
-      title: "Values",
-      description:
-        "We care deeply for the well-being of vulnerable adults, providing support with empathy, dignity, and respect.",
-      icon: <ComplianceChecksIcon />,
+      title: aboutUsData?.about_cms?.section3_title,
+      description: aboutUsData?.about_cms?.section2_description3,
     },
-    // {
-    //   number: "04",
-    //   title: "Core Beliefs",
-    //   description:
-    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-    //   icon: <PlacementInductionIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "04",
-    //   title: "Core Beliefs",
-    //   description:
-    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-    //   icon: <PlacementInductionIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
   ];
 
   const isCarousel = steps.length > 3;
@@ -195,26 +146,21 @@ const MissionVisionSection = () => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-3 px-10 gap-6 justify-between">
+            <div className="grid grid-cols-3 px-10 gap-3 justify-between">
               {steps.map((step, index) => (
                 <div key={index} className="min-w-0">
-                  <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
+                  <div className="bg-[#012367] scrollbar-hide p-4 md:p-6 rounded-3xl h-auto md:h-60 max-w-full border border-gray-200 relative">
                     {/* Decorative Flower */}
-                    <div className="absolute top-2 right-2">
+                    <div className="absolute top-6 right-3">
                       <FlowerDecoration />
                     </div>
 
                     {/* Content */}
                     <div className="relative z-10 max-w-full">
-                      <h3 className="text-2xl font-semibold text-white">
-                        <TTSWrapper
-                          text={step.title}
-                          className="text-2xl font-semibold text-white"
-                        >
-                          {step.title}
-                        </TTSWrapper>
+                      <h3 className="text-3xl font-semibold text-white">
+                        <TTSWrapper text={step.title}>{step.title}</TTSWrapper>
                       </h3>
-                      <p className="text-white text-lg font-normal mt-4">
+                      <p className="text-white text-xl font-normal mt-4">
                         <TTSWrapper text={step.description}>
                           {step.description}
                         </TTSWrapper>

@@ -1,16 +1,55 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { HomeData } from "@/types/Home.type";
 
-const HeroSection = () => {
+const HeroSection = ({ homeData }: { homeData: HomeData }) => {
+  const [activeButton, setActiveButton] = useState<number | null>(null);
+
+  // Find default slider (is_default === 1)
+  const defaultSlider = homeData?.sliders?.find(
+    (slider) => slider.is_default === 1
+  );
+
+  // Find slider by service ID when button is clicked
+  const getSliderByServiceId = (serviceId: number | null) => {
+    if (!serviceId) return defaultSlider;
+    return homeData?.sliders?.find(
+      (slider) => slider.service?.id === serviceId
+    );
+  };
+
+  // Get current slider based on active button
+  const currentSlider = activeButton
+    ? getSliderByServiceId(activeButton)
+    : defaultSlider;
+
+  // Get all unique services from sliders for buttons
+  const serviceSliders = homeData?.sliders?.filter(
+    (slider) => slider.service !== null
+  ) || [];
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
+        {/* Desktop Background Image */}
         <div
-          className="w-full h-[98%] bg-cover bg-center"
+          className="hidden md:block w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
           style={{
-            backgroundImage: "url('/hero-banner.png')",
+            backgroundImage: currentSlider
+              ? `url('${currentSlider.image_value}')`
+              : "url('/hero-banner.png')",
+          }}
+        />
+        {/* Mobile Background Image */}
+        <div
+          className="block md:hidden w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
+          style={{
+            backgroundImage: currentSlider
+              ? `url('${currentSlider.image_mobile_value}')`
+              : "url('/hero-banner.png')",
           }}
         />
         <div className="absolute inset-0" />
@@ -20,56 +59,57 @@ const HeroSection = () => {
       <div className="relative z-10 flex items-center justify-center px-4 py-20 md:py-32">
         <div className="max-w-4xl mx-auto text-center">
           <TTSWrapper
-            text="Together, We Create a Community of"
+            text={currentSlider?.pre_title || ""}
             className="justify-start text-white text-xl sm:text-2xl md:text-3xl lg:text-[45px] font-extralight"
           >
-            <div className="justify-start text-white text-xl sm:text-2xl md:text-3xl lg:text-[45px] font-extralight">
-              Together, We Create a Community of
+            <div className="justify-start text-white text-xl sm:text-2xl md:text-3xl lg:text-[45px] font-extralight transition-all duration-500">
+              {currentSlider?.pre_title || ""}
             </div>
           </TTSWrapper>
 
-          <TTSWrapper text="Care that Changes Lives">
-            <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold">
-              Care that Changes Lives
+          <TTSWrapper text={currentSlider?.title || ""}>
+            <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold transition-all duration-500">
+              {currentSlider?.title || ""}
             </h1>
           </TTSWrapper>
 
-          <TTSWrapper text="You are not alone whether you are seek care, training or a new career">
-            <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-normal mb-6 sm:mb-8 md:mb-10 mx-auto mt-2 px-4">
-              You are not alone whether you are seek care, training or a new
-              career
+          <TTSWrapper text={currentSlider?.description || ""}>
+            <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-normal mb-6 sm:mb-8 md:mb-10 mx-auto mt-2 px-4 transition-all duration-500">
+              {currentSlider?.description || ""}
             </p>
           </TTSWrapper>
 
           {/* CTA Button */}
-          <div
-            className="inline-flex items-center gap-2 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-full 
-              border border-white/20 bg-[rgba(212,212,212,0.1)] backdrop-blur-xl 
-              text-white text-sm sm:text-base md:text-lg font-medium transition-all"
-          >
-            <Link href="/career-opportunities">
-              <div className="flex items-center text-sm sm:text-base gap-2 sm:gap-3 font-light">
-                <TTSWrapper text="Find Opportunities">
-                  Find Opportunities
-                </TTSWrapper>
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
-                    viewBox="0 0 11 11"
-                    fill="none"
-                    className="w-2 h-2 sm:w-3 sm:h-3"
-                  >
-                    <path
-                      d="M8.99987 3.41386L1.61201 10.8017L0.19781 9.38752L7.58474 2.00013H0V0H11V11H8.99987V3.41386Z"
-                      fill="white"
-                    />
-                  </svg>
+          {currentSlider?.action_url && (
+            <div
+              className="inline-flex items-center gap-2 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-full 
+                border border-white/20 bg-[rgba(212,212,212,0.1)] backdrop-blur-xl 
+                text-white text-sm sm:text-base md:text-lg font-medium transition-all"
+            >
+              <Link href={currentSlider.action_url}>
+                <div className="flex items-center text-sm sm:text-base gap-2 sm:gap-3 font-light">
+                  <TTSWrapper text={currentSlider.action_title || ""}>
+                    {currentSlider.action_title || ""}
+                  </TTSWrapper>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="11"
+                      height="11"
+                      viewBox="0 0 11 11"
+                      fill="none"
+                      className="w-2 h-2 sm:w-3 sm:h-3"
+                    >
+                      <path
+                        d="M8.99987 3.41386L1.61201 10.8017L0.19781 9.38752L7.58474 2.00013H0V0H11V11H8.99987V3.41386Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -77,34 +117,36 @@ const HeroSection = () => {
       <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
         <div className="max-w-full mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
-              <TTSWrapper text="MCM Nursing Care Agency">
-                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
-                  MCM Nursing Care Agency
-                </span>
-              </TTSWrapper>
-              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal">
-                +
-              </div>
-            </button>
-            <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-70 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
-              <TTSWrapper text="Mass Home Care">
-                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">Mass Home Care</span>
-              </TTSWrapper>
-              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
-                +
-              </div>
-            </button>
-              <button className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-300 border border-white/30 cursor-pointer">
-              <TTSWrapper text="Mass Training Academy">
-                <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
-                  Mass Training Academy
-                </span>
-              </TTSWrapper>
-              <div className="ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal flex items-center justify-center bg-[rgba(217,217,217,0.4)] bg-opacity-20 rounded-full group-hover:bg-opacity-30 transition-all">
-                +
-              </div>
-            </button>
+            {serviceSliders.map((slider) => {
+              if (!slider.service) return null;
+              const serviceId = slider.service.id;
+              const isActive = activeButton === serviceId;
+
+              return (
+                <button
+                  key={slider.id}
+                  onClick={() =>
+                    setActiveButton(isActive ? null : serviceId)
+                  }
+                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-500 border border-white/30 cursor-pointer"
+                >
+                  <TTSWrapper text={slider.service.title}>
+                    <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
+                      {slider.service.title}
+                    </span>
+                  </TTSWrapper>
+                  <div
+                    className={`ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full transition-all text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal ${
+                      isActive
+                        ? "bg-blue-500"
+                        : "bg-[rgba(217,217,217,0.4)] bg-opacity-20 group-hover:bg-opacity-30"
+                    }`}
+                  >
+                    +
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

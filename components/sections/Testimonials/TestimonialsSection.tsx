@@ -3,8 +3,13 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { TestimonialsPageData } from "@/types/Testimonials.type";
+import { useRouter } from "next/navigation";
 
-const TestimonialHero: React.FC = () => {
+const TestimonialHero: React.FC<{ testimonialsData: TestimonialsPageData }> = ({
+  testimonialsData,
+}) => {
+  const router = useRouter();
   return (
     <div className="mx-30">
       <div className="mx-auto px-4 py-16">
@@ -12,20 +17,26 @@ const TestimonialHero: React.FC = () => {
           {/* Left Content */}
           <div className="max-w-lg space-y-6 flex flex-col justify-center">
             <h1 className="text-5xl font-semibold text-black leading-tight">
-              <TTSWrapper text="Real People.">Real People.</TTSWrapper> <br />{" "}
-              <TTSWrapper text="Real Feedback.">Real Feedback.</TTSWrapper>
+              <TTSWrapper
+                text={testimonialsData.testimonial_cms.section2_title}
+              >
+                {testimonialsData.testimonial_cms.section2_title}
+              </TTSWrapper>
             </h1>
 
             <p className="text-base text-black font-normal max-w-lg leading-relaxed">
-              <TTSWrapper text="Over the years, we&#39;ve had the privilege of working with clients from diverse backgrounds — each with unique goals, challenges, and visions. Their words reflect the impact we&#39;ve made together.">
-                Over the years, we&#39;ve had the privilege of working with clients
-                from diverse backgrounds — each with unique goals, challenges,
-                and visions. Their words reflect the impact we&#39;ve made together.
+              <TTSWrapper
+                text={testimonialsData.testimonial_cms.section2_description}
+              >
+                {testimonialsData.testimonial_cms.section2_description}
               </TTSWrapper>
             </p>
 
             <div className="w-fit">
-              <button className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+              <button
+                onClick={() => router.push("/contact-us")}
+                className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
                 <TTSWrapper text="Contact Us">Contact Us</TTSWrapper>
                 <TopRightArrowWhite />
               </button>
@@ -52,8 +63,10 @@ const TestimonialHero: React.FC = () => {
             </div>
             <div className="relative rounded-3xl w-full h-full">
               <Image
-                src="/common/testimonials-nurse.png"
-                alt="Healthcare professional with elderly patient"
+                src={testimonialsData.testimonial_cms.section2_image_value}
+                alt={
+                  testimonialsData.testimonial_cms.section2_image_alt_text_value
+                }
                 width={700}
                 height={540}
               />

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTTS } from "@/components/providers/TTSProvider";
@@ -12,7 +12,9 @@ const Header = () => {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const servicesDropdownRef = useRef<HTMLDivElement | null>(null);
+
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };
@@ -20,8 +22,27 @@ const Header = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        servicesDropdownRef.current &&
+        !servicesDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsServicesDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 sm:pb-6 pt-2 md:px-8 lg:px-16">
+    <nav
+      className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 sm:pb-6 pt-2 md:px-8 lg:px-16"
+      style={{ overflow: "visible" }}
+    >
       {/* Gradient Background */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -32,7 +53,10 @@ const Header = () => {
         }}
       />
 
-      <div className="relative max-w-full mx-auto flex items-center justify-between">
+      <div
+        className="relative max-w-full mx-auto flex items-center justify-between"
+        style={{ overflow: "visible" }}
+      >
         {/* Logo */}
         <Link href="/" className="flex items-center ml-2 sm:ml-5">
           <Image
@@ -45,7 +69,10 @@ const Header = () => {
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8 text-base font-light">
+        <div
+          className="hidden lg:flex items-center space-x-10 text-sm font-light"
+          style={{ overflow: "visible" }}
+        >
           <Link
             href="/"
             className="text-white hover:text-gray-200 transition-colors"
@@ -58,12 +85,72 @@ const Header = () => {
           >
             About Us
           </Link>
-          <Link
-            href="/services"
-            className="text-white hover:text-gray-200 transition-colors"
+          <div
+            className="relative flex gap-2"
+            ref={servicesDropdownRef}
+            style={{ overflow: "visible", zIndex: 9999 }}
           >
-            Services
-          </Link>
+            <Link
+              href="/services"
+              className="text-white hover:text-gray-200 transition-colors"
+            >
+              Services
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
+              className="text-white hover:text-gray-200 transition-colors flex items-center gap-1"
+              aria-haspopup="true"
+              aria-expanded={isServicesDropdownOpen}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="8"
+                viewBox="0 0 12 8"
+                fill="none"
+                className={`transition-transform ${
+                  isServicesDropdownOpen ? "rotate-180" : ""
+                }`}
+              >
+                <path
+                  d="M1 1L6 6L11 1"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            {isServicesDropdownOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] border border-gray-200"
+                style={{ position: "absolute", overflow: "visible" }}
+              >
+                <Link
+                  href="/services/mcm-nursing-care-agency"
+                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
+                  onClick={() => setIsServicesDropdownOpen(false)}
+                >
+                  MCM Nursing Care Agency
+                </Link>
+                <Link
+                  href="/services/mass-home-care"
+                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
+                  onClick={() => setIsServicesDropdownOpen(false)}
+                >
+                  Mass Home Care
+                </Link>
+                <Link
+                  href="/services/mass-training-academy"
+                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
+                  onClick={() => setIsServicesDropdownOpen(false)}
+                >
+                  Mass Training Academy
+                </Link>
+              </div>
+            )}
+          </div>
 
           <Link
             href="/career-opportunities"
@@ -215,7 +302,7 @@ const Header = () => {
           </button>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             onClick={toggleMobileMenu}
             className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
             aria-label="Toggle mobile menu"

@@ -1,7 +1,12 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { TestimonialsPageData } from "@/types/Testimonials.type";
 import React from "react";
 
-function TestimonialsBanner() {
+function TestimonialsBanner({
+  testimonialsData,
+}: {
+  testimonialsData: TestimonialsPageData;
+}) {
   return (
     <>
       <div
@@ -18,16 +23,17 @@ function TestimonialsBanner() {
               </TTSWrapper>
             </div>
             <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mt-3 sm:mt-4">
-              <TTSWrapper text={"Testimonials"}>Testimonials</TTSWrapper>
+              <TTSWrapper
+                text={testimonialsData.testimonial_cms.section1_title}
+              >
+                {testimonialsData.testimonial_cms.section1_title}
+              </TTSWrapper>
             </h1>
             <p className="text-white text-sm sm:text-base md:text-lg font-normal mt-2 mb-4 max-w-2xl px-4">
               <TTSWrapper
-                text={
-                  "Lorem Ipsum 8 years of meaningful care... care without compromise."
-                }
+                text={testimonialsData.testimonial_cms.section1_sub_title}
               >
-                Lorem Ipsum 8 years of meaningful care... care without
-                compromise.
+                {testimonialsData.testimonial_cms.section1_sub_title}
               </TTSWrapper>
             </p>
             <div className="mx-auto mt-5 max-w-[1290px] h-[570px]">
@@ -38,7 +44,7 @@ function TestimonialsBanner() {
                 playsInline
                 className="w-full h-full rounded-[40px] sm:rounded-[30px] lg:rounded-[40px] "
               >
-                <source src="/common/testimonials-video.mp4" type="video/mp4" />
+                <source src={testimonialsData.testimonial_cms.section1_video_value} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

@@ -2,39 +2,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { TestimonialsPageData } from "@/types/Testimonials.type";
 
-const ClientStoriesSection = () => {
+const ClientStoriesSection = ({
+  testimonialsData,
+}: {
+  testimonialsData: TestimonialsPageData;
+}) => {
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
-
-  const clientStories = [
-    {
-      id: 1,
-      image: "/testimonials/testimonial-5.jpg",
-      hasVideo: false,
-    },
-    {
-      id: 2,
-      image: "/testimonials/testimonial-1.png",
-      hasVideo: true,
-      videoUrl: "/common/testimonials-video.mp4",
-    },
-    {
-      id: 3,
-      image: "/testimonials/testimonial-2.png",
-      hasVideo: false,
-    },
-    {
-      id: 4,
-      image: "/testimonials/testimonial3.png",
-      hasVideo: true,
-      videoUrl: "/common/testimonials-video.mp4",
-    },
-    {
-      id: 5,
-      image: "/testimonials/testimonial-4.png",
-      hasVideo: false,
-    },
-  ];
 
   const handlePlayClick = (storyId: number) => {
     setPlayingVideo(storyId);
@@ -50,13 +25,17 @@ const ClientStoriesSection = () => {
         {/* Header Section */}
         <div className="mb-12 max-w-2xl mx-30">
           <h2 className="text-5xl font-semibold text-black mb-4">
-            <TTSWrapper text="Client Stories">Client Stories</TTSWrapper>
+            <TTSWrapper
+              text={testimonialsData.testimonial_cms.section3_title || ""}
+            >
+              {testimonialsData.testimonial_cms.section3_title || ""}
+            </TTSWrapper>
           </h2>
           <p className="text-base font-normal text-black leading-relaxed">
-            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s.">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry&#39;s standard dummy text
-              ever since the 1500s.
+            <TTSWrapper
+              text={testimonialsData.testimonial_cms.section3_description || ""}
+            >
+              {testimonialsData.testimonial_cms.section3_description || ""}
             </TTSWrapper>
           </p>
         </div>
@@ -64,75 +43,94 @@ const ClientStoriesSection = () => {
         {/* Image Gallery Section */}
         <div className="overflow-x-auto scrollbar-hide pb-6">
           <div className="flex gap-4 sm:gap-6 min-w-max px-1">
-            {clientStories.map((story) => (
+            {testimonialsData.client_stories.map((story) => (
               <div
                 key={story.id}
                 className="relative flex-shrink-0 group cursor-pointer"
               >
                 <div
-                  className={`relative w-[300px] sm:w-[350px] lg:w-[400px] rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 ${
-                    story.hasVideo
-                      ? "h-[300px] sm:h-[340px] lg:h-[400px]"
-                      : "h-[250px] sm:h-[280px] lg:h-[320px] items-center justify-center"
+                  className={`relative rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 ${
+                    story.media_type === "video"
+                      ? "h-[300px] sm:h-[340px] lg:h-[400px] w-[300px] sm:w-[350px] lg:w-[350px]"
+                      : "h-[250px] sm:h-[280px] lg:h-[320px] mt-10 items-center justify-between w-[300px] sm:w-[350px] lg:w-[400px]"
                   }`}
                 >
-                  <Image
-                    src={story.image}
-                    alt={`Client story ${story.id}`}
-                    fill
-                    className="object-cover object-center items-center group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {(story.video_thumbnail_image_value || story.image_value) && (
+                    <Image
+                      src={
+                        story.image_value ||
+                        story.video_thumbnail_image_value ||
+                        ""
+                      }
+                      alt={story.image_alt_text_value || ""}
+                      fill
+                      className="object-cover object-center items-center group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
 
                   {/* Play Button Overlay for Video Stories */}
-                  {story.hasVideo && !playingVideo && (
+                  {story.media_type === "video" && !playingVideo && (
                     <div
                       onClick={() => handlePlayClick(story.id)}
                       className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300 cursor-pointer"
                     >
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/90 flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300">
                         <svg
-                          className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 ml-1"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-20 h-20"
+                          width="100"
+                          height="100"
+                          viewBox="0 0 100 100"
+                          fill="none"
                         >
-                          <path d="M8 5v14l11-7z" />
+                          <path
+                            d="M50 0C22.4283 0 0 22.4305 0 50C0 77.5695 22.4283 100 50 100C77.5717 100 100 77.5695 100 50C100 22.4305 77.5717 0 50 0ZM69.8772 51.7518L40.7105 70.5018C40.3688 70.7234 39.974 70.8334 39.5834 70.8334C39.2416 70.8334 38.8957 70.7478 38.5865 70.5791C37.915 70.2129 37.5 69.5129 37.5 68.75V31.25C37.5 30.4871 37.915 29.7871 38.5865 29.4209C39.2457 29.0588 40.0717 29.0811 40.7105 29.4982L69.8772 48.2482C70.4713 48.6307 70.8334 49.292 70.8334 50C70.8334 50.708 70.4713 51.3691 69.8772 51.7518Z"
+                            fill="white"
+                            fillOpacity="0.47"
+                          />
                         </svg>
                       </div>
                     </div>
                   )}
 
                   {/* Video Player */}
-                  {story.hasVideo && playingVideo === story.id && (
-                    <div className="absolute inset-0 z-10">
-                      <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
-                        <video
-                          controls
-                          autoPlay
-                          className="w-full h-full object-contain"
-                          onEnded={handleCloseVideo}
-                        >
-                          <source src={story.videoUrl} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                        <button
-                          onClick={handleCloseVideo}
-                          className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-300 z-20"
-                        >
-                          <svg
-                            className="w-6 h-6 text-gray-900"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
+                  {story.media_type === "video" &&
+                    playingVideo === story.id && (
+                      <div className="absolute inset-0 z-10">
+                        {story.video_value && (
+                          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+                            <video
+                              controls
+                              autoPlay
+                              className="w-full h-full object-contain"
+                              onEnded={handleCloseVideo}
+                            >
+                              <source
+                                src={story.video_value}
+                                type="video/mp4"
+                              />
+                              Your browser does not support the video tag.
+                            </video>
+                            <button
+                              onClick={handleCloseVideo}
+                              className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-300 z-20"
+                            >
+                              <svg
+                                className="w-6 h-6 text-gray-900"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
             ))}

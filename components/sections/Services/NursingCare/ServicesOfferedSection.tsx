@@ -1,12 +1,12 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import Image from "next/image";
 import React from "react";
 
 function ServicesOfferedSection({
-  img1 = "/services/caring.jpg",
-  imgAlt1 = "Nurse Caring for the Elderly",
-  img2 = "/services/bp-2.jpg",
-  imgAlt2 = "Basic Life Support",
+  MCMData,
+}: {
+  MCMData: McmNursingCareAgencyServiceDetail;
 }) {
   return (
     <>
@@ -44,60 +44,44 @@ function ServicesOfferedSection({
         </div>
         <div className="container mt-10 mx-auto px-4 sm:px-6 lg:px-32 text-center relative z-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-black">
-            <TTSWrapper text="Services Offered">Services Offered</TTSWrapper>
+            <TTSWrapper
+              text={MCMData?.service_detail_cms.service_offered_title}
+            >
+              {MCMData?.service_detail_cms.service_offered_title}
+            </TTSWrapper>
           </h2>
           <p className="text-black text-base font-normal max-w-3xl mx-auto mt-4">
-            <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
-              Mass Care Momentous represents the proud milestones, meaningful
-              connections, and impactful moments we&apos;ve achieved on our journey
-              in healthcare staffing.
+            <TTSWrapper
+              text={MCMData?.service_detail_cms.service_offered_subtitle}
+            >
+              {MCMData?.service_detail_cms.service_offered_subtitle}
             </TTSWrapper>
           </p>
         </div>
         <div className="flex justify-center relative  mt-8 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-full px-4 sm:px-6 lg:px-32">
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                src={img1}
-                alt={imgAlt1}
-                width={800}
-                height={430}
-                className="rounded-2xl w-full h-[430px] object-center lg:object-cover"
-              />
-              <h6 className="text-2xl font-medium text-black mt-6">
-                <TTSWrapper text="Temporary & Permanent Staffing">
-                  Temporary & Permanent Staffing
-                </TTSWrapper>
-              </h6>
-              <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
-                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
-                  Mass Care Momentous represents the proud milestones,
-                  meaningful connections, and impactful moments we&apos;ve achieved
-                  on our journey in healthcare staffing.
-                </TTSWrapper>
-              </p>
-            </div>
-            <div className="flex flex-col items-center justify-center">
-              <Image
-                src={img2}
-                alt={imgAlt2}
-                width={800}
-                height={430}
-                className="rounded-2xl w-full h-[430px] object-fill lg:object-cover"
-              />
-              <h6 className="text-2xl font-medium text-black mt-6">
-                <TTSWrapper text="Specialised Healthcare Roles">
-                  Specialised Healthcare Roles
-                </TTSWrapper>
-              </h6>
-              <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
-                <TTSWrapper text="Mass Care Momentous represents the proud milestones, meaningful connections, and impactful moments we&apos;ve achieved on our journey in healthcare staffing.">
-                  Mass Care Momentous represents the proud milestones,
-                  meaningful connections, and impactful moments we&apos;ve achieved
-                  on our journey in healthcare staffing.
-                </TTSWrapper>
-              </p>
-            </div>
+            {MCMData?.service_offers.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col items-center justify-center"
+              >
+                <Image
+                  src={item.image_value}
+                  alt={item.image_alt_text_value}
+                  width={800}
+                  height={430}
+                  className="rounded-2xl w-full h-[430px] object-center lg:object-cover"
+                />
+                <h6 className="text-2xl font-medium text-black mt-6">
+                  <TTSWrapper text={item.title}>{item.title}</TTSWrapper>
+                </h6>
+                <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
+                  <TTSWrapper text={item.description}>
+                    {item.description}
+                  </TTSWrapper>
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
