@@ -370,8 +370,6 @@ function CareerOpportunitiesPage() {
   };
 
   const handleApplyNow = (jobOrTitle: JobListing | string) => {
-    console.log("clicked");
-    console.log("jobOrTitle", jobOrTitle);
     if (typeof jobOrTitle === "string") {
       // Called from JobDetailsModal with just the title (fallback for old code)
       const job =
@@ -379,7 +377,6 @@ function CareerOpportunitiesPage() {
         jobListingsData?.careers?.find(
           (j: JobListing) => j.title === jobOrTitle
         );
-      console.log("job", job);
       if (job) {
         setSelectedJobForApplication(job);
         setIsApplyModalOpen(true);
@@ -458,7 +455,6 @@ function CareerOpportunitiesPage() {
           }&page=1`
         );
         setJobListingsData(responseList.data);
-        console.log("Career List API Response:", responseList);
       } catch (error) {
         console.error("Error fetching careers:", error);
       } finally {
@@ -537,13 +533,6 @@ function CareerOpportunitiesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [careers?.departments]);
 
-  console.log("selectedType", selectedType);
-  console.log("departmentsOptionsForDropdown", departmentsOptionsForDropdown);
-  console.log(
-    "selectedRole",
-    (selectedType?.value === "" || selectedType?.value === "All Departments") &&
-      departmentsOptionsForDropdown.length <= 1
-  );
   return (
     <>
       {isLoading && (

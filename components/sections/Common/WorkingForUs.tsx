@@ -86,7 +86,6 @@ function WorkingForUs({
         name: formData.name,
         email: formData.email,
       };
-      console.log("payload", payload);
       setIsLoading(true);
       restApiWrapper
         .post("/service-enquiry", payload)
@@ -94,7 +93,7 @@ function WorkingForUs({
           router.push("/thankyou-enquiry");
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .finally(() => {
           setIsLoading(false);

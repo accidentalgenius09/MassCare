@@ -58,7 +58,7 @@ const ContactPage: React.FC = () => {
         toast.success(res.message);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -69,8 +69,6 @@ const ContactPage: React.FC = () => {
           message: "",
         });
       });
-
-    console.log("Form submitted:", payload);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -364,7 +362,6 @@ const ContactPage: React.FC = () => {
                               type="button"
                               onClick={() => {
                                 handleSelectChange(String(option.id));
-                                console.log(option.id);
                               }}
                               className={`w-full px-3 py-1 text-left hover:bg-blue-50 transition-colors ${
                                 formData.serviceType === String(option.id)

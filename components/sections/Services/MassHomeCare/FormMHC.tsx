@@ -54,7 +54,6 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
         name: formData.name,
         email: formData.email,
       };
-      console.log("payload", payload);
       setIsLoading(true);
       restApiWrapper
         .post("/service-enquiry", payload)
@@ -62,7 +61,7 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
           router.push("/thankyou-enquiry");
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .finally(() => {
           setIsLoading(false);

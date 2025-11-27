@@ -72,7 +72,7 @@ const TestimonialsSection = ({
         setActiveTab(VIEW_ALL);
       }
     }
-  }, [testimonials, activeTab, tabs]);
+  }, [testimonials]);
 
   // Filter testimonials based on active tab
   const filteredTestimonials = React.useMemo(() => {
@@ -219,7 +219,7 @@ const TestimonialsSection = ({
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
               <div className="flex gap-8 whitespace-nowrap">
                 {testimonialCategories.length > 0
-                  ? testimonialCategories.map((category) => (
+                  ? testimonialCategories.map((category, index) => (
                       <button
                         key={category.id}
                         onClick={() => setActiveTab(category.title)}
