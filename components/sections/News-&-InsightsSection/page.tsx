@@ -40,7 +40,6 @@ function NewsAndInsightsSection({
       );
       setTabs(response.data);
       setActiveTab2(response.data[0].id);
-      console.log(response.data);
     };
     fetchTabs();
   }, [activeTab, activeTabSlug]);
@@ -64,7 +63,6 @@ function NewsAndInsightsSection({
     fetchCards();
   }, [activeTab2, activeTabSlug, visibleCount]);
 
-  console.log(pagination);
   return (
     <div className="bg-white py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">

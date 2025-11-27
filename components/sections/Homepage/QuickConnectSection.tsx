@@ -62,7 +62,7 @@ export default function QuickConnect({
         toast.success(res.message);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         setIsLoading(false);
