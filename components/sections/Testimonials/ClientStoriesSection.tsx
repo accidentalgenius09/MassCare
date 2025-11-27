@@ -2,39 +2,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { TestimonialsPageData } from "@/types/Testimonials.type";
 
-const ClientStoriesSection = () => {
+const ClientStoriesSection = ({
+  testimonialsData,
+}: {
+  testimonialsData: TestimonialsPageData;
+}) => {
   const [playingVideo, setPlayingVideo] = useState<number | null>(null);
-
-  const clientStories = [
-    {
-      id: 1,
-      image: "/testimonials/testimonial-5.jpg",
-      hasVideo: false,
-    },
-    {
-      id: 2,
-      image: "/testimonials/testimonial-1.png",
-      hasVideo: true,
-      videoUrl: "/common/testimonials-video.mp4",
-    },
-    {
-      id: 3,
-      image: "/testimonials/testimonial-2.png",
-      hasVideo: false,
-    },
-    {
-      id: 4,
-      image: "/testimonials/testimonial3.png",
-      hasVideo: true,
-      videoUrl: "/common/testimonials-video.mp4",
-    },
-    {
-      id: 5,
-      image: "/testimonials/testimonial-4.png",
-      hasVideo: false,
-    },
-  ];
 
   const handlePlayClick = (storyId: number) => {
     setPlayingVideo(storyId);
@@ -50,13 +25,17 @@ const ClientStoriesSection = () => {
         {/* Header Section */}
         <div className="mb-12 max-w-2xl mx-30">
           <h2 className="text-5xl font-semibold text-black mb-4">
-            <TTSWrapper text="Client Stories">Client Stories</TTSWrapper>
+            <TTSWrapper
+              text={testimonialsData.testimonial_cms.section3_title || ""}
+            >
+              {testimonialsData.testimonial_cms.section3_title || ""}
+            </TTSWrapper>
           </h2>
           <p className="text-base font-normal text-black leading-relaxed">
-            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s.">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry&#39;s standard dummy text
-              ever since the 1500s.
+            <TTSWrapper
+              text={testimonialsData.testimonial_cms.section3_description || ""}
+            >
+              {testimonialsData.testimonial_cms.section3_description || ""}
             </TTSWrapper>
           </p>
         </div>
@@ -64,27 +43,33 @@ const ClientStoriesSection = () => {
         {/* Image Gallery Section */}
         <div className="overflow-x-auto scrollbar-hide pb-6">
           <div className="flex gap-4 sm:gap-6 min-w-max px-1">
-            {clientStories.map((story) => (
+            {testimonialsData.client_stories.map((story) => (
               <div
                 key={story.id}
                 className="relative flex-shrink-0 group cursor-pointer"
               >
                 <div
                   className={`relative rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 ${
-                    story.hasVideo
+                    story.media_type === "video"
                       ? "h-[300px] sm:h-[340px] lg:h-[400px] w-[300px] sm:w-[350px] lg:w-[350px]"
                       : "h-[250px] sm:h-[280px] lg:h-[320px] mt-10 items-center justify-between w-[300px] sm:w-[350px] lg:w-[400px]"
                   }`}
                 >
-                  <Image
-                    src={story.image}
-                    alt={`Client story ${story.id}`}
-                    fill
-                    className="object-cover object-center items-center group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {(story.video_thumbnail_image_value || story.image_value) && (
+                    <Image
+                      src={
+                        story.image_value ||
+                        story.video_thumbnail_image_value ||
+                        ""
+                      }
+                      alt={story.image_alt_text_value || ""}
+                      fill
+                      className="object-cover object-center items-center group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
 
                   {/* Play Button Overlay for Video Stories */}
-                  {story.hasVideo && !playingVideo && (
+                  {story.media_type === "video" && !playingVideo && (
                     <div
                       onClick={() => handlePlayClick(story.id)}
                       className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300 cursor-pointer"
@@ -109,37 +94,43 @@ const ClientStoriesSection = () => {
                   )}
 
                   {/* Video Player */}
-                  {story.hasVideo && playingVideo === story.id && (
-                    <div className="absolute inset-0 z-10">
-                      <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
-                        <video
-                          controls
-                          autoPlay
-                          className="w-full h-full object-contain"
-                          onEnded={handleCloseVideo}
-                        >
-                          <source src={story.videoUrl} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                        <button
-                          onClick={handleCloseVideo}
-                          className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-300 z-20"
-                        >
-                          <svg
-                            className="w-6 h-6 text-gray-900"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
+                  {story.media_type === "video" &&
+                    playingVideo === story.id && (
+                      <div className="absolute inset-0 z-10">
+                        {story.video_value && (
+                          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+                            <video
+                              controls
+                              autoPlay
+                              className="w-full h-full object-contain"
+                              onEnded={handleCloseVideo}
+                            >
+                              <source
+                                src={story.video_value}
+                                type="video/mp4"
+                              />
+                              Your browser does not support the video tag.
+                            </video>
+                            <button
+                              onClick={handleCloseVideo}
+                              className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-300 z-20"
+                            >
+                              <svg
+                                className="w-6 h-6 text-gray-900"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
             ))}

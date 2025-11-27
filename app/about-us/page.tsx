@@ -1,34 +1,84 @@
+"use client";
 import MissionVisionSection from "@/components/sections/About-us/MissionVision";
 import WhyChooseUs from "@/components/sections/About-us/WhyChooseUs";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import ServicesSection from "@/components/sections/Homepage/ServicesSection";
 import WelcomeSection from "@/components/sections/Homepage/WelcomeSection";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "About Us | Mass Care",
-  description:
-    "Learn about Mass Care's mission, values, and commitment to quality nursing, home care, and training services.",
-};
+import restApiWrapper from "@/service/RestApiWrapper";
+import { AboutUsDataType } from "@/types/Aboutus.type";
+import { useEffect, useState } from "react";
+import TTSWrapper from "@/hooks/TTSWrapper";
 
 export default function AboutUsPage() {
+  const [aboutUsData, setAboutUsData] = useState<AboutUsDataType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAboutUsData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await restApiWrapper.get("/about-us");
+        setAboutUsData(response.data);
+      } catch (error) {
+        console.error("Error fetching about us data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAboutUsData();
+  }, []);
+
   return (
     <>
-      <PageBanner
-        title="About Us"
-        breadcrumb="Home / About Us"
-        description="Lorem Ipsum 8 years of meaningful care... care without compromise."
-      />
-      <div className="px-20">
-        <WelcomeSection section="aboutus" />
-      </div>
-      <div className="px-12">
-        {" "}
-        <MissionVisionSection />
-      </div>
-      <div className="px-20">
-        <ServicesSection />
-        <WhyChooseUs />
+      {isLoading && (
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-[9999]">
+          <div className="flex flex-col items-center justify-center space-y-6">
+            {/* Animated Spinner */}
+            <div className="relative">
+              <div className="w-20 h-20 border-4 border-[#E8EFFF] rounded-full"></div>
+              <div className="w-20 h-20 border-4 border-[#0A5BE0] border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-3 h-3 bg-[#0A5BE0] rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            {/* Loading Text */}
+            <div className="text-center">
+              <p className="text-[#0A5BE0] text-xl font-semibold animate-pulse">
+                <TTSWrapper text="Loading About Us...">
+                  Loading About Us...
+                </TTSWrapper>
+              </p>
+              <p className="text-gray-600 text-sm mt-3 max-w-md">
+                <TTSWrapper text="Please wait while we fetch the content">
+                  Please wait while we fetch the content
+                </TTSWrapper>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={isLoading ? "blur-sm pointer-events-none" : ""}>
+        <PageBanner
+          title={aboutUsData?.banner?.banner_title}
+          breadcrumb="Home / About Us"
+          description={aboutUsData?.banner?.banner_description}
+        />
+        <div className="px-20">
+          {aboutUsData && (
+            <WelcomeSection aboutUsData={aboutUsData} section="aboutus" />
+          )}
+        </div>
+        <div className="px-12">
+          {" "}
+          {aboutUsData && <MissionVisionSection aboutUsData={aboutUsData} />}
+        </div>
+        <div className="px-20">
+          {aboutUsData?.services && (
+            <ServicesSection ServiceData={aboutUsData?.services} />
+          )}
+          {aboutUsData && <WhyChooseUs aboutUsData={aboutUsData} />}
+        </div>
       </div>
     </>
   );

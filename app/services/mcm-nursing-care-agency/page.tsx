@@ -1,42 +1,44 @@
 "use client";
 import PageBanner from "@/components/sections/Common/PageBanner";
-import TestimonialsSection from "@/components/sections/Homepage/TestimonialsSection";
-import FormMHC from "@/components/sections/Services/MassHomeCare/FormMHC";
-import LocationsMap from "@/components/sections/Services/MassHomeCare/LocationsWeCover";
+import BranchLocationsSection from "@/components/sections/Services/NursingCare/BranchLocationsSection";
 import CareNursingAgency from "@/components/sections/Services/NursingCare/CareNursingAgency";
-import CQCRatingCard from "@/components/sections/Services/NursingCare/CQCRatingCard";
-import ServicesOfferedSection from "@/components/sections/Services/NursingCare/ServicesOfferedSection";
 import TrustedPartnerBanner from "@/components/sections/Services/NursingCare/TrustedPartnerBanner";
+import React, { useEffect, useState } from "react";
+import WorkingForUs from "@/components/sections/Common/WorkingForUs";
+import ServicesOfferedSection from "@/components/sections/Services/NursingCare/ServicesOfferedSection";
+import TestimonialsSection from "@/components/sections/Homepage/TestimonialsSection";
+import CQCRatingCard from "@/components/sections/Services/NursingCare/CQCRatingCard";
 import restApiWrapper from "@/service/RestApiWrapper";
-import { Testimonial } from "@/types/Home.type";
 import {
   McmNursingCareAgencyServiceDetail,
   ServiceTestimonial,
 } from "@/types/Service.type";
-import React, { useEffect, useState } from "react";
+import { Testimonial } from "@/types/Home.type";
 import TTSWrapper from "@/hooks/TTSWrapper";
 
-function MassHomeCare() {
-  const [MCMData, setMCMData] = useState<McmNursingCareAgencyServiceDetail>();
+function McmNursingCarePage() {
+  const [nursingCareAgency, setNursingCareAgency] =
+    useState<McmNursingCareAgencyServiceDetail>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMCMData = async () => {
+    const fetchTestimonials = async () => {
       try {
         setIsLoading(true);
         const response = await restApiWrapper.get(
-          "/service-details?slug=mass-home-care"
+          "/service-details?slug=mcm-nursing-care-agency"
         );
-        setMCMData(response.data);
+        setNursingCareAgency(response.data);
       } catch (error) {
         console.error("Error fetching service details:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchMCMData();
+    fetchTestimonials();
   }, []);
 
+  // Transform ServiceTestimonial[] to Testimonial[]
   const transformTestimonials = (
     serviceTestimonials: ServiceTestimonial[]
   ): Testimonial[] => {
@@ -78,33 +80,36 @@ function MassHomeCare() {
         </div>
       )}
       <PageBanner
-        title="MCM Nursing Care Agency"
+        title={nursingCareAgency?.banner_title}
         breadcrumb="Home / Services / MCM Nursing Care Agency"
-        description="Lorem Ipsum 8 years of meaningful care... care without compromise."
+        description={nursingCareAgency?.banner_description}
       />
-      {MCMData && (
+      {nursingCareAgency && (
         <>
-          <CareNursingAgency MCMData={MCMData} />
-          <ServicesOfferedSection MCMData={MCMData} />
-          <LocationsMap MCMData={MCMData} />
-          <FormMHC MCMData={MCMData} />
-          <div className="mt-20">
-            <TrustedPartnerBanner MCMData={MCMData} />
-          </div>
+          <CareNursingAgency
+            MCMData={nursingCareAgency}
+            imageSrc="/services/mcm-agency.png"
+          />
+          <ServicesOfferedSection MCMData={nursingCareAgency} />
+          <BranchLocationsSection MCMData={nursingCareAgency} />
+          <TrustedPartnerBanner MCMData={nursingCareAgency} />
+          <WorkingForUs MCMData={nursingCareAgency} />
           <TestimonialsSection
             showTabs={false}
             testimonials={
-              MCMData?.service_testimonials
-                ? transformTestimonials(MCMData?.service_testimonials)
+              nursingCareAgency?.service_testimonials
+                ? transformTestimonials(nursingCareAgency.service_testimonials)
                 : []
             }
-            title={MCMData?.service_detail_cms?.testimonial_title || ""}
+            title={
+              nursingCareAgency?.service_detail_cms?.testimonial_title || ""
+            }
           />
-          <CQCRatingCard MCMData={MCMData} />
+          <CQCRatingCard MCMData={nursingCareAgency} />
         </>
       )}
     </>
   );
 }
 
-export default MassHomeCare;
+export default McmNursingCarePage;

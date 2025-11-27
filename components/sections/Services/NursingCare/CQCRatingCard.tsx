@@ -1,8 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 
-function CQCRatingCard() {
+function CQCRatingCard({
+  MCMData,
+}: {
+  MCMData: McmNursingCareAgencyServiceDetail;
+}) {
   return (
     <section className="py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-32">
@@ -11,15 +16,17 @@ function CQCRatingCard() {
             {/* Left Section - CQC Information */}
             <div className="flex flex-col items-center md:items-start">
               <Image
-                src="/services/cqc-logo.png"
-                alt="Care Quality Commission Logo"
+                src={MCMData?.service_detail_cms?.quality_image_value}
+                alt={MCMData?.service_detail_cms?.quality_image_alt_text_value}
                 width={200}
                 height={140}
                 className="object-contain w-40 sm:w-48 md:w-56"
               />
               <p className="text-xs sm:text-sm text-black font-normal -mt-2 text-center md:text-left">
-                <TTSWrapper text="Independent Regulator of Health & Social Care">
-                  Independent Regulator of Health &amp; Social Care
+                <TTSWrapper
+                  text={MCMData?.service_detail_cms?.quality_image_title}
+                >
+                  {MCMData?.service_detail_cms?.quality_image_title}
                 </TTSWrapper>
               </p>
             </div>
@@ -28,31 +35,49 @@ function CQCRatingCard() {
             <div className="flex flex-col md:flex-row gap-6 md:gap-12 bg-[#E8EFFF] rounded-xl p-4 sm:p-6 w-full md:w-auto">
               <div>
                 <h4 className="text-xl sm:text-2xl font-bold text-black mb-3">
-                  <TTSWrapper text="Mass Care Home">Mass Care Home</TTSWrapper>
+                  <TTSWrapper
+                    text={MCMData?.service_detail_cms?.quality_section_title}
+                  >
+                    {MCMData?.service_detail_cms?.quality_section_title}
+                  </TTSWrapper>
                 </h4>
                 <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 inline-block mb-4">
                   <p className="text-white">
-                    <span className="font-semibold text-lg">Overall Rating: </span>
-                    <span className="font-light text-xs sm:text-sm">Outstanding</span>
+                    <TTSWrapper text="Overall Rating:">
+                      <span className="font-semibold text-lg">
+                        Overall Rating:{" "}
+                      </span>
+                    </TTSWrapper>
+                    <TTSWrapper text={MCMData?.service_detail_cms?.rating}>
+                      <span className="font-light text-xs sm:text-sm">
+                        {MCMData?.service_detail_cms?.rating}
+                      </span>
+                    </TTSWrapper>
                   </p>
                 </div>
               </div>
               <div className="max-w-lg">
                 <p className="text-base sm:text-lg font-bold text-black mb-3">
-                  <TTSWrapper text="The service is performing exceptionally well">
-                    The service is performing exceptionally well
+                  <TTSWrapper
+                    text={MCMData?.service_detail_cms?.service_performance_title}
+                  >
+                    {MCMData?.service_detail_cms?.service_performance_title}
                   </TTSWrapper>
                 </p>
                 <p className="text-xs sm:text-sm text-black font-normal mb-4">
-                  <TTSWrapper text="CQC ratings help you choose care services. They show how well services are caring for people and how well they are managed.">
-                    CQC ratings help you choose care services. They show how
-                    well services are caring for people and how well they are
-                    managed.
+                  <TTSWrapper
+                    text={
+                      MCMData?.service_detail_cms?.service_performance_subtitle
+                    }
+                  >
+                    {MCMData?.service_detail_cms?.service_performance_subtitle}
                   </TTSWrapper>
                 </p>
                 <p className="text-xs sm:text-sm text-black font-normal">
-                  <TTSWrapper text="Last inspection: 06 August 2025">
-                    Last inspection: 06 August 2025
+                  <TTSWrapper
+                    text={MCMData?.service_detail_cms?.last_inspection_date}
+                  >
+                    {MCMData?.service_detail_cms?.last_inspection_date}
                   </TTSWrapper>
                 </p>
               </div>

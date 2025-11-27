@@ -1,71 +1,78 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TopRightArrowBlack, TopRightArrowWhite } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
+import { HomeData, TestimonialCategory } from "@/types/Home.type";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import restApiWrapper from "@/service/RestApiWrapper";
 
-interface FormData {
+export interface FormData {
   name: string;
-  email: string;
-  phone: string;
-  areaOfInterest: string;
+  phone_number: string;
+  purpose_of_enquiry_id: number;
   message: string;
 }
 
-interface NewsCard {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  image: string;
-}
-
-export default function QuickConnect() {
+export default function QuickConnect({
+  homeData,
+  purposeOfEnquiries,
+}: {
+  homeData: HomeData;
+  purposeOfEnquiries: TestimonialCategory[];
+}) {
+  const navigate = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "",
-    phone: "",
-    areaOfInterest: "",
+    phone_number: "",
+    purpose_of_enquiry_id: 0,
     message: "",
   });
-
-  const newsCards: NewsCard[] = [
-    {
-      id: 1,
-      title: "Had a great experience will do again and",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "11.07.2025",
-      image: "/news/news1.png",
-    },
-    {
-      id: 2,
-      title: "Lorem Ipsum is simply dummy text of",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "05.07.2025",
-      image: "/news/news2.jpg",
-    },
-    {
-      id: 3,
-      title: "Had a great experience will do again and",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "03.07.2025",
-      image: "/news/news3.jpg",
-    },
-    {
-      id: 4,
-      title: "Lorem Ipsum is simply dummy text of the",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and types Lorem Ipsum is",
-      date: "01.07.2025",
-      image: "/news/news4.jpg",
-    },
-  ];
+  const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
+  const areaDropdownRef = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
-    alert("Form submitted successfully!");
+    // Check which fields are missing
+    const missingFields: string[] = [];
+
+    if (!formData.name.trim()) missingFields.push("Name");
+    if (!formData.phone_number.trim()) missingFields.push("Phone");
+    if (!formData.purpose_of_enquiry_id) missingFields.push("Area of Interest");
+    if (!formData.message.trim()) missingFields.push("Message");
+
+    // If any fields are missing, show toast
+    if (missingFields.length > 0) {
+      if (missingFields.length === 1) {
+        toast.error(`Please fill in ${missingFields[0]}`);
+      } else {
+        toast.error(
+          `Please fill in all required fields: ${missingFields.join(", ")}`
+        );
+      }
+      return;
+    }
+
+    // All fields are filled and valid, proceed with submission
+    setIsLoading(true);
+    restApiWrapper
+      .post("/contact-enquiry", formData)
+      .then((res) => {
+        toast.success(res.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setFormData({
+          name: "",
+          phone_number: "",
+          purpose_of_enquiry_id: 0,
+          message: "",
+        });
+      });
   };
 
   const handleInputChange = (
@@ -73,11 +80,39 @@ export default function QuickConnect() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    let value = e.target.value;
+
+    // For phone field, only allow numbers and common phone characters (+, -, spaces, parentheses)
+    if (e.target.name === "phone_number") {
+      value = value.replace(/[^0-9+\-() ]/g, "");
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
+
+  const handleAreaSelect = (value: string) => {
+    setFormData((prev) => ({ ...prev, purpose_of_enquiry_id: Number(value) }));
+    setIsAreaDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        areaDropdownRef.current &&
+        !areaDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsAreaDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,19 +127,18 @@ export default function QuickConnect() {
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
               <TTSWrapper
-                text="Quick Connect"
+                text={homeData?.home_cms?.quick_connect_title}
                 className="text-4xl md:text-5xl font-bold text-white mb-1"
               >
-                Quick Connect
+                {homeData?.home_cms?.quick_connect_title}
               </TTSWrapper>
             </h1>
             <p className="text-white text-sm md:text-base">
               <TTSWrapper
-                text="Lorem Ipsum is simply dummy text of the printing and typesetting industry"
+                text={homeData?.home_cms?.quick_connect_subtitle}
                 className="text-white text-sm md:text-base"
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry
+                {homeData?.home_cms?.quick_connect_subtitle}
               </TTSWrapper>
             </p>
           </div>
@@ -120,42 +154,100 @@ export default function QuickConnect() {
                 className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
-                type="email"
-                name="email"
-                placeholder="Email*"
-                value={formData.email}
+                type="tel"
+                name="phone_number"
+                placeholder="Phone*"
+                value={formData.phone_number}
                 onChange={handleInputChange}
                 className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone*"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <select
-                name="areaOfInterest"
-                value={formData.areaOfInterest}
-                onChange={handleInputChange}
-                className="w-full px-6 py-4 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 1rem center",
-                  backgroundSize: "1.5em 1.5em",
-                }}
-              >
-                <option value="">Area of Interest*</option>
-                <option value="healthcare">Healthcare</option>
-                <option value="elderly-care">Elderly Care</option>
-                <option value="home-services">Home Services</option>
-                <option value="consultation">Consultation</option>
-              </select>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="relative" ref={areaDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsAreaDropdownOpen((prev) => !prev)}
+                  className="w-full px-6 py-4 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500 text-left flex items-center justify-between gap-3"
+                  aria-haspopup="listbox"
+                  aria-expanded={isAreaDropdownOpen}
+                  aria-label="Select area of interest"
+                >
+                  <span>
+                    {formData.purpose_of_enquiry_id
+                      ? purposeOfEnquiries?.find(
+                          (category) =>
+                            category.id === formData.purpose_of_enquiry_id
+                        )?.title
+                      : "Area of Interest*"}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="10"
+                    viewBox="0 0 16 10"
+                    fill="none"
+                    className={`transition-transform ${
+                      isAreaDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    <path
+                      d="M1 1L8 8L15 1"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                {isAreaDropdownOpen && (
+                  <ul
+                    role="listbox"
+                    className="absolute z-30 mt-2 w-full rounded-lg border border-gray-200 bg-white py-2 shadow-lg focus:outline-none"
+                  >
+                    {purposeOfEnquiries &&
+                      purposeOfEnquiries.map((category) => {
+                        const isSelected =
+                          formData.purpose_of_enquiry_id === category.id;
+                        return (
+                          <li key={category.id}>
+                            <button
+                              type="button"
+                              role="option"
+                              aria-selected={isSelected}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                handleAreaSelect(String(category.id));
+                              }}
+                              onKeyDown={(event) => {
+                                if (
+                                  event.key === "Enter" ||
+                                  event.key === " "
+                                ) {
+                                  event.preventDefault();
+                                  handleAreaSelect(String(category.id));
+                                }
+                              }}
+                              className={`w-full text-left px-5 py-2 text-sm sm:text-base transition ${
+                                isSelected
+                                  ? "bg-blue-100 text-blue-900"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`}
+                            >
+                              {category.title}
+                            </button>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                )}
+                <input
+                  type="hidden"
+                  name="purpose_of_enquiry_id"
+                  value={formData.purpose_of_enquiry_id}
+                />
+              </div>
             </div>
 
             <textarea
@@ -164,22 +256,22 @@ export default function QuickConnect() {
               value={formData.message}
               onChange={handleInputChange}
               rows={5}
-              className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-6 py-4 rounded-lg bg-white text-black placeholder-black focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none scrollbar-hide"
             />
 
             <div className="text-center pt-4">
               <button
                 onClick={handleSubmit}
+                disabled={isLoading}
                 className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none hover:brightness-110 hover:shadow-lg transition-all duration-300"
                 style={{
                   background: "rgba(10, 91, 224, 1)",
                   borderRadius: "300px",
+                  opacity: isLoading ? 0.5 : 1,
+                  cursor: isLoading ? "not-allowed" : "pointer",
                 }}
               >
-                <TTSWrapper
-                  text="Submit Enquiry"
-                  className="inline-flex items-center gap-1 text-white font-medium rounded-lg focus:outline-none"
-                >
+                <TTSWrapper text="Submit Enquiry">
                   Submit Enquiry{""}
                 </TTSWrapper>
                 <TopRightArrowWhite />
@@ -195,25 +287,23 @@ export default function QuickConnect() {
           <div className="flex justify-between items-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
               <TTSWrapper
-                text="News & Events"
+                text={homeData?.home_cms?.news_and_events_title}
                 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5"
               >
-                News & Events
+                {homeData?.home_cms?.news_and_events_title}
               </TTSWrapper>
             </h2>
-            <button className="text-black font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300">
-              <TTSWrapper
-                text="Visit News Hub"
-                className="text-black font-medium flex items-center gap-1"
-              >
-                Visit News Hub
-              </TTSWrapper>
+            <button
+              onClick={() => navigate.push("/news-and-insights")}
+              className="text-black cursor-pointer font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300"
+            >
+              <TTSWrapper text="Visit News Hub">Visit News Hub</TTSWrapper>
               <TopRightArrowBlack />
             </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newsCards.map((card) => (
+            {homeData?.blogs?.map((card) => (
               <div
                 key={card.id}
                 className="overflow-hidden"
@@ -232,25 +322,23 @@ export default function QuickConnect() {
                     </TTSWrapper>
                   </h3>
                   <p className="text-black text-sm mb-6 leading-relaxed">
-                    <TTSWrapper
-                      text={card.description}
-                    >
-                      {card.description}
+                    <TTSWrapper text={card.short_content}>
+                      {card.short_content}
                     </TTSWrapper>
                   </p>
                   <p className="text-sm text-black font-semibold mb-4">
                     <TTSWrapper
-                      text={card.date}
+                      text={card.published_on}
                       className="text-sm text-black font-semibold mb-4"
                     >
-                      {card.date}
+                      {card.published_on}
                     </TTSWrapper>
                   </p>
                 </div>
                 <div className="relative h-60 overflow-hidden">
                   <Image
-                    src={card.image}
-                    alt={card.title}
+                    src={card.image_value}
+                    alt={card.image_alt_text_value}
                     fill
                     className="w-full h-full object-cover"
                     style={{
@@ -262,7 +350,10 @@ export default function QuickConnect() {
                       backgroundColor: "rgba(10, 91, 224, 1)",
                       borderRadius: "300px",
                     }}
-                    className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:brightness-110 hover:shadow-lg transition-all duration-300"
+                    onClick={() =>
+                      navigate.push(`/news-and-insights/${card.slug}`)
+                    }
+                    className="absolute bottom-4 cursor-pointer right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2 hover:brightness-110 hover:shadow-lg transition-all duration-300"
                   >
                     <TTSWrapper
                       text="Read More"

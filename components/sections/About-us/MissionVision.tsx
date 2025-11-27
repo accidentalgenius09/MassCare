@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  CandidateMatchingIcon,
-  ComplianceChecksIcon,
-  FlowerDecoration,
-  InitialConsultationIcon,
-} from "../../helpers/svgs";
+import { FlowerDecoration } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { AboutUsDataType } from "@/types/Aboutus.type";
 
 // Main Component
-const MissionVisionSection = () => {
+const MissionVisionSection = ({
+  aboutUsData,
+}: {
+  aboutUsData: AboutUsDataType;
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
 
@@ -33,66 +33,17 @@ const MissionVisionSection = () => {
 
   const steps = [
     {
-      number: "01",
-      title: "Mission",
-      description: "To champion local communities, avoid outsourcing...",
-      icon: <InitialConsultationIcon />,
+      title: aboutUsData?.about_cms?.section2_title1,
+      description: aboutUsData?.about_cms?.section2_description1,
     },
     {
-      number: "02",
-      title: "Vision",
-      description: "To champion local communities, avoid outsourcing...",
-      icon: <CandidateMatchingIcon />,
+      title: aboutUsData?.about_cms?.section2_title2,
+      description: aboutUsData?.about_cms?.section2_description2,
     },
     {
-      number: "03",
-      title: "Values",
-      description:
-        "We care deeply for the well-being of vulnerable adults, providing support with empathy, dignity, and respect.",
-      icon: <ComplianceChecksIcon />,
+      title: aboutUsData?.about_cms?.section3_title,
+      description: aboutUsData?.about_cms?.section2_description3,
     },
-    // {
-    //   number: "04",
-    //   title: "Core Beliefs",
-    //   description:
-    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-    //   icon: <PlacementInductionIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "04",
-    //   title: "Core Beliefs",
-    //   description:
-    //     "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-    //   icon: <PlacementInductionIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
-    // {
-    //   number: "05",
-    //   title: "Quality Promise",
-    //   description:
-    //     "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-    //   icon: <OngoingSupportIcon />,
-    // },
   ];
 
   const isCarousel = steps.length > 3;

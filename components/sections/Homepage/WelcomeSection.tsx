@@ -1,71 +1,52 @@
 "use client";
 
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { AboutUsDataType } from "@/types/Aboutus.type";
 import Image from "next/image";
 
 interface WelcomeSectionProps {
   section?: string;
+  aboutUsData: AboutUsDataType;
 }
 
-const WelcomeSection = ({ section = "home" }: WelcomeSectionProps) => {
+const WelcomeSection = ({
+  aboutUsData,
+  section = "home",
+}: WelcomeSectionProps) => {
   return (
     <section className="pb-2 pt-8 sm:pt-12 md:pt-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-2 sm:ms-4 md:ms-6 me-4 sm:me-6 md:me-10 justify-between">
           {/* Left Content */}
           <div className="mt-4 sm:mt-6 md:mt-10">
-            <TTSWrapper
-              text="Welcome to Mass Care"
-              className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2"
-            >
+            <TTSWrapper text={aboutUsData?.about_cms?.section1_title}>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                Welcome to Mass Care
+                {aboutUsData?.about_cms?.section1_title}
               </h2>
             </TTSWrapper>
 
-            <div className="justify-start text-neutral-900 text-lg sm:text-xl font-normal mb-3 sm:mb-4">
-              <TTSWrapper
-                text="Celebrating 8 years of meaningful care... "
-                className="justify-start text-neutral-900 text-lg sm:text-xl font-normal"
-              >
-                Celebrating 8 years of meaningful care... <br />
-              </TTSWrapper>
-              <TTSWrapper
-                text="care without compromise."
-                className="justify-start text-neutral-900 text-lg sm:text-xl font-normal mb-3 sm:mb-4"
-              >
-                care without compromise.
+            <div className="justify-start text-neutral-900 text-lg sm:text-xl font-normal mb-3 sm:mb-4 max-w-[400px]">
+              <TTSWrapper text={aboutUsData?.about_cms?.section1_sub_title}>
+                {aboutUsData?.about_cms?.section1_sub_title}
               </TTSWrapper>
             </div>
 
             <div className="max-w-[600px]">
-              <TTSWrapper
-                text="Mass Care Agency is a registered nursing agency; we are dedicated to the health profession, and we are passionate about caring for vulnerable adults. This passion comes from within the heart and means a lot to us. We aim to support the healthcare industry all over the UK by supplying quality health care professionals. We will fulfil your staffing needs when you require, and we are available 24 hours a day 7 days a week. <br /> <br />
-                  You can also book your staffing requirement by calling one of
-                  our friendly team members or using the booking form provided
-                  on this site."
-              >
-                <p className="text-black font-normal text-xs sm:text-sm">
-                  Mass Care Agency is a registered nursing agency; we are
-                  dedicated to the health profession, and we are passionate
-                  about caring for vulnerable adults. This passion comes from
-                  within the heart and means a lot to us. We aim to support the
-                  healthcare industry all over the UK by supplying quality
-                  health care professionals. We will fulfil your staffing needs
-                  when you require, and we are available 24 hours a day 7 days a
-                  week.
-                  <br /> <br />
-                  You can also book your staffing requirement by calling one of
-                  our friendly team members or using the booking form provided
-                  on this site.
-                </p>
+              <TTSWrapper text={aboutUsData?.about_cms?.section1_description}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: aboutUsData?.about_cms?.section1_description || "",
+                  }}
+                />
               </TTSWrapper>
             </div>
           </div>
 
           {/* Right Content - Mission, Vision & Accreditation */}
           <div
-            className={`space-y-8 sm:space-y-10 md:space-y-12 ${section === "aboutus" ? "ml-0" : "ml-0 sm:ml-12 md:ml-24"}`}
+            className={`space-y-8 sm:space-y-10 md:space-y-12 ${
+              section === "aboutus" ? "ml-0" : "ml-0 sm:ml-12 md:ml-24"
+            }`}
           >
             {/* Mission */}
 
@@ -91,8 +72,8 @@ const WelcomeSection = ({ section = "home" }: WelcomeSectionProps) => {
                     </TTSWrapper>
                   </h2>
                   <div className="text-sm sm:text-base">
-                    <TTSWrapper text="To deliver dignified, person-centered care...">
-                      To deliver dignified, person-centered care...
+                    <TTSWrapper text="To champion local communities, avoid outsourcing...">
+                      To champion local communities, avoid outsourcing...
                     </TTSWrapper>
                   </div>
                 </div>

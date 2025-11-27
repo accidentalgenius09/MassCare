@@ -1,16 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  CQC,
-  HundredPercentIcon,
-  InhouseCpD,
-  NationalCoverage,
-  NoOutsourcing,
-} from "../../helpers/svgs";
+import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { HomeData } from "@/types/Home.type";
 
-const WhyChooseSection = () => {
+const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
   const [isDragging, setIsDragging] = useState(false);
@@ -43,98 +38,30 @@ const WhyChooseSection = () => {
         setCarouselWidth(carouselRef.current.offsetWidth);
       }
     };
-    
+
     updateCarouselWidth();
     window.addEventListener("resize", updateCarouselWidth);
     return () => window.removeEventListener("resize", updateCarouselWidth);
   }, [itemsPerView]);
 
-  const benefits = [
-    {
-      icon: <CQC />,
-      title: "CQC-recognized",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <NoOutsourcing />,
-      title: "No Outsourcing",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <InhouseCpD />,
-      title: "In-house CPD-certified training",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <NationalCoverage />,
-      title: "National coverage",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <HundredPercentIcon />,
-      title: "100% CBT/OSCE pass rate",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <InhouseCpD />,
-      title: "In-house CPD-certified training",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <NationalCoverage />,
-      title: "National coverage",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <HundredPercentIcon />,
-      title: "100% CBT/OSCE pass rate",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <InhouseCpD />,
-      title: "In-house CPD-certified training",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <NationalCoverage />,
-      title: "National coverage",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-    {
-      icon: <HundredPercentIcon />,
-      title: "100% CBT/OSCE pass rate",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-    },
-  ];
 
-  const totalSlides = Math.ceil(benefits.length / itemsPerView);
-  
+  const totalSlides = Math.ceil(homeData.mass_care_features.length / itemsPerView);
+
   // Calculate transform with special handling for the last slide
   const getTransform = () => {
-    const isLastSlide = currentIndex === totalSlides - 1;
-    const itemsInLastSlide = benefits.length % itemsPerView || itemsPerView;
-    
-    if (isLastSlide && itemsInLastSlide < itemsPerView && carouselWidth > 0) {
-      // On the last slide with fewer items, align the last card to the right
-      const cardWidth = carouselWidth / itemsPerView;
-      const gap = 16; // gap-4
-      const totalCardsWidth = itemsInLastSlide * cardWidth + (itemsInLastSlide - 1) * gap;
-      const remainingSpace = carouselWidth - totalCardsWidth;
-      const offsetPercent = (remainingSpace / carouselWidth) * 100;
-      return -(currentIndex * 100) + offsetPercent;
+    // Always start from the left (0% when currentIndex is 0)
+    if (currentIndex === 0) {
+      return 0;
     }
-    
+
+    const isLastSlide = currentIndex === totalSlides - 1;
+    const itemsInLastSlide = homeData.mass_care_features.length % itemsPerView || itemsPerView;
+
+    if (isLastSlide && itemsInLastSlide < itemsPerView && carouselWidth > 0) {
+      // On the last slide with fewer items, keep items aligned to the left
+      return -currentIndex * 100;
+    }
+
     return -currentIndex * 100;
   };
 
@@ -193,26 +120,27 @@ const WhyChooseSection = () => {
         <div className="mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
             <TTSWrapper
-              text="Why Choose Mass Care"
+              text={homeData.home_cms.why_choose_title || ""}
               className="text-2xl sm:text-3xl md:text-4xl font-bold"
             >
-              Why Choose Mass Care
+              {homeData.home_cms.why_choose_title || ""}
             </TTSWrapper>
           </h2>
           <p className="text-sm sm:text-base md:text-md text-blue-200 mt-2 sm:mt-4">
-            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry" className="text-sm sm:text-base md:text-md text-blue-200">
-            
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry{" "}
+            <TTSWrapper
+              text={homeData.home_cms.why_choose_subtitle || ""}
+              className="text-sm sm:text-base md:text-md text-blue-200"
+            >
+              {homeData.home_cms.why_choose_subtitle || ""}
             </TTSWrapper>
           </p>
         </div>
 
         {/* Carousel Container */}
-        <div className="relative w-full max-w-full">
+        <div className="relative w-full max-w-full overflow-hidden">
           <div
             ref={carouselRef}
-            className="cursor-grab active:cursor-grabbing"
+            className="cursor-grab active:cursor-grabbing overflow-hidden"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -222,21 +150,21 @@ const WhyChooseSection = () => {
             onTouchEnd={handleMouseUp}
           >
             <div
-              className="flex gap-4 transition-transform duration-300 ease-out"
+              className="flex gap-4 transition-transform duration-300 ease-out justify-start"
               style={{
                 transform: `translateX(${getTransform()}%)`,
               }}
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div key={slideIndex} className="min-w-full flex gap-4">
-                  {benefits
+                <div key={slideIndex} className="min-w-full flex gap-4 justify-start">
+                  {homeData.mass_care_features
                     .slice(
                       slideIndex * itemsPerView,
                       (slideIndex + 1) * itemsPerView
                     )
-                    .map((benefit, index) => (
+                    .map((feature, index) => (
                       <div
-                        key={slideIndex * itemsPerView + index}
+                        key={feature.id || slideIndex * itemsPerView + index}
                         style={{
                           width: `calc((100% - ${
                             (itemsPerView - 1) * 16
@@ -247,16 +175,34 @@ const WhyChooseSection = () => {
                         <div className="bg-white px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6 rounded-2xl sm:rounded-3xl md:rounded-4xl pb-2 sm:pb-3 text-gray-900 hover:shadow-lg transition-shadow h-full select-none">
                           <div className="flex gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
                             {/* Icon */}
-                            <div className="flex-shrink-0">{benefit.icon}</div>
+                            <div className="flex-shrink-0">
+                              <Image
+                                src={feature.icon_value || ""}
+                                alt={feature.icon_alt_text_value || feature.title}
+                                width={48}
+                                height={48}
+                                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14"
+                              />
+                            </div>
 
                             {/* Content */}
                             <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">
-                              <TTSWrapper text={benefit.title} className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{benefit.title}</TTSWrapper>
+                              <TTSWrapper
+                                text={feature.title}
+                                className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold"
+                              >
+                                {feature.title}
+                              </TTSWrapper>
                             </h3>
                           </div>
                           <hr className="mx-1 sm:mx-2 mb-1 sm:mb-2" />
                           <p className="text-gray-600 text-xs sm:text-sm">
-                            <TTSWrapper text={benefit.description} className="text-gray-600 text-xs sm:text-sm">{benefit.description}</TTSWrapper>
+                            <TTSWrapper
+                              text={feature.subtitle}
+                              className="text-gray-600 text-xs sm:text-sm"
+                            >
+                              {feature.subtitle}
+                            </TTSWrapper>
                           </p>
                         </div>
                       </div>

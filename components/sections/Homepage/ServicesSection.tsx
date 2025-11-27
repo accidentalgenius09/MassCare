@@ -1,36 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Checkbox, TopRightArrowBlack } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
-import EnquireNowPopup from "../About-us/EnquireNowPopup";
+import { useRouter } from "next/navigation";
+import { Service } from "@/types/Aboutus.type";
 
-const ServicesSection = () => {
-  const services = [
-    {
-      title: "MCM Nursing Care Agency",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. simply Ipsum is simply",
-      image: "/services/oru-service1.png",
-      features: ["1500+ pros", "Temp & Perm Roles", "Global Sourcing"],
-    },
-    {
-      title: "Mass Home Care",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. simply Ipsum is simply",
-      image: "/services/oru-service3.png",
-      features: ["BLS", "ALS", "OSCE/CBT prep"],
-    },
-    {
-      title: "Mass Training Academy",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. simply Ipsum is simply",
-      image: "/services/oru-service2.png",
-      features: ["24/7 support", "All-day sitting", "CQC-rated"],
-    },
-  ];
-  const [showPopup, setShowPopup] = useState(false);
-
+const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
+  const router = useRouter();
   return (
     <>
       <div className="container mx-auto bg-white pb-8 sm:pb-12 md:pb-16 pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 lg:px-8">
@@ -46,7 +23,7 @@ const ServicesSection = () => {
           </h2>
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {services.map((service, index) => (
+            {ServiceData?.map((service, index) => (
               <div
                 key={index}
                 className="relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden max-w-full h-[600px] sm:h-[700px] md:h-[800px]"
@@ -54,8 +31,8 @@ const ServicesSection = () => {
                 {/* Card Image */}
                 <div className="absolute inset-0 w-full h-full">
                   <Image
-                    src={service.image}
-                    alt={service.title}
+                    src={service.image_value}
+                    alt={service.image_alt_text_value}
                     fill
                     className="w-full h-full object-cover"
                   />
@@ -143,10 +120,10 @@ const ServicesSection = () => {
                   })()}
                   <p className="text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
                     <TTSWrapper
-                      text={service.description}
+                      text={service.subtitle}
                       className="text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed"
                     >
-                      {service.description}
+                      {service.subtitle}
                     </TTSWrapper>
                   </p>
 
@@ -172,7 +149,7 @@ const ServicesSection = () => {
 
                   {/* Explore More Link */}
                   <button
-                    onClick={() => setShowPopup(true)}
+                    onClick={() => router.push(`services/${service.slug}`)}
                     className="flex items-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm transition-all duration-300 hover:gap-2 hover:text-blue-600 group cursor-pointer"
                   >
                     <TTSWrapper text="Explore More">Explore More</TTSWrapper>
@@ -184,7 +161,6 @@ const ServicesSection = () => {
           </div>
         </div>
       </div>
-      {showPopup && <EnquireNowPopup onClose={() => setShowPopup(false)} />}
     </>
   );
 };

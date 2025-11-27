@@ -6,6 +6,14 @@ import {
 } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 
+interface SectionItem {
+  sectionTitle?: string;
+  description1?: string;
+  description2?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+}
+
 interface NursingCareSectionProps {
   title?: string;
   subtitle?: string;
@@ -17,6 +25,7 @@ interface NursingCareSectionProps {
   ctaText?: string;
   ctaLink?: string;
   onCtaClick?: () => void;
+  sections?: SectionItem[];
 }
 
 const NursingCareSection: React.FC<NursingCareSectionProps> = ({
@@ -27,10 +36,15 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
   sectionTitle = "Staffing for Healthcare Facilities",
   description1 = "From placing skilled nurses in fulfilling roles across the UK to supporting healthcare providers with dependable staffing solutions, every success story reflects our core values of compassion, commitment, and care. These moments are not just achievements—they are the heartbeats of our mission to make a real difference in the lives of both our clients and candidates.",
   ctaText = "Know More",
-  ctaLink = "/services/mcm-nursing-care",
+  ctaLink = "/services/mcm-nursing-care-agency",
   description2,
+  sections,
   //   onCtaClick,
 }) => {
+  // If sections array is provided, use it; otherwise, create a single section from props
+  const sectionsToRender = sections && sections.length > 0 
+    ? sections 
+    : [{ sectionTitle, description1, description2, imageSrc, imageAlt }];
   //   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
   //     if (onCtaClick) {
   //       e.preventDefault();
@@ -75,53 +89,66 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
           </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-20 items-center">
-          {/* Image Section */}
-          <div className="order-2 lg:order-1">
-            <div className="relative rounded-2xl overflow-hidden bg-gray-200 w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                fill
-                className="object-cover"
-              />
+        {/* Content Sections */}
+        {sectionsToRender.map((section, index) => {
+          const sectionImageSrc = section.imageSrc || imageSrc;
+          const sectionImageAlt = section.imageAlt || imageAlt;
+          
+          return (
+            <div key={index} className={index > 0 ? "mt-12 md:mt-16 lg:mt-20" : ""}>
+              {/* Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-20 items-center">
+                {/* Image Section */}
+                <div className="order-2 lg:order-1">
+                  <div className="relative rounded-2xl overflow-hidden bg-gray-200 w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
+                    <Image
+                      src={sectionImageSrc}
+                      alt={sectionImageAlt}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Text Content Section */}
+                <div className="order-1 max-w-3xl space-y-4 md:space-y-6 ps-0 md:ps-6 lg:ps-10 leading-tight">
+                  {section.sectionTitle && (
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-medium text-black leading-tight">
+                      <TTSWrapper text={section.sectionTitle}>{section.sectionTitle}</TTSWrapper>
+                    </h2>
+                  )}
+
+                  <div className="space-y-3 md:space-y-4">
+                    {section.description1 && (
+                      <p className="text-sm sm:text-base text-black font-normal">
+                        <TTSWrapper text={section.description1}>{section.description1}</TTSWrapper>
+                      </p>
+                    )}
+
+                    {section.description2 && (
+                      <p className="text-sm sm:text-base text-black font-normal">
+                        <TTSWrapper text={section.description2}>{section.description2}</TTSWrapper>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Text Content Section */}
-          <div className="order-1 max-w-3xl space-y-4 md:space-y-6 ps-0 md:ps-6 lg:ps-10 leading-tight">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-medium text-black leading-tight">
-              <TTSWrapper text={sectionTitle}>{sectionTitle}</TTSWrapper>
-            </h2>
-
-            <div className="space-y-3 md:space-y-4">
-              <p className="text-sm sm:text-base text-black font-normal">
-                <TTSWrapper text={description1}>{description1}</TTSWrapper>
-              </p>
-
-              {description2 && (
-                <p className="text-sm sm:text-base text-black font-normal">
-                  <TTSWrapper text={description2}>{description2}</TTSWrapper>
-                </p>
-              )}
-            </div>
-
-            {/* CTA Button - Mobile & Tablet */}
-            <div className="lg:hidden pt-4">
-              <a
-                href={ctaLink}
-                // onClick={handleCtaClick}
-                className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium 
+          );
+        })}
+      </div>
+      {/* CTA Button - Mobile & Tablet */}
+      <div className="lg:hidden px-4">
+        <a
+          href={ctaLink}
+          // onClick={handleCtaClick}
+          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium 
                          px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg 
                          group"
-              >
-                <TTSWrapper text={ctaText}>{ctaText}</TTSWrapper>
-                <TopRightArrowWhite />{" "}
-              </a>
-            </div>
-          </div>
-        </div>
+        >
+          <TTSWrapper text={ctaText}>{ctaText}</TTSWrapper>
+          <TopRightArrowWhite />{" "}
+        </a>
       </div>
     </section>
   );

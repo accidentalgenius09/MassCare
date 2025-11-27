@@ -26,12 +26,14 @@ export default function RootLayout({
           rel="stylesheet" 
         />
       </head>
-      <body className={`antialiased overflow-x-hidden`} style={{ fontFamily: 'Inter, Arial, Helvetica, sans-serif' }}>
+      <body className={`antialiased overflow-x-hidden`} style={{ fontFamily: 'Helvetica' }}>
         <AccessibilityProvider>
           <TTSProvider>
             <Header />
-            <Toaster />
-            {children}
+            <Toaster position="top-right" />
+            <div className="bg-white text-black">
+              {children}
+            </div>
             <Footer />
           </TTSProvider>
         </AccessibilityProvider>

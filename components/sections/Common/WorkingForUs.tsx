@@ -1,48 +1,105 @@
 "use client";
 import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import restApiWrapper from "@/service/RestApiWrapper";
+import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
-  areaOfInterest: string;
-  preferredIntake: string;
+  areaOfInterest: number | "";
+  preferredIntake: number;
   message: string;
 }
-function WorkingForUs() {
+
+interface ApiOptionItem {
+  id: number;
+  title: string;
+}
+
+interface DropdownOption {
+  value: number;
+  label: string;
+}
+
+function WorkingForUs({
+  MCMData,
+}: {
+  MCMData: McmNursingCareAgencyServiceDetail;
+}) {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
     areaOfInterest: "",
-    preferredIntake: "",
+    preferredIntake: 0,
     message: "",
   });
   const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
   const [isPreferredDropdownOpen, setIsPreferredDropdownOpen] = useState(false);
   const areaDropdownRef = useRef<HTMLDivElement | null>(null);
   const preferredDropdownRef = useRef<HTMLDivElement | null>(null);
-
   const areaCloseTimeoutRef = useRef<number | null>(null);
   const preferredCloseTimeoutRef = useRef<number | null>(null);
+  const [areaOfInterestOptions, setAreaOfInterestOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
+  const [preferredIntakeOptions, setPreferredIntakeOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
 
-  const areaOfInterestOptions = [
-    { value: "healthcare", label: "Healthcare" },
-    { value: "elderly-care", label: "Elderly Care" },
-    { value: "home-services", label: "Home Services" },
-    { value: "consultation", label: "Consultation" },
-  ];
+  useEffect(() => {
+    const fetchWorkingForUsData = async () => {
+      const response = await restApiWrapper.get<ApiOptionItem[]>(
+        "/get-enquiry-course-of-interests"
+      );
+      const response2 = await restApiWrapper.get<ApiOptionItem[]>(
+        "/get-preferred-intakes"
+      );
+      const transformResponse = (
+        responseData: ApiOptionItem[]
+      ): DropdownOption[] => {
+        return responseData.map((item: ApiOptionItem) => ({
+          value: item.id,
+          label: item.title,
+        }));
+      };
+      setAreaOfInterestOptions(transformResponse(response.data));
+      setPreferredIntakeOptions(transformResponse(response2.data));
+    };
+    fetchWorkingForUsData();
+  }, []);
 
-  const preferredIntakeOptions = [
-    { value: "full-time", label: "Full Time" },
-    { value: "part-time", label: "Part Time" },
-    { value: "flexible", label: "Flexible" },
-  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const handleSubmit = () => {
-    toast.success("Form submitted successfully!");
+    if (formData) {
+      const payload = {
+        service_id: MCMData.id,
+        enquiry_course_of_interest_id: formData.areaOfInterest,
+        phone_number: formData.phone,
+        preferred_intake_id: formData.preferredIntake,
+        message: formData.message,
+        name: formData.name,
+        email: formData.email,
+      };
+      console.log("payload", payload);
+      setIsLoading(true);
+      restApiWrapper
+        .post("/service-enquiry", payload)
+        .then(() => {
+          router.push("/thankyou-enquiry");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const handleInputChange = (
@@ -56,7 +113,7 @@ function WorkingForUs() {
     });
   };
 
-  const handleAreaSelect = (value: string) => {
+  const handleAreaSelect = (value: number) => {
     setFormData((prev) => ({ ...prev, areaOfInterest: value }));
     if (areaCloseTimeoutRef.current) {
       window.clearTimeout(areaCloseTimeoutRef.current);
@@ -67,7 +124,7 @@ function WorkingForUs() {
     }, 120);
   };
 
-  const handlePreferredSelect = (value: string) => {
+  const handlePreferredSelect = (value: number) => {
     setFormData((prev) => ({ ...prev, preferredIntake: value }));
     if (preferredCloseTimeoutRef.current) {
       window.clearTimeout(preferredCloseTimeoutRef.current);
@@ -117,12 +174,13 @@ function WorkingForUs() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-1">
-            <TTSWrapper text="Work for Us">Work for Us</TTSWrapper>
+            <TTSWrapper text="{MCMData?.service_detail_cms?.enquiry_title}">
+              {MCMData?.service_detail_cms?.enquiry_title}
+            </TTSWrapper>
           </h1>
           <p className="text-white text-base">
-            <TTSWrapper text="Lorem Ipsum is simply dummy text of the printing and typesetting industry">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry
+            <TTSWrapper text={MCMData?.service_detail_cms?.enquiry_subtitle}>
+              {MCMData?.service_detail_cms?.enquiry_subtitle}
             </TTSWrapper>
           </p>
         </div>
@@ -331,19 +389,22 @@ function WorkingForUs() {
           <div className="text-center pt-4">
             <button
               onClick={handleSubmit}
-              className="inline-flex items-center gap-2 px-8 py-3 cursor-pointer text-white font-medium rounded-lg "
+              className={`inline-flex items-center gap-2 px-8 py-3 cursor-pointer text-white font-medium rounded-lg ${
+                isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+              }`}
               style={{
                 background: "rgba(10, 91, 224, 1)",
                 borderRadius: "300px",
               }}
+              disabled={isLoading}
             >
               <TTSWrapper
-                text="Submit Enquiry"
+                text={isLoading ? "Submitting..." : "Submit Enquiry"}
                 className="inline-flex items-center gap-1 text-white font-medium rounded-lg"
               >
-                Submit Enquiry{""}
+                {isLoading ? "Submitting..." : "Submit Enquiry"}
               </TTSWrapper>
-              <TopRightArrowWhite />
+              {!isLoading && <TopRightArrowWhite />}
             </button>
           </div>
         </div>
