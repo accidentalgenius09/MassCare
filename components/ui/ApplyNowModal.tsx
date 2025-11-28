@@ -4,18 +4,25 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 import { ArrowUpRight } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { UploadOutline, XOutline } from "../helpers/svgs";
+import restApiWrapper from "@/service/RestApiWrapper";
+import toast from "react-hot-toast";
+import { useRouter, usePathname } from "next/navigation";
 
 interface ApplyNowModalProps {
   isOpen: boolean;
   onClose: () => void;
   jobTitle: string;
+  jobId: number;
 }
 
 const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
   isOpen,
   onClose,
   jobTitle,
+  jobId,
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -25,18 +32,108 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
     agreeToTerms: false,
   });
 
+  const [errors, setErrors] = useState<{
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    experience?: string;
+    cv?: string;
+    agreeToTerms?: string;
+  }>({});
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isExperienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
   const experienceDropdownRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const dropdownCloseTimeoutRef = useRef<number | null>(null);
 
   const experienceOptions = [
-    { value: "0-1", label: "0-1 years" },
-    { value: "1-2", label: "1-2 years" },
-    { value: "2-5", label: "2-5 years" },
-    { value: "5-10", label: "5-10 years" },
-    { value: "10+", label: "10+ years" },
+    { value: 1, label: "1 year" },
+    { value: 2, label: "2 years" },
+    { value: 3, label: "3 years" },
+    { value: 4, label: "4 years" },
+    { value: 5, label: "5 years" },
   ];
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    // Allow only digits and plus sign, max 13 characters
+    const phoneRegex = /^[\d\+]+$/;
+    // Should have at least 10 digits and max 13 characters (including +)
+    const digitsOnly = phone.replace(/\D/g, "");
+    return (
+      phoneRegex.test(phone) && phone.length <= 13 && digitsOnly.length >= 10
+    );
+  };
+
+  const validateFile = (file: File | null): string | null => {
+    if (!file) {
+      return "CV file is required";
+    }
+
+    // Check file type
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    const allowedExtensions = [".pdf", ".doc", ".docx"];
+    const fileExtension = file.name
+      .toLowerCase()
+      .substring(file.name.lastIndexOf("."));
+
+    if (
+      !allowedTypes.includes(file.type) &&
+      !allowedExtensions.includes(fileExtension)
+    ) {
+      return "Please upload a PDF, DOC, or DOCX file";
+    }
+
+    // Check file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      return "File size must be less than 5MB";
+    }
+
+    return null;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    // Allow only numbers and + sign
+    value = value.replace(/[^\d\+]/g, "");
+
+    // Limit to 13 characters
+    if (value.length > 13) {
+      value = value.slice(0, 13);
+    }
+
+    // Ensure + is only at the beginning if present
+    if (value.includes("+") && value.indexOf("+") !== 0) {
+      value = value.replace(/\+/g, "");
+      value = "+" + value;
+    }
+
+    // Limit to one + sign
+    const plusCount = (value.match(/\+/g) || []).length;
+    if (plusCount > 1) {
+      value = "+" + value.replace(/\+/g, "");
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      phone: value,
+    }));
+    // Clear error when user starts typing
+    setErrors((prev) => ({ ...prev, phone: undefined }));
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -47,19 +144,27 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
         ...prev,
         [name]: (e.target as HTMLInputElement).checked,
       }));
+      // Clear error when checkbox is checked
+      if ((e.target as HTMLInputElement).checked) {
+        setErrors((prev) => ({ ...prev, agreeToTerms: undefined }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
+      // Clear error when user starts typing
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
-  const handleExperienceSelect = (value: string) => {
+  const handleExperienceSelect = (value: number | string) => {
     setFormData((prev) => ({
       ...prev,
-      experience: value,
+      experience: String(value),
     }));
+    // Clear error when experience is selected
+    setErrors((prev) => ({ ...prev, experience: undefined }));
     if (dropdownCloseTimeoutRef.current) {
       window.clearTimeout(dropdownCloseTimeoutRef.current);
     }
@@ -90,19 +195,133 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
     };
   }, []);
 
+  // Close modal and reset form when pathname changes to /application-received
+  useEffect(() => {
+    if (pathname === "/application-received") {
+      // Reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        experience: "",
+        cv: null,
+        agreeToTerms: false,
+      });
+      setErrors({});
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      onClose();
+    }
+  }, [pathname, onClose]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData((prev) => ({
       ...prev,
       cv: file,
     }));
+
+    // Validate file immediately
+    const fileError = validateFile(file);
+    if (fileError) {
+      setErrors((prev) => ({ ...prev, cv: fileError }));
+      // Clear the file input if invalid
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } else {
+      setErrors((prev) => ({ ...prev, cv: undefined }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const newErrors: typeof errors = {};
+
+    // Validate full name
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    } else if (formData.fullName.trim().length < 2) {
+      newErrors.fullName = "Full name must be at least 2 characters";
+    }
+
+    // Validate email
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Validate phone
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!validatePhone(formData.phone)) {
+      newErrors.phone =
+        "Please enter a valid phone number (10-13 digits, + allowed)";
+    }
+
+    // Validate experience
+    if (!formData.experience) {
+      newErrors.experience = "Please select your experience";
+    }
+
+    // Validate file
+    const fileError = validateFile(formData.cv);
+    if (fileError) {
+      newErrors.cv = fileError;
+    }
+
+    // Validate terms agreement
+    if (!formData.agreeToTerms) {
+      newErrors.agreeToTerms = "You must agree to the terms and conditions";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
-    onClose();
+
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Create FormData object
+      const formdata = new FormData();
+
+      // Append form fields
+      formdata.append("career_id", jobId.toString());
+      formdata.append("name", formData.fullName.trim());
+      formdata.append("email", formData.email.trim());
+      formdata.append("phone_number", formData.phone.trim());
+      formdata.append("experience", formData.experience);
+
+      // Append resume file with filename as third parameter
+      if (fileInputRef.current?.files && fileInputRef.current.files[0]) {
+        const file = fileInputRef.current.files[0];
+        // Use the file's name as the filename (third parameter)
+        formdata.append("resume", file, file.name);
+      }
+
+      const response = await restApiWrapper.post("/career-enquiry", formdata);
+      if (response.status < 400) {
+        router.push("/application-received");
+        // Form reset and modal close will happen in useEffect when pathname changes
+      } else {
+        toast.error("Application submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -156,9 +375,16 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
-                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                className={`w-full px-4 py-2.5 sm:py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base ${
+                  errors.fullName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                }`}
                 required
               />
+              {errors.fullName && (
+                <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+              )}
             </div>
 
             {/* Email Address */}
@@ -172,9 +398,16 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter your email address"
-                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                className={`w-full px-4 py-2.5 sm:py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base ${
+                  errors.email
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                }`}
                 required
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* Phone Number */}
@@ -186,11 +419,19 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                 type="tel"
                 name="phone"
                 value={formData.phone}
-                onChange={handleInputChange}
+                onChange={handlePhoneChange}
                 placeholder="Enter Phone number"
-                className="w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                maxLength={13}
+                className={`w-full px-4 py-2.5 sm:py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base ${
+                  errors.phone
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                }`}
                 required
               />
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              )}
             </div>
 
             {/* Experience */}
@@ -198,16 +439,15 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
               <label className="block text-sm sm:text-base font-medium text-black mb-2">
                 <TTSWrapper text="Experience *">Experience *</TTSWrapper>
               </label>
-              <div
-                className="relative"
-                ref={experienceDropdownRef}
-              >
+              <div className="relative" ref={experienceDropdownRef}>
                 <button
                   type="button"
-                  onClick={() =>
-                    setExperienceDropdownOpen((prev) => !prev)
-                  }
-                  className={`w-full px-4 py-2.5 sm:py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base flex items-center justify-between ${
+                  onClick={() => setExperienceDropdownOpen((prev) => !prev)}
+                  className={`w-full px-4 py-2.5 sm:py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-sm sm:text-base flex items-center justify-between ${
+                    errors.experience
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300"
+                  } ${
                     formData.experience === ""
                       ? "text-gray-500  bg-white"
                       : "text-black"
@@ -220,7 +460,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                     {formData.experience
                       ? experienceOptions.find(
                           (option) =>
-                            option.value === formData.experience
+                            String(option.value) === formData.experience
                         )?.label
                       : "Select your experience in this field"}
                   </span>
@@ -247,7 +487,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   >
                     {experienceOptions.map((option) => {
                       const isSelected =
-                        formData.experience === option.value;
+                        String(option.value) === formData.experience;
                       return (
                         <li key={option.value}>
                           <button
@@ -260,10 +500,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                               handleExperienceSelect(option.value);
                             }}
                             onKeyDown={(event) => {
-                              if (
-                                event.key === "Enter" ||
-                                event.key === " "
-                              ) {
+                              if (event.key === "Enter" || event.key === " ") {
                                 event.preventDefault();
                                 handleExperienceSelect(option.value);
                               }
@@ -288,6 +525,9 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   required
                 />
               </div>
+              {errors.experience && (
+                <p className="text-red-500 text-xs mt-1">{errors.experience}</p>
+              )}
             </div>
 
             {/* Upload CV */}
@@ -297,6 +537,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
               </label>
               <div className="relative">
                 <input
+                  ref={fileInputRef}
                   type="file"
                   name="cv"
                   onChange={handleFileChange}
@@ -315,30 +556,42 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   </p>
                 </div>
               </div>
-              {formData.cv && (
+              {formData.cv && !errors.cv && (
                 <p className="text-sm text-green-600 mt-2">
                   <TTSWrapper text={`Selected: ${formData.cv.name}`}>
                     Selected: {formData.cv.name}
                   </TTSWrapper>
                 </p>
               )}
+              {errors.cv && (
+                <p className="text-red-500 text-xs mt-1">{errors.cv}</p>
+              )}
             </div>
 
             {/* Terms & Conditions */}
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                name="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={handleInputChange}
-                className="w-5 h-5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <label className="text-sm text-black">
-                <TTSWrapper text="I Agree To The Terms & Conditions *">
-                  I Agree To The Terms & Conditions *
-                </TTSWrapper>
-              </label>
+            <div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  name="agreeToTerms"
+                  checked={formData.agreeToTerms}
+                  onChange={handleInputChange}
+                  className={`w-5 h-5 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                    errors.agreeToTerms ? "border-red-500" : "border-gray-300"
+                  }`}
+                  required
+                />
+                <label className="text-sm text-black">
+                  <TTSWrapper text="I Agree To The Terms & Conditions *">
+                    I Agree To The Terms & Conditions *
+                  </TTSWrapper>
+                </label>
+              </div>
+              {errors.agreeToTerms && (
+                <p className="text-red-500 text-xs mt-1 ml-8">
+                  {errors.agreeToTerms}
+                </p>
+              )}
             </div>
 
             {/* Action Buttons */}
@@ -352,12 +605,19 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
               </button>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
+                disabled={isSubmitting}
+                className={`w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[#0A5BE0] text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base ${
+                  isSubmitting
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
               >
-                <TTSWrapper text="Submit Application">
-                  Submit Application
+                <TTSWrapper
+                  text={isSubmitting ? "Submitting..." : "Submit Application"}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Application"}
                 </TTSWrapper>
-                <ArrowUpRight className="w-4 h-4" />
+                {!isSubmitting && <ArrowUpRight className="w-4 h-4" />}
               </button>
             </div>
           </form>
