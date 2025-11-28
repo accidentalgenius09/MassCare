@@ -369,7 +369,40 @@ function CareerOpportunitiesPage() {
     setSelectedJob(null);
   };
 
-  const handleApplyNow = (jobOrTitle: JobListing | string) => {
+  const handleApplyNow = (
+    jobOrTitle:
+      | JobListing
+      | string
+      | {
+          id: number;
+          title: string;
+          category?: string;
+          postedTime?: string;
+          description?: string;
+          location?: string;
+          employmentType?: string;
+          experience?: string;
+          requirements?: string[];
+          fullDescription?: string;
+          responsibilities?: string[];
+          department?: {
+            id: number;
+            title: string;
+          };
+          job_type?: {
+            title: string;
+          };
+          city?: {
+            name: string;
+          };
+          state?: {
+            name: string;
+          };
+          job_tags?: Array<{
+            title: string;
+          }>;
+        }
+  ) => {
     if (typeof jobOrTitle === "string") {
       // Called from JobDetailsModal with just the title (fallback for old code)
       const job =
@@ -383,7 +416,26 @@ function CareerOpportunitiesPage() {
       }
     } else {
       // Called from job listing cards or JobDetailsModal with full job object
-      setSelectedJobForApplication(jobOrTitle);
+      // Convert to JobListing format if needed
+      const jobListing: JobListing = {
+        id: jobOrTitle.id,
+        title: jobOrTitle.title,
+        category: jobOrTitle.category,
+        postedTime: jobOrTitle.postedTime,
+        description: jobOrTitle.description,
+        location: jobOrTitle.location || "",
+        employmentType: jobOrTitle.employmentType || "",
+        experience: jobOrTitle.experience || "",
+        requirements: jobOrTitle.requirements,
+        fullDescription: jobOrTitle.fullDescription,
+        responsibilities: jobOrTitle.responsibilities,
+        department: jobOrTitle.department,
+        job_type: jobOrTitle.job_type,
+        city: jobOrTitle.city,
+        state: jobOrTitle.state,
+        job_tags: jobOrTitle.job_tags,
+      };
+      setSelectedJobForApplication(jobListing);
       setIsApplyModalOpen(true);
     }
   };
@@ -563,7 +615,7 @@ function CareerOpportunitiesPage() {
         </div>
       )}
 
-      <div className={isLoading ? "blur-sm pointer-events-none" : ""}>
+      <div>
         <PageBanner
           title={careers?.banner?.banner_title}
           breadcrumb="Home / Career Opportunities"
@@ -917,6 +969,7 @@ function CareerOpportunitiesPage() {
           isOpen={isApplyModalOpen}
           onClose={handleCloseApplyModal}
           jobTitle={selectedJobForApplication.title}
+          jobId={selectedJobForApplication.id}
         />
       )}
     </>

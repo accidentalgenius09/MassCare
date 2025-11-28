@@ -8,7 +8,35 @@ import { ClockOutline, MapPinOutline } from "../helpers/svgs";
 interface JobDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApplyNow?: (jobTitle: string) => void;
+  onApplyNow?: (job: {
+    id: number;
+    title: string;
+    category?: string;
+    postedTime?: string;
+    description?: string;
+    location?: string;
+    employmentType?: string;
+    experience?: string;
+    requirements?: string[];
+    fullDescription?: string;
+    responsibilities?: string[];
+    department?: {
+      id: number;
+      title: string;
+    };
+    job_type?: {
+      title: string;
+    };
+    city?: {
+      name: string;
+    };
+    state?: {
+      name: string;
+    };
+    job_tags?: Array<{
+      title: string;
+    }>;
+  }) => void;
   job: {
     id: number;
     category?: string;
@@ -167,7 +195,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
           <div className="flex">
             <button
               onClick={() => {
-                onApplyNow?.(job.title);
+                onApplyNow?.(job);
                 onClose();
               }}
               className="bg-[#0A5BE0] text-white px-5 py-3 rounded-full flex items-center gap-2 font-sm hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
