@@ -11,6 +11,8 @@ import React, { useEffect, useState } from "react";
 import { FilterDropdown } from "@/components/sections/Common/FilterDropdown";
 import restApiWrapper from "@/service/RestApiWrapper";
 import { CareerDataType } from "@/types/Career.type";
+import { MetaData } from "@/types/Home.type";
+import dayjs from "dayjs";
 
 interface CareerListData {
   careers: JobListing[];
@@ -310,22 +312,10 @@ interface OptionItem {
   value: string | number;
 }
 
-// Helper function to convert ISO date to "X Days ago" format
+// Helper function to convert ISO date to DD-MM-YYYY format
 const formatDaysAgo = (dateString: string | undefined): string => {
   if (!dateString) return "";
-
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffTime = Math.abs(now.getTime() - date.getTime());
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) {
-    return "Today";
-  } else if (diffDays === 1) {
-    return "1 Day ago";
-  } else {
-    return `${diffDays} Days ago`;
-  }
+  return dayjs(dateString).format("DD-MM-YYYY");
 };
 
 function CareerOpportunitiesPage() {
@@ -346,6 +336,7 @@ function CareerOpportunitiesPage() {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedJobForApplication, setSelectedJobForApplication] =
     useState<JobListing | null>(null);
+  const [metaData, setMetaData] = useState<MetaData | null>(null);
   const [displayCount, setDisplayCount] = useState(6);
   const [careers, setCareers] = useState<CareerDataType>({} as CareerDataType);
   const [isLoading, setIsLoading] = useState(true);
@@ -523,6 +514,11 @@ function CareerOpportunitiesPage() {
       try {
         const response = await restApiWrapper.get("/careers");
         setCareers(response.data);
+        const meta = await restApiWrapper.get("/meta-tags?page=career");
+        // Parse the metadata if it's a string, otherwise use directly
+        const parsedMeta =
+          typeof meta.data === "string" ? JSON.parse(meta.data) : meta.data;
+        setMetaData(parsedMeta);
       } catch (error) {
         console.error("Error fetching careers:", error);
       } finally {
@@ -585,6 +581,100 @@ function CareerOpportunitiesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [careers?.departments]);
 
+  useEffect(() => {
+    if (!metaData) return;
+
+    // 1. Set title
+    if (metaData.meta_title) {
+      document.title = metaData.meta_title;
+    }
+
+    // 2. Set or create meta description
+    let metaDescription = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    if (metaData.meta_description) {
+      metaDescription.setAttribute("content", metaData.meta_description);
+    }
+
+    // 3. Set or append meta keywords (with dedupe)
+    let metaKeywords = document.querySelector<HTMLMetaElement>(
+      'meta[name="keywords"]'
+    );
+    if (!metaKeywords) {
+      metaKeywords = document.createElement("meta");
+      metaKeywords.setAttribute("name", "keywords");
+      document.head.appendChild(metaKeywords);
+    }
+
+    if (metaData.meta_keywords) {
+      const existingKeywords = metaKeywords.getAttribute("content") || "";
+
+      const combinedKeywords = [
+        ...existingKeywords.split(","),
+        ...metaData.meta_keywords.split(","),
+      ]
+        .map((k) => k.trim())
+        .filter(Boolean);
+
+      const uniqueKeywords = Array.from(new Set(combinedKeywords));
+
+      metaKeywords.setAttribute("content", uniqueKeywords.join(", "));
+    }
+
+    // 4. Parse and append other_meta_tags (e.g., <meta name="author" ...>)
+    if (metaData.other_meta_tags) {
+      try {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = metaData.other_meta_tags;
+
+        const metaTags = tempDiv.querySelectorAll("meta");
+
+        metaTags.forEach((tag) => {
+          const name = tag.getAttribute("name") || tag.getAttribute("property");
+          const content = tag.getAttribute("content");
+          const httpEquiv = tag.getAttribute("http-equiv");
+
+          if (!content && !httpEquiv && !name) return;
+
+          let existingTag: HTMLMetaElement | null = null;
+
+          if (name) {
+            existingTag = document.querySelector(
+              `meta[name="${name}"], meta[property="${name}"]`
+            );
+          } else if (httpEquiv) {
+            existingTag = document.querySelector(
+              `meta[http-equiv="${httpEquiv}"]`
+            );
+          }
+
+          // Only append if not already present
+          if (!existingTag) {
+            const newMeta = document.createElement("meta");
+            if (name) newMeta.setAttribute("name", name);
+            if (httpEquiv) newMeta.setAttribute("http-equiv", httpEquiv);
+            if (content) newMeta.setAttribute("content", content);
+            document.head.appendChild(newMeta);
+          }
+        });
+      } catch (error) {
+        console.error("Error parsing other_meta_tags:", error);
+      }
+    }
+
+    // 5. Cleanup: optional – restore default title on unmount
+    return () => {
+      document.title =
+        "Mass Care - Professional Nursing, Home Care & Training Services";
+    };
+  }, [metaData]);
+
   return (
     <>
       {isLoading && (
@@ -605,7 +695,7 @@ function CareerOpportunitiesPage() {
                   Loading Career Opportunities...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the latest opportunities">
                   Please wait while we fetch the latest opportunities
                 </TTSWrapper>
@@ -626,8 +716,8 @@ function CareerOpportunitiesPage() {
         <div className="min-h-screen bg-white pt-8 pb-2 sm:pt-12 sm:pb-6 md:pt-16 md:pb-10 px-4 sm:px-6 lg:px-8">
           <div className="max-w-full px-4 sm:px-8 lg:px-20 mx-auto">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 sm:mb-12">
-              <div className="mb-6 sm:mb-0">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-8 sm:mb-12 gap-6 lg:gap-0">
+              <div className="mb-0 lg:mb-0">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-2">
                   <TTSWrapper text={careers?.career_cms?.section1_title}>
                     {careers?.career_cms?.section1_title}
@@ -636,40 +726,37 @@ function CareerOpportunitiesPage() {
               </div>
 
               {/* Filter Section */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                <div className="flex flex-wrap gap-3 sm:gap-4">
-                  <FilterDropdown
-                    value={selectedType}
-                    options={typesOptionsForDropdown}
-                    onChange={(option) => setSelectedType(option)}
-                    className="mt-1"
-                    widthClass="w-48"
-                  />
-                  <FilterDropdown
-                    value={selectedLocation}
-                    options={locationOptionsForDropdown}
-                    onChange={(option) => setSelectedLocation(option)}
-                    className="mt-1"
-                    widthClass="w-48"
-                  />
-                  <FilterDropdown
-                    value={selectedRole}
-                    options={departmentsOptionsForDropdown}
-                    onChange={(option) => setSelectedRole(option)}
-                    className="mt-1"
-                    widthClass="w-48"
-                    disabled={
-                      selectedType?.value === "" ||
-                      selectedType?.value === "All Departments" ||
-                      departmentsOptionsForDropdown.length <= 1
-                    }
-                  />
-                </div>
-
+              <div className="flex flex-row flex-wrap items-center gap-3 sm:gap-4 w-full lg:w-auto">
+                <FilterDropdown
+                  value={selectedType}
+                  options={typesOptionsForDropdown}
+                  onChange={(option) => setSelectedType(option)}
+                  className="mt-1"
+                  widthClass="w-full sm:w-48"
+                />
+                <FilterDropdown
+                  value={selectedLocation}
+                  options={locationOptionsForDropdown}
+                  onChange={(option) => setSelectedLocation(option)}
+                  className="mt-1"
+                  widthClass="w-full sm:w-48"
+                />
+                <FilterDropdown
+                  value={selectedRole}
+                  options={departmentsOptionsForDropdown}
+                  onChange={(option) => setSelectedRole(option)}
+                  className="mt-1"
+                  widthClass="w-full sm:w-48"
+                  disabled={
+                    selectedType?.value === "" ||
+                    selectedType?.value === "All Departments" ||
+                    departmentsOptionsForDropdown.length <= 1
+                  }
+                />
                 {/* Clear Filters Button */}
                 <button
                   onClick={handleClearFilters}
-                  className="px-4 py-2 border border-[#E8EFFF] rounded-full text-sm font-medium text-gray-700 bg-[#E8EFFF] hover:bg-gray-50 hover:shadow-md transition-all duration-300"
+                  className="px-4 py-2 border border-[#E8EFFF] rounded-full text-sm font-medium text-gray-700 bg-[#E8EFFF] hover:bg-gray-50 hover:shadow-md transition-all duration-300 w-full sm:w-auto whitespace-nowrap"
                 >
                   <TTSWrapper text="Clear Filters">Clear Filters</TTSWrapper>
                 </button>
@@ -860,21 +947,23 @@ function CareerOpportunitiesPage() {
                         index === 0
                           ? "bg-[#E8EFFF] rounded-xl"
                           : "bg-blue-50 rounded-2xl"
-                      } p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300`}
+                      } p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300 flex flex-col max-h-[170px]`}
                     >
-                      <h3 className="text-xl sm:text-2xl font-medium text-black mb-3 sm:mb-4">
+                      <h3 className="text-xl sm:text-2xl font-medium text-black mb-3 sm:mb-4 flex-shrink-0">
                         <TTSWrapper text={value.title}>
                           {value.title}
                         </TTSWrapper>
                       </h3>
-                      <TTSWrapper text={value.description}>
-                        <div
-                          className="text-black leading-relaxed prose prose-sm"
-                          dangerouslySetInnerHTML={{
-                            __html: value.description || "",
-                          }}
-                        />
-                      </TTSWrapper>
+                      <div className="overflow-y-auto scrollbar-hide flex-1">
+                        <TTSWrapper text={value.description}>
+                          <div
+                            className="text-black leading-relaxed prose prose-sm"
+                            dangerouslySetInnerHTML={{
+                              __html: value.description || "",
+                            }}
+                          />
+                        </TTSWrapper>
+                      </div>
                     </div>
                   ))}
               </div>
@@ -890,7 +979,7 @@ function CareerOpportunitiesPage() {
             </h2>
             <TTSWrapper text={careers?.career_cms?.section3_description || ""}>
               <div
-                className="text-base text-black max-w-4xl mx-auto leading-relaxed prose prose-lg"
+                className="text-base text-black max-w-4xl mx-auto leading-relaxed prose prose-lg px-4 md:px-0"
                 dangerouslySetInnerHTML={{
                   __html: careers?.career_cms?.section3_description || "",
                 }}
@@ -898,50 +987,57 @@ function CareerOpportunitiesPage() {
             </TTSWrapper>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-4 sm:mx-8 lg:mx-24">
-            {careers?.process?.map((step, index) => (
-              <div
-                key={step.id}
-                className={`bg-white p-6 sm:p-8 relative rounded-xl lg:rounded-none ${
-                  index === 0
-                    ? "lg:rounded-l-xl"
-                    : index === careers?.process?.length - 1
-                    ? "lg:rounded-r-xl"
-                    : ""
-                }`}
-              >
-                {careers?.process?.length - 1 !== index && (
-                  <div
-                    className="hidden lg:block"
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: "15%",
-                      height: "70%",
-                      borderRight: "1px solid #000",
-                    }}
-                  ></div>
-                )}
-                <div className="text-4xl font-medium text-[#012367] mb-4">
-                  <TTSWrapper text={`0${index + 1}`}>{`0${
-                    index + 1
-                  }`}</TTSWrapper>
-                </div>
-                <h3 className="text-xl font-semibold text-[#111] mb-3 sm:mb-4">
-                  <TTSWrapper text={step.title}>{step.title}</TTSWrapper>
-                </h3>
-                <div className="text-[#111] leading-relaxed">
-                  <TTSWrapper text={step.description}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mx-4 sm:mx-8 lg:mx-24 gap-4 lg:gap-x-0 lg:gap-y-8">
+            {careers?.process?.map((step, index) => {
+              const isLastInRow = (index + 1) % 4 === 0;
+              const isLastItem = index === (careers?.process?.length || 0) - 1;
+
+              return (
+                <div
+                  key={step.id}
+                  className={`bg-white p-6 sm:p-8 relative rounded-xl lg:rounded-none ${
+                    index === 0
+                      ? "lg:rounded-l-xl"
+                      : index === careers?.process?.length - 1
+                      ? "lg:rounded-r-xl"
+                      : ""
+                  }`}
+                >
+                  {!isLastInRow && !isLastItem && (
                     <div
-                      className="text-[#111] leading-relaxed prose prose-sm"
-                      dangerouslySetInnerHTML={{
-                        __html: step.description || "",
+                      className="hidden lg:block"
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "15%",
+                        height: "70%",
+                        borderRight: "1px solid #000",
                       }}
-                    />
-                  </TTSWrapper>
+                    ></div>
+                  )}
+                  <div className="text-4xl font-medium text-[#012367] mb-4">
+                    <TTSWrapper
+                      text={index + 1 < 10 ? `0${index + 1}` : `${index + 1}`}
+                    >
+                      {index + 1 < 10 ? `0${index + 1}` : `${index + 1}`}
+                    </TTSWrapper>
+                  </div>
+                  <h3 className="text-xl font-semibold text-[#111] mb-3 sm:mb-4">
+                    <TTSWrapper text={step.title}>{step.title}</TTSWrapper>
+                  </h3>
+                  <div className="text-[#111] leading-relaxed">
+                    <TTSWrapper text={step.description}>
+                      <div
+                        className="text-[#111] leading-relaxed prose prose-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: step.description || "",
+                        }}
+                      />
+                    </TTSWrapper>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       </div>

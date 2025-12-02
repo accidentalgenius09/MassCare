@@ -5,6 +5,7 @@ import restApiWrapper from "@/service/RestApiWrapper";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -76,6 +77,57 @@ function WorkingForUs({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleSubmit = () => {
+    const missingFields: string[] = [];
+    if (!formData.name.trim()) missingFields.push("Name");
+    if (!formData.email.trim()) missingFields.push("Email");
+    if (!formData.phone.trim()) missingFields.push("Phone");
+    if (!formData.areaOfInterest) missingFields.push("Area of Interest");
+    if (!formData.preferredIntake) missingFields.push("Preferred Intake");
+    if (!formData.message.trim()) missingFields.push("Message");
+    if (missingFields.length > 0) {
+      toast.error(missingFields.join(", "));
+      return;
+    }
+    if (formData.name.length === 1) {
+      toast.error("Name is too short");
+      return;
+    }
+    if (formData.name.length > 50) {
+      toast.error("Name must be less than 50 characters");
+      return;
+    }
+    if (formData.email.length === 0) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    const validateEmail = (email: string): boolean => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+    if (!validateEmail(formData.email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    if (formData.phone.length < 10 || formData.phone.length > 13) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    if (formData.areaOfInterest === 0) {
+      toast.error("Please select a valid area of interest");
+      return;
+    }
+    if (formData.preferredIntake === 0) {
+      toast.error("Please select a valid preferred intake");
+      return;
+    }
+    if (formData.message.length === 1) {
+      toast.error("Message is too short");
+      return;
+    }
+    if (formData.message.length > 500) {
+      toast.error("Message must be less than 500 characters");
+      return;
+    }
     if (formData) {
       const payload = {
         service_id: MCMData.id,
@@ -106,6 +158,17 @@ function WorkingForUs({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    if (e.target.name === "phone") {
+      const filteredValue = e.target.value.replace(/[^\d+]/g, "");
+      if (filteredValue !== e.target.value) {
+        return;
+      }
+      setFormData({
+        ...formData,
+        [e.target.name]: filteredValue,
+      });
+      return;
+    }
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,

@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
+import dayjs from "dayjs";
 
 function CQCRatingCard({
   MCMData,
@@ -41,10 +42,10 @@ function CQCRatingCard({
                     {MCMData?.service_detail_cms?.quality_section_title}
                   </TTSWrapper>
                 </h4>
-                <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 inline-block mb-4">
-                  <p className="text-white">
+                <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 sm:py-2 inline-block mb-4">
+                  <p className="text-white text-xs sm:text-base leading-tight whitespace-nowrap">
                     <TTSWrapper text="Overall Rating:">
-                      <span className="font-semibold text-lg">
+                      <span className="font-semibold text-xs sm:text-lg">
                         Overall Rating:{" "}
                       </span>
                     </TTSWrapper>
@@ -75,9 +76,9 @@ function CQCRatingCard({
                 </p>
                 <p className="text-xs sm:text-sm text-black font-normal">
                   <TTSWrapper
-                    text={MCMData?.service_detail_cms?.last_inspection_date}
+                    text={MCMData?.service_detail_cms?.last_inspection_date ? dayjs(MCMData.service_detail_cms.last_inspection_date).format("DD-MM-YYYY") : ""}
                   >
-                    {MCMData?.service_detail_cms?.last_inspection_date}
+                    {MCMData?.service_detail_cms?.last_inspection_date ? dayjs(MCMData.service_detail_cms.last_inspection_date).format("DD-MM-YYYY") : ""}
                   </TTSWrapper>
                 </p>
               </div>

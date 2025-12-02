@@ -7,6 +7,7 @@ import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import { useParams, useRouter } from "next/navigation";
 import restApiWrapper from "@/service/RestApiWrapper";
 import { BlogDetail } from "@/types/News-and-Insights";
+import dayjs from "dayjs";
 interface RecentNewsItem {
   id: number;
   title: string;
@@ -89,6 +90,8 @@ export default function NewsAndInsightsDetailPage() {
     return () => window.removeEventListener("resize", updateArticleHeight);
   }, [recentNews.length]);
 
+  console.log(articleData?.related_blogs_list ,"articleData?.related_blogs_list ");
+
   return (
     <>
       {isLoading && (
@@ -109,7 +112,7 @@ export default function NewsAndInsightsDetailPage() {
                   Loading Blog Details...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the content">
                   Please wait while we fetch the content
                 </TTSWrapper>
@@ -128,8 +131,8 @@ export default function NewsAndInsightsDetailPage() {
 
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
           <p className="text-sm text-black font-semibold max-w-7xl mx-auto">
-            <TTSWrapper text={articleData?.published_on || ""}>
-              {articleData?.published_on || ""}
+            <TTSWrapper text={articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}>
+              {articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}
             </TTSWrapper>
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -185,7 +188,7 @@ export default function NewsAndInsightsDetailPage() {
                 ) : null}
 
                 {/* Carousel Container */}
-                <div className="flex-1 overflow-hidden w-80">
+                <div className="flex-1 w-80">
                   <div className="space-y-6">
                     {articleData?.related_blogs_list?.map((card, i) => (
                       <div
@@ -215,10 +218,10 @@ export default function NewsAndInsightsDetailPage() {
                           </p>
                           <p className="text-sm text-black font-semibold">
                             <TTSWrapper
-                              text={card.published_on}
+                              text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                               className="text-sm text-black font-semibold"
                             >
-                              {card.published_on}
+                              {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                             </TTSWrapper>
                           </p>
                         </div>
@@ -237,7 +240,7 @@ export default function NewsAndInsightsDetailPage() {
                               backgroundColor: "rgba(10, 91, 224, 1)",
                               borderRadius: "300px",
                             }}
-                            className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
+                            className="absolute cursor-pointer bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
                             onClick={() =>
                               navigate.push(`/news-and-insights/${card.slug}`)
                             }

@@ -1,8 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { GoogleMapPinIcon, TopRightArrowBlack } from "../helpers/svgs";
+import { useRouter } from "next/navigation";
+import { SiteSettings } from "@/types/Footer.type";
+import TTSWrapper from "@/hooks/TTSWrapper";
 
 interface LocationCardProps {
+  siteSettings?: SiteSettings;
   companyName?: string;
   logoSrc?: string;
   address?: string;
@@ -10,13 +14,19 @@ interface LocationCardProps {
 }
 
 const LocationCard: React.FC<LocationCardProps> = ({
+  siteSettings,
   companyName = "mass",
   logoSrc,
   address = "Unit A, Acorn Business Centre, Livingstone Way, Taunton, Somerset, United Kingdom, TA2 6BD",
   googleMapsUrl = "https://maps.google.com",
 }) => {
+  const router = useRouter();
+
+  // Use siteSettings data if available, otherwise fallback to props
+  const mapUrl = siteSettings?.map_link || googleMapsUrl;
+
   const handleMapClick = () => {
-    window.open(googleMapsUrl, "_blank", "noopener,noreferrer");
+    window.open(mapUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -25,7 +35,10 @@ const LocationCard: React.FC<LocationCardProps> = ({
       <div className="py-10 flex flex-col items-end text-end">
         {/* Logo Section */}
         <div className="mb-6">
-          <div className="relative w-64 h-24">
+          <div
+            className="relative w-64 h-24 cursor-pointer"
+            onClick={() => router.push("/")}
+          >
             <Image
               src={logoSrc ?? "/logo-white.png"}
               alt={`${companyName} logo`}
@@ -37,9 +50,15 @@ const LocationCard: React.FC<LocationCardProps> = ({
 
         {/* Address Section */}
         <div className="mb-8 px-4">
-          <p className="text-white text-base leading-relaxed font-light">
-            {address}
-          </p>
+          <div className="text-white text-base leading-relaxed font-light">
+            <TTSWrapper text={siteSettings?.address ?? ""}>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: siteSettings?.address ?? "",
+                }}
+              />
+            </TTSWrapper>
+          </div>
         </div>
       </div>
       {/* Google Map Button Section */}

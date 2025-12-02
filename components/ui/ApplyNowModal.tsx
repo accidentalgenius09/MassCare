@@ -330,14 +330,65 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
     }
   };
 
+  const handleBackdropWheel = (e: React.WheelEvent) => {
+    // Prevent background scroll when scrolling on backdrop
+    const target = e.target as HTMLElement;
+    const modalContent = target.closest('.modal-content-wrapper');
+    
+    // If scrolling on backdrop (not modal content), prevent it
+    if (!modalContent || target === e.currentTarget) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      // Disable body scroll
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        // Restore body scroll
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f] overflow-y-auto"
       onClick={handleBackdropClick}
+      onWheel={handleBackdropWheel}
+      onScroll={(e) => {
+        // Prevent backdrop from scrolling
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      onTouchMove={(e) => {
+        // Prevent background scroll on touch devices
+        const target = e.target as HTMLElement;
+        const modalContent = target.closest('.modal-content-wrapper');
+        if (!modalContent) {
+          e.preventDefault();
+        }
+      }}
     >
-      <div className="bg-white rounded-md w-[98%] max-w-6xl max-h-[90vh] my-auto relative flex flex-col">
+      <div className="modal-content-wrapper bg-white rounded-md w-[98%] max-w-6xl max-h-[90vh] my-auto relative flex flex-col">
         {/* Close Button */}
         {/* Modal Content */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 overflow-y-auto scrollbar-hide flex-1">
@@ -551,7 +602,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   </div>
                   <p className="text-xs sm:text-sm text-[#00000066]">
                     <TTSWrapper text="Click To Upload Your CV (PDF, DOC, DOCX)">
-                      Click To Upload Your CV (PDF, DOC, DOCX)
+                      Click To Upload Your CV (PDF, DOC, DOCX) (Max 5MB)
                     </TTSWrapper>
                   </p>
                 </div>

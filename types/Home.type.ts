@@ -126,3 +126,10 @@ export interface HomeData {
     image_alt_text_value: string
   }
   
+  export interface MetaData {
+    id: number;
+    meta_title: string;
+    meta_description: string;
+    meta_keywords: string;
+    other_meta_tags: string;
+  }

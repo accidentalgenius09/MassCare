@@ -2,7 +2,7 @@
 
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { X, ArrowUpRight } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { ClockOutline, MapPinOutline } from "../helpers/svgs";
 
 interface JobDetailsModalProps {
@@ -74,6 +74,29 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
   onApplyNow,
   job,
 }) => {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      // Disable body scroll
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        // Restore body scroll
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -82,12 +105,40 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
     }
   };
 
+  const handleBackdropWheel = (e: React.WheelEvent) => {
+    // Prevent background scroll when scrolling on backdrop
+    const target = e.target as HTMLElement;
+    const modalContent = target.closest('.modal-content-wrapper');
+    
+    // If scrolling on backdrop (not modal content), prevent it
+    if (!modalContent || target === e.currentTarget) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f]"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f] overflow-y-auto"
       onClick={handleBackdropClick}
+      onWheel={handleBackdropWheel}
+      onScroll={(e) => {
+        // Prevent backdrop from scrolling
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      onTouchMove={(e) => {
+        // Prevent background scroll on touch devices
+        const target = e.target as HTMLElement;
+        const modalContent = target.closest('.modal-content-wrapper');
+        if (!modalContent) {
+          e.preventDefault();
+        }
+      }}
     >
-      <div className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto relative">
+      <div className="modal-content-wrapper bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto relative my-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -110,9 +161,9 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
 
           {/* Basic Job Information */}
           <div className="space-y-2 mb-6">
-            <div className="flex items-center gap-8">
+            <div className="flex flex-col md:flex-row md:items-center md:gap-8">
               {(job.job_type || job.experience) && (
-                <div className="flex items-center gap-2 text-black">
+                <div className="flex items-center gap-2 text-black mb-2 md:mb-0">
                   <ClockOutline />
                   <span className="text-sm">
                     <TTSWrapper

@@ -6,7 +6,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Service } from "@/types/Aboutus.type";
 
-const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
+const ServicesSection = ({
+  ServiceData,
+  title = "Our Services",
+}: {
+  ServiceData: Service[];
+  title?: string;
+}) => {
   const router = useRouter();
   return (
     <>
@@ -15,10 +21,10 @@ const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
           {/* Section Header */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
             <TTSWrapper
-              text="Our Services"
+              text={title}
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8"
             >
-              Our Services
+              {title}
             </TTSWrapper>
           </h2>
           {/* Service Cards Grid */}
@@ -128,7 +134,21 @@ const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
                   </p>
 
                   {/* Features List */}
-                  <div className="space-y-1 sm:space-y-2 mb-3 sm:mb-4">
+                  <div 
+                    className={`space-y-1 sm:space-y-2 mb-3 sm:mb-4 ${
+                      service.features.length > 3 
+                        ? "max-h-[120px] sm:max-h-[140px] md:max-h-[160px] overflow-y-auto scrollbar-hide pr-2" 
+                        : ""
+                    }`}
+                    style={
+                      service.features.length > 3
+                        ? {
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "#d1d5db transparent",
+                          }
+                        : {}
+                    }
+                  >
                     {service.features.map((feature, idx) => (
                       <div
                         key={idx}

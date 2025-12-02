@@ -17,9 +17,10 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
   // Update items per view based on screen size
   useEffect(() => {
     const updateItemsPerView = () => {
-      if (window.innerWidth < 640) {
+      const width = window.innerWidth;
+      if (width < 768) {
         setItemsPerView(1);
-      } else if (window.innerWidth < 1024) {
+      } else if (width < 1024) {
         setItemsPerView(2);
       } else {
         setItemsPerView(4);
@@ -30,6 +31,11 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
     window.addEventListener("resize", updateItemsPerView);
     return () => window.removeEventListener("resize", updateItemsPerView);
   }, []);
+
+  // Reset currentIndex when itemsPerView changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [itemsPerView]);
 
   // Track carousel width
   useEffect(() => {
@@ -140,7 +146,7 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
         <div className="relative w-full max-w-full overflow-hidden">
           <div
             ref={carouselRef}
-            className="cursor-grab active:cursor-grabbing overflow-hidden"
+            className="cursor-grab active:cursor-grabbing overflow-hidden w-full"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -148,15 +154,17 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleMouseUp}
+            style={{ overflow: "hidden" }}
           >
             <div
-              className="flex gap-4 transition-transform duration-300 ease-out justify-start"
+              className="flex transition-transform duration-300 ease-out justify-start"
               style={{
                 transform: `translateX(${getTransform()}%)`,
+                gap: itemsPerView === 1 ? "0px" : itemsPerView === 2 ? "2%" : "16px",
               }}
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div key={slideIndex} className="min-w-full flex gap-4 justify-start">
+                <div key={slideIndex} className="min-w-full flex justify-start" style={{ boxSizing: "border-box", gap: itemsPerView === 1 ? "0px" : itemsPerView === 2 ? "4px" : "16px", width: "100%", overflow: "hidden", maxWidth: "100%" }}>
                   {homeData.mass_care_features
                     .slice(
                       slideIndex * itemsPerView,
@@ -166,13 +174,18 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
                       <div
                         key={feature.id || slideIndex * itemsPerView + index}
                         style={{
-                          width: `calc((100% - ${
-                            (itemsPerView - 1) * 16
-                          }px) / ${itemsPerView})`,
+                          width: itemsPerView === 1 
+                            ? "100%" 
+                            : itemsPerView === 2
+                            ? "49%"
+                            : `calc((100% - ${(itemsPerView - 1) * 16}px) / ${itemsPerView})`,
                           flexShrink: 0,
+                          boxSizing: "border-box",
+                          minWidth: 0,
+                          maxWidth: itemsPerView === 2 ? "49%" : "none",
                         }}
                       >
-                        <div className="bg-white px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6 rounded-2xl sm:rounded-3xl md:rounded-4xl pb-2 sm:pb-3 text-gray-900 hover:shadow-lg transition-shadow h-full select-none">
+                        <div className="bg-white px-3 sm:px-4 md:px-4 lg:px-6 pt-4 sm:pt-5 md:pt-5 lg:pt-6 rounded-2xl sm:rounded-3xl md:rounded-3xl lg:rounded-4xl pb-2 sm:pb-3 text-gray-900 hover:shadow-lg transition-shadow h-full select-none w-full overflow-hidden" style={{ maxWidth: "100%" }}>
                           <div className="flex gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
                             {/* Icon */}
                             <div className="flex-shrink-0">
@@ -186,7 +199,7 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
                             </div>
 
                             {/* Content */}
-                            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">
+                            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold break-words">
                               <TTSWrapper
                                 text={feature.title}
                                 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold"
@@ -196,7 +209,7 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
                             </h3>
                           </div>
                           <hr className="mx-1 sm:mx-2 mb-1 sm:mb-2" />
-                          <p className="text-gray-600 text-xs sm:text-sm">
+                          <p className="text-gray-600 text-xs sm:text-sm break-words">
                             <TTSWrapper
                               text={feature.subtitle}
                               className="text-gray-600 text-xs sm:text-sm"
