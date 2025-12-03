@@ -1,7 +1,75 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+
+function TooltipItem({ description }: { description: string }) {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    setMousePosition({ x, y });
+
+    // Calculate tooltip position to avoid going off-screen
+    const tooltipWidth = 320; // max-w-xs is 320px
+    const tooltipHeight = 100; // approximate height
+    const offset = 15;
+
+    let left = x + offset;
+    let top = y + offset;
+
+    // Check if tooltip would go off right edge
+    if (left + tooltipWidth > window.innerWidth) {
+      left = x - tooltipWidth - offset;
+    }
+
+    // Check if tooltip would go off bottom edge
+    if (top + tooltipHeight > window.innerHeight) {
+      top = y - tooltipHeight - offset;
+    }
+
+    // Ensure tooltip doesn't go off left edge
+    if (left < 0) {
+      left = offset;
+    }
+
+    // Ensure tooltip doesn't go off top edge
+    if (top < 0) {
+      top = offset;
+    }
+
+    setTooltipStyle({
+      left: `${left}px`,
+      top: `${top}px`,
+    });
+  };
+
+  return (
+    <div
+      className="relative max-w-2xl mx-auto mt-4 w-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+    >
+      <p className="text-black text-sm font-normal text-center overflow-hidden text-ellipsis whitespace-nowrap cursor-help block w-full">
+        <TTSWrapper text={description}>{description}</TTSWrapper>
+      </p>
+
+      {/* Tooltip */}
+      {isHovered && (
+        <div
+          className="fixed px-3 py-2 bg-gray-900 text-white text-sm rounded-lg pointer-events-none z-[9999] max-w-xs break-words shadow-lg whitespace-normal"
+          style={tooltipStyle}
+        >
+          {description}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function ServicesOfferedSection({
   MCMData,
@@ -42,6 +110,7 @@ function ServicesOfferedSection({
             </svg>
           </div>
         </div>
+
         <div className="container mt-10 mx-auto px-4 sm:px-6 lg:px-32 text-center relative z-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-black">
             <TTSWrapper
@@ -58,12 +127,13 @@ function ServicesOfferedSection({
             </TTSWrapper>
           </p>
         </div>
-        <div className="flex justify-center relative  mt-8 mb-16">
+
+        <div className="flex justify-center relative mt-8 mb-16 overflow-visible">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-full px-4 sm:px-6 lg:px-32">
             {MCMData?.service_offers.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center overflow-visible"
               >
                 <Image
                   src={item.image_value}
@@ -75,18 +145,8 @@ function ServicesOfferedSection({
                 <h6 className="text-2xl font-medium text-black mt-6">
                   <TTSWrapper text={item.title}>{item.title}</TTSWrapper>
                 </h6>
-                <div className="group relative max-w-2xl mx-auto mt-4 w-full">
-                  <p className="text-black text-sm font-normal text-center overflow-hidden text-ellipsis whitespace-nowrap cursor-help block w-full">
-                    <TTSWrapper text={item.description}>
-                      {item.description}
-                    </TTSWrapper>
-                  </p>
-                  {/* Tooltip */}
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10 max-w-md w-max break-words">
-                    <span className="whitespace-normal">{item.description}</span>
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
-                  </div>
-                </div>
+
+                <TooltipItem description={item.description} />
               </div>
             ))}
           </div>

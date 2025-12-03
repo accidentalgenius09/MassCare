@@ -14,7 +14,9 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
   const [scrollLeft, setScrollLeft] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   const autoScrollInterval = useRef<NodeJS.Timeout | null>(null);
-  const totalSlides = Math.ceil(homeData.trusted_institutions.length / itemsPerView);
+  const totalSlides = Math.ceil(
+    homeData.trusted_institutions.length / itemsPerView
+  );
 
   // Update items per view based on screen size
   useEffect(() => {
@@ -98,7 +100,7 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 md:px-10 flex flex-col lg:flex-row items-center lg:items-start">
+      <div className="container mx-auto px-4 sm:px-6 md:px-16 flex flex-col lg:flex-row items-center lg:items-start">
         <div className="text-center mb-6 lg:mb-0 lg:mr-4 lg:text-left flex-shrink-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center lg:whitespace-nowrap">
             <TTSWrapper
@@ -130,8 +132,8 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
               }}
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div 
-                  key={slideIndex} 
+                <div
+                  key={slideIndex}
                   className="min-w-full flex"
                   style={{ gap: `${gap}px` }}
                 >

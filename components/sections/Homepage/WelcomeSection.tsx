@@ -19,11 +19,11 @@ const WelcomeSection = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-2 sm:ms-4 md:ms-6 me-4 sm:me-6 md:me-10 justify-between">
           {/* Left Content */}
           <div className="mt-4 sm:mt-6 md:mt-10">
-            <TTSWrapper text={aboutUsData?.about_cms?.section1_title}>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-2">
+              <TTSWrapper text={aboutUsData?.about_cms?.section1_title}>
                 {aboutUsData?.about_cms?.section1_title}
-              </h2>
-            </TTSWrapper>
+              </TTSWrapper>
+            </h2>
 
             <div className="justify-start text-neutral-900 text-lg sm:text-xl font-normal mb-3 sm:mb-4 max-w-[400px]">
               <TTSWrapper text={aboutUsData?.about_cms?.section1_sub_title}>

@@ -16,9 +16,9 @@ const WelcomeSectionHome = ({
   return (
     <section className="pb-2 pt-8 sm:pt-12 md:pt-16 bg-white text-black">
       <div
-        className={`container mx-auto ${page === "home" ? "px-24" : "px-4"}`}
+        className={`container mx-auto ${page === "home" ? "px-4 lg:px-24" : "px-4"}`}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-2 sm:ms-4 md:ms-6 me-4 sm:me-6 md:me-10 justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-0 sm:ms-4 md:ms-6 me-0 sm:me-6 md:me-10 justify-between">
           {/* Left Content */}
           <div>
             <TTSWrapper text={homeData.title}>

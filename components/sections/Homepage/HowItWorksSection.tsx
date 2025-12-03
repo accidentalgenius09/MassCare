@@ -76,14 +76,14 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
     <section className="py-8 sm:py-12 md:py-16 bg-white overflow-visible">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h1 className="text-4xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             <TTSWrapper
               text={homeData.home_cms.how_it_works_title || ""}
-              className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
+              className="text-4xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
             >
               {homeData.home_cms.how_it_works_title || ""}
             </TTSWrapper>
-          </h2>
+          </h1>
           <p className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4">
             <TTSWrapper
               text={homeData.home_cms.how_it_works_subtitle || ""}
