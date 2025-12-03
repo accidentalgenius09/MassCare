@@ -264,18 +264,17 @@ export default function QuickConnect({
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none hover:brightness-110 hover:shadow-lg transition-all duration-300"
+                className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center gap-2 focus:outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:before:translate-x-full"
                 style={{
-                  background: "rgba(10, 91, 224, 1)",
-                  borderRadius: "300px",
                   opacity: isLoading ? 0.5 : 1,
-                  cursor: isLoading ? "not-allowed" : "pointer",
                 }}
               >
-                <TTSWrapper text="Submit Enquiry">
-                  Submit Enquiry{""}
-                </TTSWrapper>
-                <TopRightArrowWhite />
+                <span className="relative z-10 flex items-center gap-2">
+                  <TTSWrapper text="Submit Enquiry">
+                    Submit Enquiry{""}
+                  </TTSWrapper>
+                  <TopRightArrowWhite />
+                </span>
               </button>
             </div>
           </div>
@@ -329,10 +328,16 @@ export default function QuickConnect({
                   </p>
                   <p className="text-sm text-black font-semibold mb-4">
                     <TTSWrapper
-                      text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
+                      text={
+                        card.published_on
+                          ? dayjs(card.published_on).format("DD-MM-YYYY")
+                          : ""
+                      }
                       className="text-sm text-black font-semibold mb-4"
                     >
-                      {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
+                      {card.published_on
+                        ? dayjs(card.published_on).format("DD-MM-YYYY")
+                        : ""}
                     </TTSWrapper>
                   </p>
                 </div>

@@ -45,7 +45,7 @@ const WelcomeSectionHome = ({
           {/* Right Content - Mission, Vision & Accreditation */}
           <div
             onClick={() => router.push("/about-us")}
-            className={`ml-0 sm:ml-12 md:ml-24`}
+            className={`ml-0 cursor-pointer sm:ml-12 md:ml-24`}
           >
             {/* Mission */}
             <div className="px-4 sm:px-5 md:px-6 pt-4 sm:pt-5 md:pt-6 pb-3 sm:pb-4 rounded-2xl sm:rounded-3xl md:rounded-[40px] border border-gray-200">

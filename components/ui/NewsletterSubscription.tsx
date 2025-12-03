@@ -87,7 +87,7 @@ function Newsletter() {
             onClick={(e) => {
               handleSubmit(e);
             }}
-            className="bg-white text-[#002D72] px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0 hover:bg-gray-100 hover:shadow-md transition-all duration-300"
+            className="bg-white text-[#002D72] cursor-pointer px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0 hover:bg-gray-100 hover:shadow-md transition-all duration-300"
           >
             <TopRightArrowBlack />
           </button>

@@ -91,19 +91,14 @@ const CareerPathwaysSection = ({ homeData }: { homeData: HomeData }) => {
               <div>
                 <button
                   onClick={() => navigate.push("/career-opportunities")}
-                  className="text-white px-6 py-3 flex items-center gap-2 group cursor-pointer hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
-                  style={{
-                    borderRadius: "300px",
-                    background: "#0A5BE0",
-                  }}
+                  className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 flex items-center gap-2 cursor-pointer"
                 >
-                  <TTSWrapper
-                    text="Explore Career Routes"
-                    className="text-white flex items-center gap-1 group cursor-pointer"
-                  >
-                    Explore Career Routes
-                  </TTSWrapper>
-                  <TopRightArrowWhite />
+                  <span className="relative z-10 flex items-center gap-2">
+                    <TTSWrapper text="Explore Career Routes">
+                      Explore Career Routes
+                    </TTSWrapper>
+                    <TopRightArrowWhite />
+                  </span>
                 </button>
               </div>
             </div>

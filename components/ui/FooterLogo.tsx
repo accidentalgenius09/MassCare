@@ -64,17 +64,19 @@ const LocationCard: React.FC<LocationCardProps> = ({
       {/* Google Map Button Section */}
       <div className="me-4 mt-4 text-end flex flex-col items-end gap-5">
         <p className="text-white text-base font-bold me-3">Google Map</p>
-        <button
-          onClick={handleMapClick}
-          className="group w-40 bg-white text-gray-800 font-medium py-3 px-6 rounded-full 
-                     flex items-center justify-between hover:bg-gray-100 hover:shadow-lg transition-all duration-300"
-        >
-          <div className="w-5 h-5 relative">
-            <GoogleMapPinIcon />
-          </div>
-          <span className="text-sm font-medium">Lets Go</span>
-          <TopRightArrowBlack />
-        </button>
+        <div className="cursor-pointer">
+          <button
+            onClick={handleMapClick}
+            className="group w-40 bg-white text-gray-800 cursor-pointer font-medium py-3 px-6 rounded-full 
+                       flex items-center justify-between hover:bg-gray-100 hover:shadow-lg transition-all duration-300"
+          >
+            <div className="w-5 h-5 relative">
+              <GoogleMapPinIcon />
+            </div>
+            <span className="text-sm font-medium">Lets Go</span>
+            <TopRightArrowBlack />
+          </button>
+        </div>
       </div>
     </div>
   );
