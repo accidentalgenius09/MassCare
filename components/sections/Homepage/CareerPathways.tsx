@@ -19,7 +19,7 @@ const CareerPathwaysSection = ({ homeData }: { homeData: HomeData }) => {
   }, [homeData?.home_cms?.career_pathway_points]);
 
   return (
-    <div className="container mx-auto bg-white py-16 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto bg-white py-16 px-4 sm:px-6 lg:px-12">
       <div className="max-w-full mx-auto">
         {/* Career Pathways Section */}
         <div

@@ -332,26 +332,38 @@ const ContactPage: React.FC = () => {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {/* Location Card */}
                 {contactUsData?.contact_infos.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow"
+                    className="group rounded-2xl p-6 cursor-pointer
+                 bg-blue-50 hover:bg-[#0A5BE0]
+                 transition-colors duration-300"
                   >
-                    <div className="w-12 h-12 flex items-center justify-center mb-4">
+                    <div
+                      className="w-12 h-12 flex items-center justify-center mb-4 
+                      bg-[#0A5BE0] group-hover:bg-white 
+                      rounded-full transition-colors duration-300"
+                    >
                       <Image
                         src={item.icon_value}
                         alt={item.icon_alt_text_value}
-                        width={48}
-                        height={48}
+                        width={20}
+                        height={20}
                       />
                     </div>
-                    <h3 className="font-bold text-base sm:text-lg mb-2">
+                    <h3
+                      className="font-bold text-base sm:text-lg mb-2 
+                     text-black group-hover:text-white 
+                     transition-colors duration-300"
+                    >
                       {item.title}
                     </h3>
+
+                    {/* Content */}
                     <TTSWrapper text={item.content}>
                       <div
-                        className="text-sm text-gray-700"
+                        className="text-sm text-gray-700 group-hover:text-white 
+                     transition-colors duration-300"
                         dangerouslySetInnerHTML={{ __html: item.content }}
                       />
                     </TTSWrapper>
@@ -396,11 +408,11 @@ const ContactPage: React.FC = () => {
                             <Image
                               src={item.icon_value}
                               alt={item.icon_alt_text_value}
-                              width={19}
-                              height={19}
+                              width={29}
+                              height={29}
                             />
                           </div>
-                          <span className="font-semibold text-base text-black -ms-2">
+                          <span className="font-semibold text-base text-black flex-1 min-w-0 break-words">
                             <TTSWrapper text={item.title}>
                               {item.title}
                             </TTSWrapper>

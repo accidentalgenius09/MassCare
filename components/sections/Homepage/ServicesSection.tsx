@@ -16,7 +16,7 @@ const ServicesSection = ({
   const router = useRouter();
   return (
     <>
-      <div className="container mx-auto bg-white pb-8 sm:pb-12 md:pb-16 pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto bg-white pb-8 sm:pb-12 md:pb-16 pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 lg:px-16">
         <div className="max-w-full mx-auto">
           {/* Section Header */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
