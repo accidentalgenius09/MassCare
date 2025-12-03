@@ -437,7 +437,7 @@ const ContactPage: React.FC = () => {
                 </div>
 
                 {/* Right Side - Contact Form */}
-                <div className="bg-[#012B71] rounded-2xl sm:rounded-3xl p-4 md:p-6 lg:p-8 relative lg:absolute lg:right-0 lg:me-16 h-auto pb-4 md:pb-6 lg:pb-8 mt-6 lg:mt-0">
+                <div className="bg-[#012B71] lg:absolute rounded-2xl sm:rounded-3xl p-4 md:p-6 lg:p-8 relative lg:right-10 lg:-translate-x-16 h-auto pb-4 md:pb-6 lg:pb-8 mt-6 lg:mt-0">
                   <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 text-center pt-3">
                     <TTSWrapper
                       text={contactUsData?.contact_cms.section3_title || ""}
