@@ -1,11 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { HomeData } from "@/types/Home.type";
+import restApiWrapper from "@/service/RestApiWrapper";
+import { FooterData } from "@/types/Footer.type";
 
 const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const [activeButton, setActiveButton] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   // Find default slider (is_default === 1)
   const defaultSlider = homeData?.sliders?.find(
@@ -25,10 +31,90 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     ? getSliderByServiceId(activeButton)
     : defaultSlider;
 
+  // Preload critical images
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const preloadImage = (src: string) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = src;
+      link.fetchPriority = "high";
+      document.head.appendChild(link);
+    };
+
+    // Preload default slider images
+    if (defaultSlider?.image_value) {
+      preloadImage(defaultSlider.image_value);
+    }
+    if (defaultSlider?.image_mobile_value) {
+      preloadImage(defaultSlider.image_mobile_value);
+    }
+    
+    // Fallback to default hero image
+    if (!defaultSlider?.image_value) {
+      preloadImage("/hero-banner.png");
+    }
+  }, [defaultSlider]);
+
   // Get all unique services from sliders for buttons
-  const serviceSliders = homeData?.sliders?.filter(
-    (slider) => slider.service !== null
-  ) || [];
+  const serviceSliders =
+    homeData?.sliders?.filter((slider) => slider.service !== null) || [];
+
+  const hasMoreThanThreeServices = serviceSliders.length > 3;
+
+  // Drag scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !hasMoreThanThreeServices || !scrollContainerRef.current)
+      return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !hasMoreThanThreeServices || !scrollContainerRef.current)
+      return;
+    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const [footerData, setFooterData] = useState<FooterData | null>(null);
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const siteSettings = await restApiWrapper.get("/site-settings");
+        setFooterData(siteSettings.data);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
+    fetchFooterData();
+  }, []);
+
+  const desktopImage = currentSlider?.image_value || "/hero-banner.png";
+  const mobileImage = currentSlider?.image_mobile_value || "/hero-banner.png";
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
@@ -38,18 +124,20 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
         <div
           className="hidden md:block w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
           style={{
-            backgroundImage: currentSlider
-              ? `url('${currentSlider.image_value}')`
-              : "url('/hero-banner.png')",
+            backgroundImage: `url('${desktopImage}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            willChange: "background-image",
           }}
         />
         {/* Mobile Background Image */}
         <div
           className="block md:hidden w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
           style={{
-            backgroundImage: currentSlider
-              ? `url('${currentSlider.image_mobile_value}')`
-              : "url('/hero-banner.png')",
+            backgroundImage: `url('${mobileImage}')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            willChange: "background-image",
           }}
         />
         <div className="absolute inset-0" />
@@ -116,7 +204,28 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
       {/* Service Cards - Bottom of Background */}
       <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
         <div className="max-w-full mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
+          <div
+            ref={scrollContainerRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleMouseUp}
+            className={`flex items-center ${
+              hasMoreThanThreeServices ? "justify-start" : "justify-center"
+            } gap-2 sm:gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-2 sm:px-4 ${
+              hasMoreThanThreeServices
+                ? "cursor-grab active:cursor-grabbing"
+                : ""
+            }`}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
             {serviceSliders.map((slider) => {
               if (!slider.service) return null;
               const serviceId = slider.service.id;
@@ -125,13 +234,11 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
               return (
                 <button
                   key={slider.id}
-                  onClick={() =>
-                    setActiveButton(isActive ? null : serviceId)
-                  }
-                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-500 border border-white/30 cursor-pointer"
+                  onClick={() => setActiveButton(isActive ? null : serviceId)}
+                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-500 border border-white/30 cursor-pointer flex-shrink-0"
                 >
                   <TTSWrapper text={slider.service.title}>
-                    <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
+                    <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light whitespace-nowrap">
                       {slider.service.title}
                     </span>
                   </TTSWrapper>
@@ -153,7 +260,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
 
       {/* Floating Action Buttons */}
       <div className="fixed right-2 sm:right-4 md:right-6 top-[65%] -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3 max-w-[60px] sm:max-w-[70px] md:max-w-[80px]">
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() =>
+            window.open(footerData?.site_settings?.map_link || "", "_blank")
+          }
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -219,7 +331,15 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             </defs>
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() =>
+            window.open(
+              `https://wa.me/${footerData?.site_settings?.whatsapp_number}`,
+              "_blank"
+            )
+          }
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -236,7 +356,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() => {
+            window.location.href = `mailto:${footerData?.site_settings?.email}`;
+          }}
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="21"
@@ -253,7 +378,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() => {
+            window.location.href = `tel:${footerData?.site_settings?.phone_number}`;
+          }}
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             width="21"
             height="21"

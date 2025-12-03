@@ -75,11 +75,18 @@ function ServicesOfferedSection({
                 <h6 className="text-2xl font-medium text-black mt-6">
                   <TTSWrapper text={item.title}>{item.title}</TTSWrapper>
                 </h6>
-                <p className="text-black text-sm font-normal max-w-2xl mx-auto mt-4 text-center">
-                  <TTSWrapper text={item.description}>
-                    {item.description}
-                  </TTSWrapper>
-                </p>
+                <div className="group relative max-w-2xl mx-auto mt-4 w-full">
+                  <p className="text-black text-sm font-normal text-center overflow-hidden text-ellipsis whitespace-nowrap cursor-help block w-full">
+                    <TTSWrapper text={item.description}>
+                      {item.description}
+                    </TTSWrapper>
+                  </p>
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10 max-w-md w-max break-words">
+                    <span className="whitespace-normal">{item.description}</span>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

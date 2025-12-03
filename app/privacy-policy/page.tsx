@@ -49,7 +49,7 @@ function PrivacyPolicy() {
                   Loading Privacy Policy...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the content">
                   Please wait while we fetch the content
                 </TTSWrapper>

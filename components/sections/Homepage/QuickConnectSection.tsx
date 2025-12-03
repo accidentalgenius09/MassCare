@@ -7,6 +7,7 @@ import { HomeData, TestimonialCategory } from "@/types/Home.type";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import restApiWrapper from "@/service/RestApiWrapper";
+import dayjs from "dayjs";
 
 export interface FormData {
   name: string;
@@ -284,18 +285,18 @@ export default function QuickConnect({
       {/* News & Events Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
+          <div className="flex justify-between items-center flex-nowrap gap-2 sm:gap-4 mb-5 overflow-x-auto scrollbar-hide">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex-shrink-0">
               <TTSWrapper
                 text={homeData?.home_cms?.news_and_events_title}
-                className="text-3xl md:text-4xl font-bold text-gray-900 mb-5"
+                className="text-3xl md:text-4xl font-bold text-gray-900"
               >
                 {homeData?.home_cms?.news_and_events_title}
               </TTSWrapper>
             </h2>
             <button
               onClick={() => navigate.push("/news-and-insights")}
-              className="text-black cursor-pointer font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300"
+              className="text-black cursor-pointer font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap flex-shrink-0 text-sm sm:text-base"
             >
               <TTSWrapper text="Visit News Hub">Visit News Hub</TTSWrapper>
               <TopRightArrowBlack />
@@ -328,10 +329,10 @@ export default function QuickConnect({
                   </p>
                   <p className="text-sm text-black font-semibold mb-4">
                     <TTSWrapper
-                      text={card.published_on}
+                      text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                       className="text-sm text-black font-semibold mb-4"
                     >
-                      {card.published_on}
+                      {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                     </TTSWrapper>
                   </p>
                 </div>

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useTTS } from "@/components/providers/TTSProvider";
 import { useAccessibility } from "@/components/providers/AccessibilityProvider";
 import { usePathname } from "next/navigation";
+import { ServicesPageData, Service } from "@/types/Service.type";
+import restApiWrapper from "@/service/RestApiWrapper";
 
 const Header = () => {
   const { isEnabled, setEnabled } = useTTS();
@@ -38,6 +40,20 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const [servicesData, setServicesData] = useState<Service[]>();
+  useEffect(() => {
+    const fetchServicesData = async () => {
+      try {
+        const response = await restApiWrapper.get("/services");
+        setServicesData(response.data.services);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServicesData();
+  }, []);
+
   return (
     <nav
       className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 sm:pb-6 pt-2 md:px-8 lg:px-16"
@@ -54,11 +70,11 @@ const Header = () => {
       />
 
       <div
-        className="relative max-w-full mx-auto flex items-center justify-between"
+        className="relative max-w-full mx-auto flex items-center justify-between flex-wrap gap-2 sm:gap-3"
         style={{ overflow: "visible" }}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center ml-2 sm:ml-5">
+        <Link href="/" className="flex items-center ml-2 sm:ml-5 flex-shrink-0">
           <Image
             src={isHome ? "/logo-mass-care.png" : "/logo-white.png"}
             alt="Mass Care Logo"
@@ -70,110 +86,135 @@ const Header = () => {
 
         {/* Navigation Links */}
         <div
-          className="hidden lg:flex items-center space-x-10 text-sm font-light"
+          className="hidden lg:flex items-center flex-wrap gap-x-6 gap-y-2 text-sm font-light max-w-2xl"
           style={{ overflow: "visible" }}
         >
           <Link
             href="/"
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
           >
             Home
           </Link>
           <Link
             href="/about-us"
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
           >
             About Us
           </Link>
           <div
-            className="relative flex gap-2"
+            className="relative flex gap-2 items-center"
             ref={servicesDropdownRef}
             style={{ overflow: "visible", zIndex: 9999 }}
           >
             <Link
               href="/services"
-              className="text-white hover:text-gray-200 transition-colors"
+              className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
             >
               Services
             </Link>
-            <button
-              type="button"
-              onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
-              className="text-white hover:text-gray-200 transition-colors flex items-center gap-1"
-              aria-haspopup="true"
-              aria-expanded={isServicesDropdownOpen}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
-                fill="none"
-                className={`transition-transform ${
-                  isServicesDropdownOpen ? "rotate-180" : ""
-                }`}
+            {servicesData?.some(
+              (service) =>
+                service.slug === "mcm-nursing-care-agency" ||
+                service.slug === "mass-training-academy" ||
+                service.slug === "mass-home-care"
+            ) && (
+              <button
+                type="button"
+                onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
+                className="text-white hover:text-gray-200 transition-colors flex items-center gap-1 cursor-pointer flex-shrink-0"
+                aria-haspopup="true"
+                aria-expanded={isServicesDropdownOpen}
               >
-                <path
-                  d="M1 1L6 6L11 1"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  className={`transition-transform flex-shrink-0 ${
+                    isServicesDropdownOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  <path
+                    d="M1 1L6 6L11 1"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            )}
             {isServicesDropdownOpen && (
               <div
-                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] border border-gray-200"
+                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999]"
                 style={{ position: "absolute", overflow: "visible" }}
               >
-                <Link
-                  href="/services/mcm-nursing-care-agency"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  MCM Nursing Care Agency
-                </Link>
-                <Link
-                  href="/services/mass-home-care"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  Mass Home Care
-                </Link>
-                <Link
-                  href="/services/mass-training-academy"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  Mass Training Academy
-                </Link>
+                {servicesData?.map((service) => {
+                  if (service.slug === "mcm-nursing-care-agency") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mcm-nursing-care-agency"
+                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                      >
+                        MCM Nursing Care Agency
+                      </Link>
+                    );
+                  }
+                  if (service.slug === "mass-training-academy") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mass-training-academy"
+                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                      >
+                        Mass Training Academy
+                      </Link>
+                    );
+                  }
+                  if (service.slug === "mass-home-care") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mass-home-care"
+                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                      >
+                        Mass Home Care
+                      </Link>
+                    );
+                  }
+                  return null;
+                })}
               </div>
             )}
           </div>
 
           <Link
             href="/career-opportunities"
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
           >
             Careers
           </Link>
           <Link
             href="/news-and-insights"
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
           >
             News & Insights
           </Link>
           <Link
             href="/testimonials"
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
           >
             Testimonials
           </Link>
         </div>
 
         {/* Right Side Actions */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
           <Link
             href="/contact-us"
             className="hidden sm:flex items-center bg-neutral-300/10 rounded-[300px] backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 transition-all"

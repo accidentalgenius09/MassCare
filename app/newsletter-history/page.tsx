@@ -4,6 +4,7 @@ import DocumentList, {
 } from "@/components/sections/newsletter-history/DocumentCard";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import restApiWrapper from "@/service/RestApiWrapper";
+import { MetaData } from "@/types/Home.type";
 import React, { useEffect, useState } from "react";
 
 interface Newsletter {
@@ -20,6 +21,7 @@ function NewsletterHistory() {
     null
   );
   const [displayCount, setDisplayCount] = useState(12);
+  const [metaData, setMetaData] = useState<MetaData | null>(null);
 
   useEffect(() => {
     const fetchNewsletter = async () => {
@@ -27,6 +29,13 @@ function NewsletterHistory() {
       try {
         const response = await restApiWrapper.get<Newsletter>("/newsletter");
         setNewsletter(response.data);
+        const meta = await restApiWrapper.get(
+          "/meta-tags?page=stay-in-the-loop"
+        );
+        // Parse the metadata if it's a string, otherwise use directly
+        const parsedMeta =
+          typeof meta.data === "string" ? JSON.parse(meta.data) : meta.data;
+        setMetaData(parsedMeta);
       } catch (error) {
         console.error("Error fetching newsletter:", error);
       } finally {
@@ -35,6 +44,100 @@ function NewsletterHistory() {
     };
     fetchNewsletter();
   }, []);
+
+  useEffect(() => {
+    if (!metaData) return;
+
+    // 1. Set title
+    if (metaData.meta_title) {
+      document.title = metaData.meta_title;
+    }
+
+    // 2. Set or create meta description
+    let metaDescription = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]'
+    );
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+    if (metaData.meta_description) {
+      metaDescription.setAttribute("content", metaData.meta_description);
+    }
+
+    // 3. Set or append meta keywords (with dedupe)
+    let metaKeywords = document.querySelector<HTMLMetaElement>(
+      'meta[name="keywords"]'
+    );
+    if (!metaKeywords) {
+      metaKeywords = document.createElement("meta");
+      metaKeywords.setAttribute("name", "keywords");
+      document.head.appendChild(metaKeywords);
+    }
+
+    if (metaData.meta_keywords) {
+      const existingKeywords = metaKeywords.getAttribute("content") || "";
+
+      const combinedKeywords = [
+        ...existingKeywords.split(","),
+        ...metaData.meta_keywords.split(","),
+      ]
+        .map((k) => k.trim())
+        .filter(Boolean);
+
+      const uniqueKeywords = Array.from(new Set(combinedKeywords));
+
+      metaKeywords.setAttribute("content", uniqueKeywords.join(", "));
+    }
+
+    // 4. Parse and append other_meta_tags (e.g., <meta name="author" ...>)
+    if (metaData.other_meta_tags) {
+      try {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = metaData.other_meta_tags;
+
+        const metaTags = tempDiv.querySelectorAll("meta");
+
+        metaTags.forEach((tag) => {
+          const name = tag.getAttribute("name") || tag.getAttribute("property");
+          const content = tag.getAttribute("content");
+          const httpEquiv = tag.getAttribute("http-equiv");
+
+          if (!content && !httpEquiv && !name) return;
+
+          let existingTag: HTMLMetaElement | null = null;
+
+          if (name) {
+            existingTag = document.querySelector(
+              `meta[name="${name}"], meta[property="${name}"]`
+            );
+          } else if (httpEquiv) {
+            existingTag = document.querySelector(
+              `meta[http-equiv="${httpEquiv}"]`
+            );
+          }
+
+          // Only append if not already present
+          if (!existingTag) {
+            const newMeta = document.createElement("meta");
+            if (name) newMeta.setAttribute("name", name);
+            if (httpEquiv) newMeta.setAttribute("http-equiv", httpEquiv);
+            if (content) newMeta.setAttribute("content", content);
+            document.head.appendChild(newMeta);
+          }
+        });
+      } catch (error) {
+        console.error("Error parsing other_meta_tags:", error);
+      }
+    }
+
+    // 5. Cleanup: optional – restore default title on unmount
+    return () => {
+      document.title =
+        "Mass Care - Professional Nursing, Home Care & Training Services";
+    };
+  }, [metaData]);
 
   useEffect(() => {
     const fetchNewsletterList = async () => {
@@ -66,7 +169,7 @@ function NewsletterHistory() {
                   Loading Newsletter History...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the newsletter documents">
                   Please wait while we fetch the newsletter documents
                 </TTSWrapper>

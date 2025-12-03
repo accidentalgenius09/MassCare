@@ -5,6 +5,7 @@ import { TopRightArrowBlack } from "../../helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import Image from "next/image";
 import { Testimonial } from "@/types/Home.type";
+import { useRouter } from "next/navigation";
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
@@ -201,7 +202,7 @@ const TestimonialsSection = ({
     // Reset scroll position when mouse leaves the text area
     e.currentTarget.scrollTop = 0;
   };
-
+  const router = useRouter();
   return (
     <div className="bg-[#E8EFFF] pt-8 pb-12 sm:pt-12 sm:pb-16 md:pt-22 md:pb-22 px-4">
       <div className="container mx-auto">
@@ -216,8 +217,8 @@ const TestimonialsSection = ({
           </h1>
 
           {showTabs && testimonialCategories.length > 0 && (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full md:w-auto">
-              <div className="flex gap-8 whitespace-nowrap">
+            <div className="flex items-center gap-3 sm:gap-4 w-full overflow-x-auto scrollbar-hide md:w-auto md:overflow-x-visible">
+              <div className="flex gap-4 sm:gap-6 md:gap-8 whitespace-nowrap flex-shrink-0 ms-4 sm:ms-0">
                 {testimonialCategories.length > 0
                   ? testimonialCategories.map((category, index) => (
                       <button
@@ -248,10 +249,10 @@ const TestimonialsSection = ({
                       </button>
                     ))}
               </div>
-              <div className="mx-14">
-                {viewAll && (
+              {viewAll && (
+                <div className="ml-2 sm:ml-4 md:ml-6 lg:ml-14 flex-shrink-0">
                   <button
-                    onClick={() => setActiveTab(VIEW_ALL)}
+                    onClick={() => router.push("/testimonials")}
                     className={`flex items-center gap-2 text-xs cursor-pointer sm:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                       activeTab === VIEW_ALL || !activeTab
                         ? "text-blue-600 gap-3 font-bold"
@@ -261,8 +262,8 @@ const TestimonialsSection = ({
                     <TTSWrapper text="View All">View All</TTSWrapper>{" "}
                     <TopRightArrowBlack />
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -470,16 +471,18 @@ const TestimonialsSection = ({
                                 </div>
 
                                 {/* Author - Fixed at bottom */}
-                                <div className="flex items-center gap-2 sm:gap-3 mt-auto">
-                                  <Image
-                                    src={testimonial.image_value}
-                                    alt={testimonial.image_alt_text_value}
-                                    width={48}
-                                    height={48}
-                                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-                                  />
-                                  <div>
-                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">
+                                <div className="flex items-center gap-2 sm:gap-3 mt-auto pr-12 sm:pr-14 md:pr-16 relative z-10">
+                                  {testimonial.image_value && (
+                                    <Image
+                                      src={testimonial.image_value}
+                                      alt={testimonial.image_alt_text_value || testimonial.name || "Testimonial author"}
+                                      width={48}
+                                      height={48}
+                                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                                    />
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base break-words">
                                       <TTSWrapper
                                         text={testimonial.name}
                                         className="font-semibold text-gray-900 text-sm sm:text-base"
@@ -487,7 +490,7 @@ const TestimonialsSection = ({
                                         {testimonial.name}
                                       </TTSWrapper>
                                     </h3>
-                                    <p className="text-xs sm:text-sm text-gray-500">
+                                    <p className="text-xs sm:text-sm text-gray-500 break-words">
                                       <TTSWrapper
                                         text={testimonial.place}
                                         className="text-xs sm:text-sm text-gray-500"

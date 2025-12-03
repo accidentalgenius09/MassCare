@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BlogCard, NewsAndInsightsData } from "@/types/News-and-Insights";
 import restApiWrapper from "@/service/RestApiWrapper";
+import dayjs from "dayjs";
 
 interface Pagination {
   total: number;
@@ -192,10 +193,10 @@ function NewsAndInsightsSection({
                     </p>
                     <p className="text-sm text-black font-semibold">
                       <TTSWrapper
-                        text={card.published_on}
+                        text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                         className="text-sm text-black font-semibold"
                       >
-                        {card.published_on}
+                        {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                       </TTSWrapper>
                     </p>
                   </div>

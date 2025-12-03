@@ -68,7 +68,7 @@ function MassHomeCare() {
               <p className="text-[#0A5BE0] text-xl font-semibold animate-pulse">
                 <TTSWrapper text="Loading...">Loading...</TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the service details">
                   Please wait while we fetch the service details
                 </TTSWrapper>
@@ -78,9 +78,9 @@ function MassHomeCare() {
         </div>
       )}
       <PageBanner
-        title="MCM Nursing Care Agency"
-        breadcrumb="Home / Services / MCM Nursing Care Agency"
-        description="Lorem Ipsum 8 years of meaningful care... care without compromise."
+        title={MCMData?.banner_title}
+        breadcrumb={`Home / Services / ${MCMData?.banner_title}`}
+        description={MCMData?.banner_description}
       />
       {MCMData && (
         <>

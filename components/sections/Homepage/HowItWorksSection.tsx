@@ -50,55 +50,30 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
     return () => window.removeEventListener("resize", updateItemsPerView);
   }, []);
 
-  const steps = [
-    {
-      number: "01",
-      title: "Initial Consultation",
-      description:
-        "We begin with a comprehensive consultation to understand your specific needs, preferences, and requirements.",
-      icon: <InitialConsultationIcon />,
-    },
-    {
-      number: "02",
-      title: "Candidate Matching",
-      description:
-        "Our expert team carefully matches you with qualified professionals who meet your specific criteria and requirements.",
-      icon: <CandidateMatchingIcon />,
-    },
-    {
-      number: "03",
-      title: "Compliance Checks",
-      description:
-        "We conduct thorough background checks, verify qualifications, and ensure all regulatory requirements are met.",
-      icon: <ComplianceChecksIcon />,
-    },
-    {
-      number: "04",
-      title: "Placement & Induction",
-      description:
-        "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-      icon: <PlacementInductionIcon />,
-    },
-    {
-      number: "05",
-      title: "Ongoing Support",
-      description:
-        "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-      icon: <OngoingSupportIcon />,
-    },
-  ];
+  // Reset currentIndex when itemsPerView changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [itemsPerView]);
 
-  const totalSlides = Math.ceil(homeData?.work_steps?.length / itemsPerView);
+  const workStepsLength = homeData?.work_steps?.length || 0;
+  const totalSlides = itemsPerView > 0 && workStepsLength > 0 
+    ? Math.ceil(workStepsLength / itemsPerView) 
+    : 0;
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    if (totalSlides > 0) {
+      setCurrentIndex((prev) => Math.min(prev + 1, totalSlides - 1));
+    }
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    if (totalSlides > 0) {
+      setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    }
   };
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white">
+    <section className="py-8 sm:py-12 md:py-16 bg-white overflow-visible">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
@@ -120,17 +95,17 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-full mx-auto">
+        <div className="relative max-w-full mx-auto px-12 md:px-16 lg:px-20">
           {/* Previous Button */}
-          {homeData?.work_steps?.length > 5 && (
+          {totalSlides > 1 && (
             <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
               disabled={currentIndex === 0}
               aria-label="Previous slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -152,12 +127,12 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                 transform: `translateX(-${currentIndex * 100}%)`,
               }}
             >
-              {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+              {totalSlides > 0 && Array.from({ length: totalSlides }).map((_, slideIndex) => (
                 <div
                   key={slideIndex}
-                  className="min-w-full flex gap-6 justify-center"
+                  className="min-w-full flex gap-6"
                 >
-                  {homeData?.work_steps
+                  {(homeData?.work_steps || [])
                     .slice(
                       slideIndex * itemsPerView,
                       (slideIndex + 1) * itemsPerView
@@ -187,8 +162,8 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                               height={100}
                             />
                           </div>
-                          <div className="w-full max-w-[120px] sm:max-w-[140px] absolute bottom-3 sm:bottom-4">
-                            <h3 className="w-full text-sm sm:text-base md:text-lg font-semibold text-gray-900">
+                          <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">
+                            <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 break-words">
                               <TTSWrapper
                                 text={step.title}
                                 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
@@ -197,7 +172,7 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                               </TTSWrapper>
                             </h3>
                           </div>
-                          <div className="absolute right-1 sm:right-2 bottom-3 sm:bottom-4">
+                          <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4">
                             <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
                               <TTSWrapper
                                 text={step.id.toString()}
@@ -216,15 +191,15 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
           </div>
 
           {/* Next Button */}
-          {steps.length > 5 && (
+          {totalSlides > 1 && (
             <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
               disabled={currentIndex === totalSlides - 1}
               aria-label="Next slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

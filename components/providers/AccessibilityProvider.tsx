@@ -37,8 +37,8 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const stepFontSize = useCallback(() => {
     setFontIncrementPx((prev) => {
-      const next = prev + 2;
-      if (next > 8) return 0;
+      const next = prev + 1;
+      if (next > 6) return 0;
       return next;
     });
   }, []);

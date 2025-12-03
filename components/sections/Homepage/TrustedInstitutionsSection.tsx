@@ -20,10 +20,10 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640) {
-        setItemsPerView(1);
+        setItemsPerView(2);
         setGap(16);
       } else if (window.innerWidth < 1024) {
-        setItemsPerView(2);
+        setItemsPerView(3);
         setGap(24);
       } else {
         setItemsPerView(4);
@@ -130,7 +130,11 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
               }}
             >
               {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div key={slideIndex} className="min-w-full flex gap-4 sm:gap-6 md:gap-8">
+                <div 
+                  key={slideIndex} 
+                  className="min-w-full flex"
+                  style={{ gap: `${gap}px` }}
+                >
                   {homeData.trusted_institutions
                     .slice(
                       slideIndex * itemsPerView,

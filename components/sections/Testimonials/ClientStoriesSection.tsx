@@ -20,18 +20,18 @@ const ClientStoriesSection = ({
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
-        <div className="mb-12 max-w-2xl mx-30">
-          <h2 className="text-5xl font-semibold text-black mb-4">
+        <div className="mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto lg:mx-30 px-4 sm:px-0">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-black mb-3 sm:mb-4">
             <TTSWrapper
               text={testimonialsData.testimonial_cms.section3_title || ""}
             >
               {testimonialsData.testimonial_cms.section3_title || ""}
             </TTSWrapper>
           </h2>
-          <p className="text-base font-normal text-black leading-relaxed">
+          <p className="text-sm sm:text-base font-normal text-black leading-relaxed">
             <TTSWrapper
               text={testimonialsData.testimonial_cms.section3_description || ""}
             >
@@ -41,8 +41,8 @@ const ClientStoriesSection = ({
         </div>
 
         {/* Image Gallery Section */}
-        <div className="overflow-x-auto scrollbar-hide pb-6">
-          <div className="flex gap-4 sm:gap-6 min-w-max px-1">
+        <div className="overflow-x-auto scrollbar-hide pb-6 -mx-4 sm:mx-0">
+          <div className="flex gap-3 sm:gap-4 md:gap-6 min-w-max px-4 sm:px-1">
             {testimonialsData.client_stories.map((story) => (
               <div
                 key={story.id}

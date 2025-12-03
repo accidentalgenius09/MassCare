@@ -18,40 +18,67 @@ const ContactUsBanner: React.FC<ContactUsBannerProps> = ({
   testimonialsData,
 }) => {
   const navigate = useRouter();
+  const backgroundImage =
+    testimonialsData?.testimonial_cms?.section5_image_value || "";
+  const hasBackgroundImage = Boolean(backgroundImage);
+
+  const headingClasses =
+    "text-3xl sm:text-4xl lg:text-5xl font-medium text-white leading-tight max-w-full lg:max-w-4xl";
+  const descriptionClasses =
+    "text-sm sm:text-base text-white leading-relaxed max-w-full lg:max-w-2xl";
+
+  const renderTextContent = (wrapperClass = "") => (
+    <div className={`flex-1 space-y-3 sm:space-y-4 ${wrapperClass}`}>
+      <h2 className={headingClasses}>
+        <TTSWrapper text={title}>{title}</TTSWrapper>
+      </h2>
+
+      <p className={descriptionClasses}>
+        <TTSWrapper text={description}>{description}</TTSWrapper>
+      </p>
+      <button
+        onClick={() => navigate.push("/contact-us")}
+        className="inline-flex items-center gap-2 bg-[#0A5BE0] hover:bg-blue-700 cursor-pointer text-white font-normal px-6 sm:px-8 py-2.5 sm:py-3 md:py-4 rounded-full transition-all duration-300 hover:shadow-lg active:scale-100 group w-full lg:w-auto justify-center text-sm sm:text-base"
+      >
+        <TTSWrapper text={buttonText}>{buttonText}</TTSWrapper>
+        <TopRightArrowWhite />
+      </button>
+    </div>
+  );
+
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-32 space-y-6">
+        {/* Mobile layout - text overlay allowed */}
         <div
           style={{
-            backgroundImage: testimonialsData?.testimonial_cms
-              ?.section5_image_value
-              ? `url("${testimonialsData.testimonial_cms.section5_image_value}")`
+            backgroundImage: hasBackgroundImage
+              ? `linear-gradient(90deg, rgba(13,45,98,0.95) 0%, rgba(13,45,98,0.9) 45%, rgba(13,45,98,0.6) 70%, rgba(13,45,98,0) 100%), url("${backgroundImage}")`
               : "none",
-            backgroundSize: "auto 100%",
+            backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "right center",
+            backgroundPosition: "center",
           }}
-          className="rounded-3xl bg-[#0D2D62] p-8 md:p-12 lg:p-16 h-56 md:h-72 lg:h-80"
+          className="rounded-2xl sm:rounded-3xl bg-[#0D2D62] p-6 sm:p-8 min-h-[280px] sm:min-h-[320px] relative overflow-hidden md:hidden flex flex-col justify-center"
         >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
-            {/* Left Content */}
-            <div className="flex-1 space-y-4">
-              <h2 className="text-5xl font-medium text-white max-w-4xl leading-tight">
-                <TTSWrapper text={title}>{title}</TTSWrapper>
-              </h2>
+          {renderTextContent("relative z-10")}
+        </div>
 
-              <p className="text-base text-white leading-relaxed max-w-2xl">
-                <TTSWrapper text={description}>{description}</TTSWrapper>
-              </p>
-              <button
-                onClick={() => navigate.push("/contact-us")}
-                className="inline-flex items-center gap-2 bg-[#0A5BE0] hover:bg-blue-700 cursor-pointer text-white font-normal px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:shadow-lg active:scale-100 group w-full lg:w-auto justify-center"
-              >
-                <TTSWrapper text={buttonText}>{buttonText}</TTSWrapper>
-                <TopRightArrowWhite />
-              </button>
-            </div>
-          </div>
+        {/* Desktop layout - text beside image */}
+        <div className="hidden md:flex rounded-3xl ps-20 bg-[#0D2D62] min-h-[18rem] gap-8 lg:gap-12 items-center">
+          {renderTextContent()}
+          {hasBackgroundImage && (
+            <div
+              className="w-full md:w-2/5 lg:w-1/3 h-52 md:h-60 lg:h-72 rounded-2xl overflow-hidden"
+              style={{
+                backgroundImage: `url("${backgroundImage}")`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+              aria-hidden="true"
+            ></div>
+          )}
         </div>
       </div>
     </section>
