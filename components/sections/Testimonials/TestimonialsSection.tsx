@@ -35,10 +35,12 @@ const TestimonialHero: React.FC<{ testimonialsData: TestimonialsPageData }> = ({
             <div className="w-full lg:w-fit relative z-10 mt-4 lg:mt-0">
               <button
                 onClick={() => router.push("/contact-us")}
-                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="relative overflow-hidden bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center justify-center gap-2 cursor-pointer w-full lg:w-auto"
               >
-                <TTSWrapper text="Contact Us">Contact Us</TTSWrapper>
-                <TopRightArrowWhite />
+                <span className="relative z-10 flex items-center gap-2">
+                  <TTSWrapper text="Contact Us">Contact Us</TTSWrapper>
+                  <TopRightArrowWhite />
+                </span>
               </button>
             </div>
           </div>
