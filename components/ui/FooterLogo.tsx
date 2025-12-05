@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { GoogleMapPinIcon, TopRightArrowBlack } from "../helpers/svgs";
@@ -51,13 +53,19 @@ const LocationCard: React.FC<LocationCardProps> = ({
         {/* Address Section */}
         <div className="mb-8 px-4">
           <div className="text-white text-base leading-relaxed font-light">
-            <TTSWrapper text={siteSettings?.address ?? ""}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: siteSettings?.address ?? "",
-                }}
-              />
-            </TTSWrapper>
+            {siteSettings?.address ? (
+              <TTSWrapper text={siteSettings.address}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: siteSettings.address,
+                  }}
+                />
+              </TTSWrapper>
+            ) : (
+              <TTSWrapper text={address}>
+                <div>{address}</div>
+              </TTSWrapper>
+            )}
           </div>
         </div>
       </div>

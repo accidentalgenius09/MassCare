@@ -123,7 +123,7 @@ function NewsAndInsightsSection({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab2(tab.id)}
-                  className={`text-xs sm:text-sm font-medium transition-colors pb-1 ${
+                  className={`text-xs sm:text-sm font-medium cursor-pointer transition-colors pb-1 ${
                     activeTab2 === tab.id
                       ? "text-gray-900 border-b-2 border-gray-900"
                       : "text-gray-600 hover:text-gray-900"
@@ -193,10 +193,16 @@ function NewsAndInsightsSection({
                     </p>
                     <p className="text-sm text-black font-semibold">
                       <TTSWrapper
-                        text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
+                        text={
+                          card.published_on
+                            ? dayjs(card.published_on).format("DD-MM-YYYY")
+                            : ""
+                        }
                         className="text-sm text-black font-semibold"
                       >
-                        {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
+                        {card.published_on
+                          ? dayjs(card.published_on).format("DD-MM-YYYY")
+                          : ""}
                       </TTSWrapper>
                     </p>
                   </div>

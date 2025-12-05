@@ -156,7 +156,7 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mcm-nursing-care-agency"
-                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                         onClick={() => setIsServicesDropdownOpen(false)}
                       >
                         MCM Nursing Care Agency
@@ -168,7 +168,7 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mass-training-academy"
-                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                         onClick={() => setIsServicesDropdownOpen(false)}
                       >
                         Mass Training Academy
@@ -180,7 +180,7 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mass-home-care"
-                        className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors whitespace-nowrap"
+                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                         onClick={() => setIsServicesDropdownOpen(false)}
                       >
                         Mass Home Care
