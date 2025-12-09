@@ -423,7 +423,7 @@ const ContactPage: React.FC = () => {
                             {item.sub_title}
                           </TTSWrapper>
                         </p>
-                        <div className="text-sm text-black mt-3">
+                        <div className="text-sm text-black mt-3 max-w-sm break-words">
                           <TTSWrapper text={item.content}>
                             <div
                               className="text-sm text-gray-700"

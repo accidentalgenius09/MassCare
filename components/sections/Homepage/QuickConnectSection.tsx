@@ -60,7 +60,7 @@ export default function QuickConnect({
     restApiWrapper
       .post("/contact-enquiry", formData)
       .then((res) => {
-        toast.success(res.message);
+        navigate.push("/thankyou-enquiry");
       })
       .catch((err) => {
         console.error(err);

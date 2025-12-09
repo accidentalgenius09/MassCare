@@ -56,9 +56,10 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
   }, [itemsPerView]);
 
   const workStepsLength = homeData?.work_steps?.length || 0;
-  const totalSlides = itemsPerView > 0 && workStepsLength > 0 
-    ? Math.ceil(workStepsLength / itemsPerView) 
-    : 0;
+  const totalSlides =
+    itemsPerView > 0 && workStepsLength > 0
+      ? Math.ceil(workStepsLength / itemsPerView)
+      : 0;
 
   const nextSlide = () => {
     if (totalSlides > 0) {
@@ -73,9 +74,9 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
   };
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white overflow-visible">
+    <section className="pt-8 pb-16 bg-white overflow-visible">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             <TTSWrapper
               text={homeData.home_cms.how_it_works_title || ""}
@@ -127,66 +128,64 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                 transform: `translateX(-${currentIndex * 100}%)`,
               }}
             >
-              {totalSlides > 0 && Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div
-                  key={slideIndex}
-                  className="min-w-full flex gap-6"
-                >
-                  {(homeData?.work_steps || [])
-                    .slice(
-                      slideIndex * itemsPerView,
-                      (slideIndex + 1) * itemsPerView
-                    )
-                    .map((step, index) => (
-                      <div
-                        key={slideIndex * itemsPerView + index}
-                        style={{
-                          width: `calc((100% - ${
-                            (itemsPerView - 1) * 24
-                          }px) / ${itemsPerView})`,
-                          flexShrink: 0,
-                        }}
-                      >
-                        <div className="bg-[#E8EFFF] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
-                          {/* Decorative Flower */}
-                          <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
-                            <FlowerDecoration />
-                          </div>
+              {totalSlides > 0 &&
+                Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="min-w-full flex gap-6">
+                    {(homeData?.work_steps || [])
+                      .slice(
+                        slideIndex * itemsPerView,
+                        (slideIndex + 1) * itemsPerView
+                      )
+                      .map((step, index) => (
+                        <div
+                          key={slideIndex * itemsPerView + index}
+                          style={{
+                            width: `calc((100% - ${
+                              (itemsPerView - 1) * 24
+                            }px) / ${itemsPerView})`,
+                            flexShrink: 0,
+                          }}
+                        >
+                          <div className="bg-[#E8EFFF] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
+                            {/* Decorative Flower */}
+                            <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
+                              <FlowerDecoration />
+                            </div>
 
-                          {/* Icon */}
-                          <div className="flex mb-3 sm:mb-4">
-                            <Image
-                              src={step.image_value}
-                              alt={step.image_alt_text_value}
-                              width={100}
-                              height={100}
-                            />
-                          </div>
-                          <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">
-                            <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 break-words">
-                              <TTSWrapper
-                                text={step.title}
-                                className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
-                              >
-                                {step.title}
-                              </TTSWrapper>
-                            </h3>
-                          </div>
-                          <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4">
-                            <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
-                              <TTSWrapper
-                                text={step.id.toString()}
-                                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
-                              >
-                                {step.id.toString()}
-                              </TTSWrapper>
+                            {/* Icon */}
+                            <div className="flex mb-3 sm:mb-4">
+                              <Image
+                                src={step.image_value}
+                                alt={step.image_alt_text_value}
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                            <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">
+                              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 break-words">
+                                <TTSWrapper
+                                  text={step.title}
+                                  className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
+                                >
+                                  {step.title}
+                                </TTSWrapper>
+                              </h3>
+                            </div>
+                            <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4">
+                              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
+                                <TTSWrapper
+                                  text={step.id.toString()}
+                                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
+                                >
+                                  {step.id.toString()}
+                                </TTSWrapper>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                </div>
-              ))}
+                      ))}
+                  </div>
+                ))}
             </div>
           </div>
 

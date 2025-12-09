@@ -8,8 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "TT Hoves"
-  --font-mono: "TT Hoves"
+  --font-sans: "TT Hoves";
+  --font-mono: "TT Hoves";
 }
 
 @media (prefers-color-scheme: dark) {

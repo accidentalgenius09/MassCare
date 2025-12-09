@@ -5,6 +5,7 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 import { HomeData } from "@/types/Home.type";
 import restApiWrapper from "@/service/RestApiWrapper";
 import { FooterData } from "@/types/Footer.type";
+import Image from "next/image";
 
 const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const [activeButton, setActiveButton] = useState<number | null>(null);
@@ -34,7 +35,7 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   // Preload critical images
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     const preloadImage = (src: string) => {
       const link = document.createElement("link");
       link.rel = "preload";
@@ -51,7 +52,7 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     if (defaultSlider?.image_mobile_value) {
       preloadImage(defaultSlider.image_mobile_value);
     }
-    
+
     // Fallback to default hero image
     if (!defaultSlider?.image_value) {
       preloadImage("/hero-banner.png");
@@ -116,6 +117,8 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const desktopImage = currentSlider?.image_value || "/hero-banner.png";
   const mobileImage = currentSlider?.image_mobile_value || "/hero-banner.png";
 
+  console.log(currentSlider?.is_default);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
       {/* Background Image with Overlay */}
@@ -154,7 +157,17 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
               {currentSlider?.pre_title || ""}
             </div>
           </TTSWrapper>
-
+          {currentSlider?.is_default === 0 && (
+            <div className="my-4 flex justify-center">
+              <Image
+                width={1000}
+                height={1000}
+                src={"/bigLogo.png"}
+                alt={"Hero Banner"}
+                className="w-auto h-auto max-w-[700px] sm:max-w-[700px] md:max-w-[700px] object-contain"
+              />
+            </div>
+          )}
           <TTSWrapper text={currentSlider?.title || ""}>
             <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold transition-all duration-500">
               {currentSlider?.title || ""}
@@ -235,10 +248,10 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
                 <button
                   key={slider.id}
                   onClick={() => setActiveButton(isActive ? null : serviceId)}
-                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-500 border border-white/30 cursor-pointer flex-shrink-0"
+                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 rounded-full transition-all duration-500 border border-white/30 cursor-pointer flex-shrink-0"
                 >
                   <TTSWrapper text={slider.service.title}>
-                    <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light whitespace-nowrap">
+                    <span className="text-lg font-light whitespace-nowrap">
                       {slider.service.title}
                     </span>
                   </TTSWrapper>

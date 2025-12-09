@@ -50,8 +50,26 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
     return () => window.removeEventListener("resize", updateCarouselWidth);
   }, [itemsPerView]);
 
-
   const totalSlides = Math.ceil(homeData.mass_care_features.length / itemsPerView);
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    // Don't auto-scroll if user is dragging or if there's only one slide
+    if (isDragging || totalSlides <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        // If we're at the last slide, reset to the first slide
+        if (prevIndex >= totalSlides - 1) {
+          return 0;
+        }
+        // Otherwise, move to the next slide
+        return prevIndex + 1;
+      });
+    }, 3000); // Auto-scroll every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isDragging, totalSlides]);
 
   // Calculate transform with special handling for the last slide
   const getTransform = () => {
