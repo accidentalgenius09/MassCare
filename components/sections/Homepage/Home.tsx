@@ -14,8 +14,6 @@ import restApiWrapper from "@/service/RestApiWrapper";
 import { HomeData, MetaData, TestimonialCategory } from "@/types/Home.type";
 import TTSWrapper from "@/hooks/TTSWrapper";
 
-
-
 function HomePage() {
   const [homeData, setHomeData] = useState<HomeData>();
   const [metaData, setMetaData] = useState<MetaData | null>(null);
