@@ -3,7 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["images.unsplash.com", "mass-care.s3.eu-west-2.amazonaws.com", "www.mass-care-agency.dev5.intersmarthosting.in" , "i.pravatar.cc"],
+    domains: [
+      "images.unsplash.com",
+      "masscareagency.co.uk",
+      "mass-care.s3.eu-west-2.amazonaws.com",
+      "www.mass-care-agency.dev5.intersmarthosting.in",
+      "i.pravatar.cc",
+    ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -43,7 +49,8 @@ const nextConfig: NextConfig = {
           },
           {
             key: "X-Robots-Tag",
-            value: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+            value:
+              "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
           },
           {
             key: "Cache-Control",

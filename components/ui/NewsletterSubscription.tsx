@@ -40,15 +40,9 @@ function Newsletter() {
         formData
       );
 
-      if (response.status === 200) {
+      if (response.status < 400) {
         setSubscribedEmail(email);
         setShowModal(true);
-      } else {
-        toast.error(
-          response.message ||
-            response.data?.message ||
-            "Subscription failed. Please try again."
-        );
       }
     } catch (error) {
       const errorMessage =
@@ -56,7 +50,6 @@ function Newsletter() {
           ? error.message
           : "Subscription failed. Please try again.";
       toast.error(errorMessage);
-      console.error("Error subscribing to newsletter:", error);
     }
   };
 
