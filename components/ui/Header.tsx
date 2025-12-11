@@ -147,7 +147,7 @@ const Header = () => {
             )}
             {isServicesDropdownOpen && (
               <div
-                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999]"
+                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] backdrop-blur-xl"
                 style={{ position: "absolute", overflow: "visible" }}
               >
                 {servicesData?.map((service) => {

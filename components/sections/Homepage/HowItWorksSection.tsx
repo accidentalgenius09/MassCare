@@ -146,14 +146,14 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                             flexShrink: 0,
                           }}
                         >
-                          <div className="bg-[#E8EFFF] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
+                          <div className="bg-[#E8EFFF] py-4 pe-4 ps-4 sm:py-5 sm:pe-5 sm:pe-5 md:py-6 md:pe-6 md:ps-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
                             {/* Decorative Flower */}
-                            <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
+                            <div className="absolute top-1 sm:top-1 right-1 sm:right-2 -mr-8 sm:-mr-10 md:-mr-12">
                               <FlowerDecoration />
                             </div>
 
                             {/* Icon */}
-                            <div className="flex mb-3 sm:mb-4">
+                            <div className="flex">
                               <Image
                                 src={step.image_value}
                                 alt={step.image_alt_text_value}
