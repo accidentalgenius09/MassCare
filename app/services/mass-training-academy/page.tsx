@@ -87,7 +87,9 @@ function MassTrainingAcademyPage() {
           <CareNursingAgency MCMData={MCMData} whatWeDo={false} />
           <CoursesOffered MCMData={MCMData} />
           <UpcomingCoursesSection MCMData={MCMData} />
-          <WorkingForUs MCMData={MCMData} />
+          <div id="enrollform">
+            <WorkingForUs MCMData={MCMData} />
+          </div>
           <div className="mt-20">
             <TrustedPartnerBanner MCMData={MCMData} />
           </div>

@@ -110,8 +110,14 @@ function UpcomingCoursesSection({
               {/* Enroll Button */}
               <button
                 onClick={() => {
-                  if (course.enroll_link) {
-                    window.open(course.enroll_link, "_blank");
+                  const targetSection = document.getElementById(
+                    "enrollform"
+                  );
+                  if (targetSection) {
+                    targetSection.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
                   }
                 }}
                 className="lg:w-2/3 md:w-2/3 w-2/3 bg-[#0A5BE0] text-white font-medium py-3 px-5 rounded-full flex items-center justify-center gap-2 hover:bg-[#084CC0] transition-colors"
