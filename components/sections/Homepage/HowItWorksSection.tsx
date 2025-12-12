@@ -148,7 +148,7 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                         >
                           <div className="bg-[#E8EFFF] py-4 pe-4 ps-4 sm:py-5 sm:pe-5 sm:pe-5 md:py-6 md:pe-6 md:ps-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
                             {/* Decorative Flower */}
-                            <div className="absolute top-1 sm:top-1 right-1 sm:right-2 -mr-8 sm:-mr-10 md:-mr-12">
+                            <div className="absolute top-1 sm:top-1 right-1 sm:right-2">
                               <FlowerDecoration />
                             </div>
 
@@ -157,25 +157,24 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                               <Image
                                 src={step.image_value}
                                 alt={step.image_alt_text_value}
-                                width={100}
-                                height={100}
+                                width={120}
+                                height={120}
                               />
                             </div>
                             <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">
-                              <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 break-words">
+                              <h3 className="text-2xl font-semibold text-gray-900">
                                 <TTSWrapper
                                   text={step.title}
-                                  className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
                                 >
                                   {step.title}
                                 </TTSWrapper>
                               </h3>
                             </div>
                             <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4">
-                              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
+                              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-xl font-medium">
                                 <TTSWrapper
                                   text={step.id.toString()}
-                                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
+                                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-xl font-medium"
                                 >
                                   {step.id.toString()}
                                 </TTSWrapper>
