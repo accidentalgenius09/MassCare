@@ -170,11 +170,13 @@ function Services() {
               // Map service_facilities to sections format
               const sections = service.service_facilities?.map((facility) => ({
                 sectionTitle: facility.title,
+                description1: facility.description,
                 imageSrc: facility.image_value,
                 imageAlt: facility.image_alt_text_value,
               }));
               const sections2 = service.service_facilities?.map((facility) => ({
                 title: facility.title,
+                description1: facility.description,
                 imageSrc: facility.image_value,
                 imageAlt: facility.image_alt_text_value,
               }));
