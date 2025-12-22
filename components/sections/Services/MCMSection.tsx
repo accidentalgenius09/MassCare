@@ -106,6 +106,8 @@ const NursingCareSection: React.FC<NursingCareSectionProps> = ({
                       alt={sectionImageAlt}
                       fill
                       className="object-cover"
+                      loading="lazy"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </div>
                 </div>

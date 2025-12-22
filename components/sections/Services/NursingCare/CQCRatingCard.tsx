@@ -22,6 +22,8 @@ function CQCRatingCard({
                 width={200}
                 height={140}
                 className="object-contain w-40 sm:w-48 md:w-56"
+                loading="lazy"
+                sizes="(max-width: 640px) 160px, (max-width: 768px) 192px, 224px"
               />
               <p className="text-xs sm:text-sm text-black font-normal -mt-2 text-center md:text-left">
                 <TTSWrapper

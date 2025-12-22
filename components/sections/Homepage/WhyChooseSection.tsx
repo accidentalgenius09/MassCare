@@ -213,6 +213,8 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
                                 width={48}
                                 height={48}
                                 className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14"
+                                loading="lazy"
+                                sizes="(max-width: 640px) 40px, (max-width: 1024px) 48px, 56px"
                               />
                             </div>
 

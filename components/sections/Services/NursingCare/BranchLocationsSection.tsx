@@ -49,6 +49,8 @@ const BranchLocationsSection: React.FC<BranchLocationsSectionProps> = ({
                   alt={location.icon_alt_text_value}
                   width={40}
                   height={40}
+                  loading="lazy"
+                  sizes="40px"
                 />
               </div>
 
@@ -67,19 +69,19 @@ const BranchLocationsSection: React.FC<BranchLocationsSectionProps> = ({
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="space-y-1 pt-2">
-                    <p className="text-sm sm:text-base text-black">
+                  <div className="pt-2 flex flex-col gap-1">
+                    <p className="text-sm sm:text-base text-black whitespace-nowrap">
                       <TTSWrapper
                         text={location.phone_number_one}
-                        className="text-sm sm:text-base text-black"
+                        className="text-sm sm:text-base text-black whitespace-nowrap"
                       >
                         {location.phone_number_one}
                       </TTSWrapper>
                     </p>
-                    <p className="text-sm sm:text-base text-black">
+                    <p className="text-sm sm:text-base text-black whitespace-nowrap">
                       <TTSWrapper
                         text={location.phone_number_two}
-                        className="text-sm sm:text-base text-black"
+                        className="text-sm sm:text-base text-black whitespace-nowrap"
                       >
                         {location.phone_number_two}
                       </TTSWrapper>
@@ -88,7 +90,7 @@ const BranchLocationsSection: React.FC<BranchLocationsSectionProps> = ({
 
                   <button
                     onClick={() => window.open(location.map_link, "_blank")}
-                    className="group w-40 bg-white text-gray-800 font-medium py-3 px-6 rounded-full 
+                    className="group w-40 bg-white text-gray-800 font-medium py-3 px-4 rounded-full 
                      flex items-center justify-between hover:bg-gray-100 hover:shadow-lg transition-all duration-300"
                   >
                     {/* Google Maps Icon */}

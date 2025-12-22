@@ -14,11 +14,16 @@ interface Policy {
 function PrivacyPolicy() {
   const [privacyPolicy, setPrivacyPolicy] = useState<Policy | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  
   useEffect(() => {
+    setMounted(true);
     const fetchPrivacyPolicy = async () => {
       try {
         setIsLoading(true);
-        const response = await restApiWrapper.get<Policy>("/policy?slug=privacy-policy");
+        const response = await restApiWrapper.get<Policy>(
+          "/policy?slug=privacy-policy"
+        );
         setPrivacyPolicy(response.data);
       } catch (error) {
         console.error("Error fetching privacy policy:", error);
@@ -66,24 +71,26 @@ function PrivacyPolicy() {
           image="/common/privacypolicy-banner.png"
           description={privacyPolicy?.banner_description || ""}
         />
-        <div className="px-20 py-15">
-          <div>
-            <h1 className="text-3xl font-bold">
-              <TTSWrapper text={privacyPolicy?.title || ""}>
-                {privacyPolicy?.title || ""}
-              </TTSWrapper>
-            </h1>
+        {mounted && (
+          <div className="px-8 py-8 lg:px-20 lg:py-15">
             <div>
-              <TTSWrapper text={privacyPolicy?.content || ""}>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: privacyPolicy?.content || "",
-                  }}
-                />
-              </TTSWrapper>
+              <h1 className="text-3xl font-bold">
+                <TTSWrapper text={privacyPolicy?.title || ""}>
+                  {privacyPolicy?.title || ""}
+                </TTSWrapper>
+              </h1>
+              <div>
+                <TTSWrapper text={privacyPolicy?.content || ""}>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: privacyPolicy?.content || "",
+                    }}
+                  />
+                </TTSWrapper>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

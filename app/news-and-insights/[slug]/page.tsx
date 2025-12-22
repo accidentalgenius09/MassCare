@@ -92,6 +92,9 @@ export default function NewsAndInsightsDetailPage() {
 
   console.log(articleData?.related_blogs_list ,"articleData?.related_blogs_list ");
 
+  const hasRelatedBlogs = articleData?.related_blogs_list && 
+    articleData?.related_blogs_list?.length > 0;
+
   return (
     <>
       {isLoading && (
@@ -130,14 +133,14 @@ export default function NewsAndInsightsDetailPage() {
         />
 
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-          <p className="text-sm text-black font-semibold max-w-7xl mx-auto">
+          <p className="text-sm text-black font-semibold max-w-full lg:px-20 px-10 mx-auto">
             <TTSWrapper text={articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}>
               {articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}
             </TTSWrapper>
           </p>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className={`grid ${hasRelatedBlogs ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1'} gap-8 max-w-full lg:px-20 px-10 mx-auto`}>
             {/* Main Content */}
-            <div ref={articleRef} className="lg:col-span-2">
+            <div ref={articleRef} className={hasRelatedBlogs ? 'lg:col-span-2' : ''}>
               {/* Title */}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-4">
                 <TTSWrapper text={articleData?.title || ""}>
@@ -153,6 +156,8 @@ export default function NewsAndInsightsDetailPage() {
                     alt={articleData?.image_alt_text_value || ""}
                     fill
                     className="object-cover"
+                    priority
+                    sizes={hasRelatedBlogs ? "(max-width: 1024px) 100vw, 66vw" : "100vw"}
                   />
                 </div>
               )}
@@ -169,6 +174,7 @@ export default function NewsAndInsightsDetailPage() {
             </div>
 
             {/* Sidebar - Recent News */}
+            {hasRelatedBlogs && (
             <div className="lg:col-span-1 mx-auto">
               <div
                 className="flex flex-col"
@@ -231,6 +237,8 @@ export default function NewsAndInsightsDetailPage() {
                             alt={card.image_alt_text_value}
                             fill
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            sizes="320px"
                             style={{
                               borderRadius: "20px",
                             }}
@@ -260,6 +268,7 @@ export default function NewsAndInsightsDetailPage() {
                 </div>
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

@@ -58,6 +58,8 @@ const WelcomeSection = ({
                   width={850}
                   height={500}
                   className="object-cover w-full h-auto"
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 850px"
                 />
               </div>
             ) : (
@@ -99,6 +101,8 @@ const WelcomeSection = ({
                     width={80}
                     height={80}
                     className="sm:w-[100px] sm:h-[100px]"
+                    loading="lazy"
+                    sizes="(max-width: 640px) 80px, 100px"
                   />
                 </div>
               </div>

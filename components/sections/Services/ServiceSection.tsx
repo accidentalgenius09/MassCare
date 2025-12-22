@@ -19,6 +19,8 @@ function ServiceSection({ servicesData }: { servicesData: ServicesPageData }) {
                   alt={servicesData.service_cms.image_one_alt_text_value}
                   fill
                   className="object-cover"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
 
@@ -29,6 +31,8 @@ function ServiceSection({ servicesData }: { servicesData: ServicesPageData }) {
                   alt={servicesData.service_cms.image_two_alt_text_value}
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 />
               </div>
             </div>

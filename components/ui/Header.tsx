@@ -15,32 +15,89 @@ const Header = () => {
   const isHome = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const servicesDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Helper function to check if a path is active
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Refs for desktop + mobile dropdown wrappers
+  const servicesDropdownRef = useRef<HTMLDivElement | null>(null); // desktop
+  const mobileServicesDropdownRef = useRef<HTMLDivElement | null>(null); // mobile
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null); // mobile menu container
 
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    // if closing mobile menu, also close services dropdown (avoid leftover open dropdown)
+    setIsMobileMenuOpen((prev) => {
+      const newVal = !prev;
+      if (!newVal) {
+        setIsServicesDropdownOpen(false);
+      }
+      return newVal;
+    });
   };
 
+  // Click outside handler checks both desktop and mobile dropdown refs
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
+      const target = event.target as Node;
+      const clickedInsideDesktop =
         servicesDropdownRef.current &&
-        !servicesDropdownRef.current.contains(event.target as Node)
-      ) {
+        servicesDropdownRef.current.contains(target);
+      const clickedInsideMobile =
+        mobileServicesDropdownRef.current &&
+        mobileServicesDropdownRef.current.contains(target);
+      const clickedInsideMobileMenu =
+        mobileMenuRef.current &&
+        mobileMenuRef.current.contains(target);
+
+      // Close dropdown if clicked outside both desktop and mobile dropdowns
+      if (!clickedInsideDesktop && !clickedInsideMobile) {
         setIsServicesDropdownOpen(false);
+      }
+
+      // Close mobile menu if clicked outside (but keep dropdown logic separate)
+      if (isMobileMenuOpen && !clickedInsideMobileMenu && !clickedInsideMobile) {
+        // Only close mobile menu if clicking outside the menu entirely
+        // Don't close if clicking on the mobile menu button (handled by toggleMobileMenu)
+        const mobileMenuButton = (event.target as HTMLElement)?.closest('button[aria-label="Toggle mobile menu"]');
+        if (!mobileMenuButton) {
+          setIsMobileMenuOpen(false);
+          setIsServicesDropdownOpen(false);
+        }
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsServicesDropdownOpen(false);
+        // Also close mobile menu on Escape if it's open
+        if (isMobileMenuOpen) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    // Only add listeners if dropdown is open or mobile menu is open
+    if (isServicesDropdownOpen || isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKey);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
     };
-  }, []);
+  }, [isServicesDropdownOpen, isMobileMenuOpen]);
 
+  // fetch services
   const [servicesData, setServicesData] = useState<Service[]>();
   useEffect(() => {
     const fetchServicesData = async () => {
@@ -81,6 +138,8 @@ const Header = () => {
             width={120}
             height={54}
             className="sm:w-[150px] sm:h-[68px]"
+            priority
+            sizes="(max-width: 640px) 120px, 150px"
           />
         </Link>
 
@@ -91,16 +150,22 @@ const Header = () => {
         >
           <Link
             href="/"
-            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/") ? "font-bold" : ""
+            }`}
           >
             Home
           </Link>
           <Link
             href="/about-us"
-            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/about-us") ? "font-bold" : ""
+            }`}
           >
             About Us
           </Link>
+
+          {/* Desktop services wrapper (has ref) */}
           <div
             className="relative flex gap-2 items-center"
             ref={servicesDropdownRef}
@@ -108,10 +173,13 @@ const Header = () => {
           >
             <Link
               href="/services"
-              className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+              className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+                isActive("/services") ? "font-bold" : ""
+              }`}
             >
               Services
             </Link>
+
             {servicesData?.some(
               (service) =>
                 service.slug === "mcm-nursing-care-agency" ||
@@ -124,6 +192,7 @@ const Header = () => {
                 className="text-white hover:text-gray-200 transition-colors flex items-center gap-1 cursor-pointer flex-shrink-0"
                 aria-haspopup="true"
                 aria-expanded={isServicesDropdownOpen}
+                aria-controls="services-dropdown-desktop"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -131,8 +200,8 @@ const Header = () => {
                   height="8"
                   viewBox="0 0 12 8"
                   fill="none"
-                  className={`transition-transform flex-shrink-0 ${
-                    isServicesDropdownOpen ? "rotate-180" : ""
+                  className={`transform transition-transform duration-200 ${
+                    isServicesDropdownOpen ? "rotate-180" : "rotate-0"
                   }`}
                 >
                   <path
@@ -145,10 +214,14 @@ const Header = () => {
                 </svg>
               </button>
             )}
+
+            {/* Desktop dropdown */}
             {isServicesDropdownOpen && (
               <div
+                id="services-dropdown-desktop"
                 className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] backdrop-blur-xl"
                 style={{ position: "absolute", overflow: "visible" }}
+                role="menu"
               >
                 {servicesData?.map((service) => {
                   if (service.slug === "mcm-nursing-care-agency") {
@@ -156,8 +229,11 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mcm-nursing-care-agency"
-                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mcm-nursing-care-agency") ? "font-bold" : ""
+                        }`}
                         onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
                       >
                         MCM Nursing Care Agency
                       </Link>
@@ -168,8 +244,11 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mass-training-academy"
-                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mass-training-academy") ? "font-bold" : ""
+                        }`}
                         onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
                       >
                         Mass Training Academy
                       </Link>
@@ -180,8 +259,11 @@ const Header = () => {
                       <Link
                         key={service.id}
                         href="/services/mass-home-care"
-                        className="block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mass-home-care") ? "font-bold" : ""
+                        }`}
                         onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
                       >
                         Mass Home Care
                       </Link>
@@ -195,19 +277,25 @@ const Header = () => {
 
           <Link
             href="/career-opportunities"
-            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/career-opportunities") ? "font-bold" : ""
+            }`}
           >
             Careers
           </Link>
           <Link
             href="/news-and-insights"
-            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/news-and-insights") ? "font-bold" : ""
+            }`}
           >
             News & Insights
           </Link>
           <Link
             href="/testimonials"
-            className="text-white hover:text-gray-200 transition-colors whitespace-nowrap"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/testimonials") ? "font-bold" : ""
+            }`}
           >
             Testimonials
           </Link>
@@ -276,21 +364,13 @@ const Header = () => {
                   d="M20.8548 9.24602H13.8028C13.233 9.24602 12.7711 9.70793 12.7711 10.2777V10.9991C12.7711 11.5689 13.233 12.0308 13.8028 12.0308C14.2647 12.0308 14.6553 11.7275 14.7868 11.3094H16.2971V18.8766H16.2348C15.6651 18.8766 15.2031 19.3385 15.2031 19.9083C15.2031 20.478 15.6651 20.94 16.2348 20.94H18.4224C18.9921 20.94 19.454 20.478 19.454 19.9083C19.454 19.3385 18.9921 18.8766 18.4224 18.8766H18.3601V11.3094H19.8704C20.0019 11.7275 20.3929 12.0308 20.8544 12.0308C21.4242 12.0308 21.8861 11.5689 21.8861 10.9991V10.2777C21.8861 9.70793 21.4242 9.24602 20.8544 9.24602H20.8548Z"
                   fill="white"
                 />
-                <path
-                  d="M12.7716 10.2777V10.9991C12.7716 11.5689 13.2335 12.0308 13.8033 12.0308C14.2652 12.0308 14.6558 11.7275 14.7873 11.3094H15.4494C15.822 10.6575 16.1352 9.96746 16.3814 9.24644H13.8033C13.2335 9.24644 12.7716 9.70836 12.7716 10.2781V10.2777Z"
-                  fill="white"
-                />
-                <path
-                  d="M0.917788 4.87695C1.48755 4.87695 1.94947 4.41504 1.94947 3.84527V3.3507H7.34248V17.1188C8.05447 16.9813 8.74455 16.7814 9.40541 16.5236V3.3507H14.7984V3.84527C14.7984 4.41504 15.2603 4.87695 15.8301 4.87695C16.3999 4.87695 16.8618 4.41504 16.8618 3.84527V3.43922C16.7483 2.74656 16.5752 2.07453 16.3483 1.42742C16.1962 1.33891 16.0192 1.28777 15.8305 1.28777H0.917788C0.348022 1.28777 -0.113892 1.74969 -0.113892 2.31945V3.84527C-0.113892 4.41504 0.348022 4.87695 0.917788 4.87695Z"
-                  fill="white"
-                />
               </g>
               <defs>
                 <clipPath id="clip0_726_21864">
                   <rect width="22" height="22" fill="white" />
                 </clipPath>
               </defs>
-            </svg>{" "}
+            </svg>
           </button>
 
           <button
@@ -304,9 +384,7 @@ const Header = () => {
               borderRadius: "300px",
               backdropFilter: "blur(17.5px)",
             }}
-            aria-label={
-              isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"
-            }
+            aria-label={isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -355,19 +433,9 @@ const Header = () => {
               viewBox="0 0 24 24"
             >
               {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
@@ -376,53 +444,178 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-[rgba(0,0,0,0.95)] backdrop-blur-lg border-t border-white/20">
+        <div 
+          ref={mobileMenuRef}
+          className="lg:hidden absolute top-full left-0 right-0 bg-[rgba(0,0,0,0.95)] backdrop-blur-lg border-t border-white/20"
+        >
           <div className="px-4 py-6 space-y-4">
             <Link
               href="/"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/") ? "font-bold" : ""
+              }`}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsServicesDropdownOpen(false);
+              }}
             >
               Home
             </Link>
             <Link
               href="/about-us"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/about-us") ? "font-bold" : ""
+              }`}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsServicesDropdownOpen(false);
+              }}
             >
               About Us
             </Link>
-            <Link
-              href="/services"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Services
-            </Link>
+
+            {/* Mobile services wrapper (has mobile ref) */}
+            <div className="relative flex items-center gap-2" ref={mobileServicesDropdownRef}>
+              <Link
+                href="/services"
+                className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                  isActive("/services") ? "font-bold" : ""
+                }`}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsServicesDropdownOpen(false);
+                }}
+              >
+                Services
+              </Link>
+
+              {servicesData?.some(
+                (service) =>
+                  service.slug === "mcm-nursing-care-agency" ||
+                  service.slug === "mass-training-academy" ||
+                  service.slug === "mass-home-care"
+              ) && (
+                <button
+                  type="button"
+                  onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
+                  className="text-white hover:text-gray-200 transition-colors flex items-center gap-1 cursor-pointer flex-shrink-0"
+                  aria-haspopup="true"
+                  aria-expanded={isServicesDropdownOpen}
+                  aria-controls="services-dropdown-mobile"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="8"
+                    viewBox="0 0 12 8"
+                    fill="none"
+                    className={`transform transition-transform duration-200 ${isServicesDropdownOpen ? "rotate-180" : "rotate-0"}`}
+                  >
+                    <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Mobile dropdown */}
+              {isServicesDropdownOpen && (
+                <div
+                  id="services-dropdown-mobile"
+                  className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] backdrop-blur-xl"
+                  role="menu"
+                >
+                  {servicesData?.map((service) => {
+                    if (service.slug === "mcm-nursing-care-agency") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mcm-nursing-care-agency"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mcm-nursing-care-agency") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          MCM Nursing Care Agency
+                        </Link>
+                      );
+                    }
+                    if (service.slug === "mass-training-academy") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mass-training-academy"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mass-training-academy") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          Mass Training Academy
+                        </Link>
+                      );
+                    }
+                    if (service.slug === "mass-home-care") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mass-home-care"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mass-home-care") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          Mass Home Care
+                        </Link>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              )}
+            </div>
+
             <Link
               href="/career-opportunities"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/career-opportunities") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Careers
             </Link>
             <Link
               href="/news-and-insights"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/news-and-insights") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               News & Insights
             </Link>
             <Link
               href="/testimonials"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/testimonials") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Testimonials
             </Link>
             <Link
               href="/contact-us"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/contact-us") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact

@@ -41,6 +41,8 @@ const ServicesSection = ({
                     alt={service.image_alt_text_value}
                     fill
                     className="w-full h-full object-cover"
+                    loading={index < 3 ? "eager" : "lazy"}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   {/* Gradient Overlay */}
                   {/* <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div> */}

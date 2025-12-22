@@ -36,7 +36,7 @@ export default function Footer() {
       style={{ background: "#012367" }}
       className="text-white px-4 sm:px-6 md:px-12 lg:px-20"
     >
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col min-[1176px]:flex-row">
         <div className="py-8 sm:py-10 md:py-12 flex-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 pb-2 pt-6">
             {/* Quick Links */}
@@ -193,6 +193,8 @@ export default function Footer() {
                       alt={social.name}
                       width={20}
                       height={20}
+                      loading="lazy"
+                      sizes="20px"
                     />
                   </Link>
                 ))}
@@ -208,6 +210,8 @@ export default function Footer() {
                     }
                     fill
                     className="object-contain"
+                    loading="lazy"
+                    sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, 112px"
                   />
                 </div>
               )}
@@ -233,6 +237,8 @@ export default function Footer() {
                         accreditation.icon_alt_text_value ||
                         "Accreditation logo"
                       }
+                      loading="lazy"
+                      sizes="(max-width: 640px) 32px, (max-width: 768px) 40px, 48px"
                       fill
                       className="object-contain"
                     />
@@ -248,7 +254,7 @@ export default function Footer() {
           </div>
         </div>
         <div
-          className="flex justify-end w-full lg:w-1/4 -me-10"
+          className="flex justify-end w-full min-[1175px]:-mx-4 max-[1175px]:px-4 min-[1176px]:w-1/4 min-[1176px]:-me-10"
           style={{
             background: "linear-gradient(180deg, #083082 0%, #012367 100%)",
             height: "100%",
