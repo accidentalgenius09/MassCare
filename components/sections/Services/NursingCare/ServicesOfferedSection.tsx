@@ -141,6 +141,8 @@ function ServicesOfferedSection({
                   width={800}
                   height={430}
                   className="rounded-2xl w-full h-[430px] object-center lg:object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 800px"
                 />
                 <h6 className="text-2xl font-medium text-black mt-6">
                   <TTSWrapper text={item.title}>{item.title}</TTSWrapper>

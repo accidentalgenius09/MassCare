@@ -62,6 +62,8 @@ const CareNursingAgency: React.FC<CareNursingAgencyProps> = ({
                   alt={MCMData?.image_alt_text_value || "Care Nursing Agency"}
                   width={800}
                   height={500}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 800px"
                   className="object-cover"
                 />
               )}

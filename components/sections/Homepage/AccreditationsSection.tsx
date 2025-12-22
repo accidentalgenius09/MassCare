@@ -66,6 +66,8 @@ const AccreditationsSection = ({ homeData }: { homeData: HomeData }) => {
                         width={100}
                         height={100}
                         className="object-contain w-[70%] h-[70%] sm:w-[75%] sm:h-[75%] md:w-[80%] md:h-[80%]"
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100px, (max-width: 1024px) 100px, 100px"
                       />
                     </div>
                   )}

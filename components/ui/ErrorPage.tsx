@@ -21,6 +21,8 @@ const Page: React.FC = () => {
                 width={450}
                 height={300}
                 className="object-contain"
+                loading="lazy"
+                sizes="(max-width: 640px) 100vw, 450px"
               />
             </div>
           </div>

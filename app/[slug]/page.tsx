@@ -61,6 +61,8 @@ const Page: React.FC = () => {
                     : 300
                 }
                 className="object-contain"
+                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 300px, 450px"
               />
             </div>
           </div>

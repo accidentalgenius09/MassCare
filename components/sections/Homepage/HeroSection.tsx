@@ -64,6 +64,7 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     homeData?.sliders?.filter((slider) => slider.service !== null) || [];
 
   const hasMoreThanThreeServices = serviceSliders.length > 3;
+  const hasThreeServices = serviceSliders.length === 3;
 
   // Drag scroll handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -124,25 +125,29 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         {/* Desktop Background Image */}
-        <div
-          className="hidden md:block w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
-          style={{
-            backgroundImage: `url('${desktopImage}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            willChange: "background-image",
-          }}
-        />
+        <div className="hidden md:block w-full h-[98%] relative">
+          <Image
+            src={desktopImage}
+            alt="Hero Banner"
+            fill
+            priority
+            className="object-cover transition-opacity duration-500 ease-in-out"
+            sizes="100vw"
+            quality={85}
+          />
+        </div>
         {/* Mobile Background Image */}
-        <div
-          className="block md:hidden w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
-          style={{
-            backgroundImage: `url('${mobileImage}')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            willChange: "background-image",
-          }}
-        />
+        <div className="block md:hidden w-full h-[98%] relative">
+          <Image
+            src={mobileImage}
+            alt="Hero Banner"
+            fill
+            priority
+            className="object-cover transition-opacity duration-500 ease-in-out"
+            sizes="100vw"
+            quality={85}
+          />
+        </div>
         <div className="absolute inset-0" />
       </div>
 
@@ -162,9 +167,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
               <Image
                 width={1000}
                 height={1000}
+                loading="lazy"
                 src={"/bigLogo.png"}
                 alt={"Hero Banner"}
                 className="w-auto h-auto max-w-[700px] sm:max-w-[700px] md:max-w-[700px] object-contain"
+                priority
+                sizes="(max-width: 768px) 100vw, 700px"
               />
             </div>
           )}
@@ -215,7 +223,7 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
       </div>
 
       {/* Service Cards - Bottom of Background */}
-      <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
+      <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-1 px-1">
         <div className="max-w-full mx-auto">
           <div
             ref={scrollContainerRef}
@@ -228,6 +236,8 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             onTouchEnd={handleMouseUp}
             className={`flex items-center ${
               hasMoreThanThreeServices ? "justify-start" : "justify-center"
+            } ${
+              hasThreeServices ? "lg:justify-center justify-start" : ""
             } gap-2 sm:gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-2 sm:px-4 ${
               hasMoreThanThreeServices
                 ? "cursor-grab active:cursor-grabbing"

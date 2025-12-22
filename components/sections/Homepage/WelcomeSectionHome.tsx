@@ -80,6 +80,8 @@ const WelcomeSectionHome = ({
                   width={100}
                   height={80}
                   className="sm:w-[130px] sm:h-[100px]"
+                  loading="lazy"
+                  sizes="(max-width: 640px) 100px, 130px"
                 />
               </div>
             </div>

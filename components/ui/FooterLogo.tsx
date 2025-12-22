@@ -38,7 +38,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
         {/* Logo Section */}
         <div className="mb-6">
           <div
-            className="relative w-64 h-24 cursor-pointer"
+            className="relative w-48 h-24 cursor-pointer"
             onClick={() => router.push("/")}
           >
             <Image
@@ -46,6 +46,8 @@ const LocationCard: React.FC<LocationCardProps> = ({
               alt={`${companyName} logo`}
               fill
               className="object-contain"
+              loading="lazy"
+              sizes="256px"
             />
           </div>
         </div>

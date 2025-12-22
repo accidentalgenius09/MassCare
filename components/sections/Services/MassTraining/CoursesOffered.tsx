@@ -21,7 +21,7 @@ const CoursesOffered: React.FC<{
               </TTSWrapper>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {MCMData.offered_courses.map((course) => (
+              {MCMData.offered_courses.map((course, index) => (
                 <div key={course.id} className="rounded-lg overflow-hidden">
                   <div className="relative h-64 sm:h-80 lg:h-96">
                     <Image
@@ -29,6 +29,8 @@ const CoursesOffered: React.FC<{
                       fill
                       alt={course.image_alt_text_value}
                       className="w-full h-full object-cover rounded-2xl"
+                      loading={index < 4 ? "eager" : "lazy"}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
                   <div className="py-4 w-full sm:w-2/3">
@@ -42,10 +44,9 @@ const CoursesOffered: React.FC<{
               ))}
             </div>
           </section>
-
-          {/* Who Can Apply Section */}
         </div>
       </div>
+      {/* Who Can Apply Section */}
       <section className="relative bg-[#E8EFFF]">
         <div className="hidden lg:block absolute top-5 right-5">
           {" "}
@@ -109,6 +110,8 @@ const CoursesOffered: React.FC<{
                       ?.apply_section_img_one_alt_text_value
                   }
                   className="object-cover"
+                  loading="lazy"
+                  sizes="350px"
                 />
               </div>
               <div className="lg:-ms-32 lg:absolute lg:mt-20">
@@ -118,6 +121,8 @@ const CoursesOffered: React.FC<{
                   height={300}
                   alt="Care is Home"
                   className="object-cover"
+                  loading="lazy"
+                  sizes="300px"
                 />
               </div>
               <div className="overflow-hidden lg:ms-72 lg:-mt-65">
@@ -130,6 +135,8 @@ const CoursesOffered: React.FC<{
                       ?.apply_section_img_two_alt_text_value
                   }
                   className="object-cover"
+                  loading="lazy"
+                  sizes="400px"
                 />
               </div>
             </div>
@@ -146,6 +153,8 @@ const CoursesOffered: React.FC<{
                       ?.apply_section_img_one_alt_text_value
                   }
                   className="w-full h-auto object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 640px) 100vw, 50vw"
                 />
               </div>
               <div className="rounded-lg overflow-hidden">
@@ -158,6 +167,8 @@ const CoursesOffered: React.FC<{
                       ?.apply_section_img_two_alt_text_value
                   }
                   className="w-full h-auto object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 640px) 100vw, 50vw"
                 />
               </div>
               <div className="col-span-1 sm:col-span-2 flex justify-center">
@@ -167,6 +178,8 @@ const CoursesOffered: React.FC<{
                   height={250}
                   alt="Care is Home"
                   className="object-cover"
+                  loading="lazy"
+                  sizes="250px"
                 />
               </div>
             </div>

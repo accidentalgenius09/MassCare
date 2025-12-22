@@ -3,13 +3,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import PageBanner from "@/components/sections/Common/PageBanner";
 import TTSWrapper from "@/hooks/TTSWrapper";
-import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import FAQ from "@/components/sections/Common/FAQ";
 import { MetaData, TestimonialCategory } from "@/types/Home.type";
 import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { ContactUsDataType } from "@/types/Contact.type";
 import Image from "next/image";
+import {
+  ClockBlueOutline,
+  ClockWhiteOutline,
+  MailBlueOutline,
+  MailWhiteOutline,
+  MapPinWithBg,
+  MapPinWithBgWhite,
+  PhoneBlueOutline,
+  PhoneWhiteOutline,
+  TopRightArrowWhite,
+  UploadIcon,
+} from "@/components/helpers/svgs";
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -275,6 +286,83 @@ const ContactPage: React.FC = () => {
     };
   }, [isDropdownOpen]);
 
+  const [contactIcons, setContactIcons] = useState<
+    Array<{
+      id: number;
+      icon: React.ReactElement;
+      hoverIcon: React.ReactElement;
+      title: string;
+      content: string;
+    }>
+  >([]);
+
+  useEffect(() => {
+    if (
+      !contactUsData?.contact_infos ||
+      !Array.isArray(contactUsData.contact_infos) ||
+      contactUsData.contact_infos.length === 0
+    ) {
+      setContactIcons([]);
+      return;
+    }
+
+    // Validate that all icon components are defined
+    const iconComponents = {
+      ClockBlueOutline,
+      ClockWhiteOutline,
+      MailBlueOutline,
+      MailWhiteOutline,
+      MapPinWithBg,
+      MapPinWithBgWhite,
+      PhoneBlueOutline,
+      PhoneWhiteOutline,
+    };
+
+    // Check if any icon component is undefined
+    const undefinedIcons = Object.entries(iconComponents).filter(
+      ([_, component]) => !component
+    );
+    if (undefinedIcons.length > 0) {
+      console.error(
+        "Undefined icon components:",
+        undefinedIcons.map(([name]) => name)
+      );
+      setContactIcons([]);
+      return;
+    }
+
+    const respData = contactUsData.contact_infos
+      .map((item) => {
+        let icon: React.ReactElement;
+        let hoverIcon: React.ReactElement;
+        if (item.title === "Open Hours") {
+          icon = <ClockWhiteOutline />;
+          hoverIcon = <ClockBlueOutline />;
+        } else if (item.title === "Mail To Us") {
+          icon = <MailWhiteOutline />;
+          hoverIcon = <MailBlueOutline />;
+        } else if (item.title === "Location") {
+          icon = <MapPinWithBg />;
+          hoverIcon = <MapPinWithBgWhite />;
+        } else if (item.title === "Get Consultation") {
+          icon = <PhoneWhiteOutline />;
+          hoverIcon = <PhoneBlueOutline />;
+        } else {
+          icon = <ClockWhiteOutline />;
+          hoverIcon = <ClockBlueOutline />; // Default icon
+        }
+        return {
+          id: item.id,
+          icon: icon,
+          hoverIcon: hoverIcon,
+          title: item.title,
+          content: item.content,
+        };
+      })
+      .filter((item) => item.icon && item.hoverIcon); // Filter out any items with undefined icons
+    setContactIcons(respData);
+  }, [contactUsData?.contact_infos]);
+
   return (
     <>
       {isLoading && (
@@ -332,43 +420,46 @@ const ContactPage: React.FC = () => {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {contactUsData?.contact_infos.map((item) => (
-                  <div
-                    key={item.id}
-                    className="group rounded-2xl p-6 cursor-pointer
+                {contactIcons.map((item) => {
+                  if (!item.icon || !item.hoverIcon) return null;
+                  return (
+                    <div
+                      key={item.id}
+                      className="group rounded-2xl p-6 cursor-pointer
                  bg-blue-50 hover:bg-[#0A5BE0]
                  transition-colors duration-300"
-                  >
-                    <div
-                      className="w-12 h-12 flex items-center justify-center mb-4 
-                      bg-[#0A5BE0] group-hover:bg-white 
-                      rounded-full transition-colors duration-300"
                     >
-                      <Image
-                        src={item.icon_value}
-                        alt={item.icon_alt_text_value}
-                        width={20}
-                        height={20}
-                      />
-                    </div>
-                    <h3
-                      className="font-bold text-base sm:text-lg mb-2 
+                      <div
+                        className="w-12 h-12 flex items-center justify-center mb-4 
+                      bg-[#0A5BE0] group-hover:bg-white 
+                      rounded-full transition-colors duration-300 relative"
+                      >
+                        <span className="block group-hover:hidden">
+                          {item.icon}
+                        </span>
+                        <span className="hidden group-hover:block">
+                          {item.hoverIcon}
+                        </span>
+                      </div>
+                      <h3
+                        className="font-bold text-base sm:text-lg mb-2 
                      text-black group-hover:text-white 
                      transition-colors duration-300"
-                    >
-                      {item.title}
-                    </h3>
+                      >
+                        {item.title}
+                      </h3>
 
-                    {/* Content */}
-                    <TTSWrapper text={item.content}>
-                      <div
-                        className="text-sm text-gray-700 group-hover:text-white 
+                      {/* Content */}
+                      <TTSWrapper text={item.content}>
+                        <div
+                          className="text-sm text-gray-700 group-hover:text-white 
                      transition-colors duration-300"
-                        dangerouslySetInnerHTML={{ __html: item.content }}
-                      />
-                    </TTSWrapper>
-                  </div>
-                ))}
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        />
+                      </TTSWrapper>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -410,6 +501,8 @@ const ContactPage: React.FC = () => {
                               alt={item.icon_alt_text_value}
                               width={29}
                               height={29}
+                              loading="lazy"
+                              sizes="29px"
                             />
                           </div>
                           <span className="font-semibold text-base text-black flex-1 min-w-0 break-words">

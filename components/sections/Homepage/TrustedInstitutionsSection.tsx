@@ -38,6 +38,31 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
     return () => window.removeEventListener("resize", updateItemsPerView);
   }, []);
 
+  // Hide scrollbars
+  useEffect(() => {
+    const styleId = 'trusted-institutions-scrollbar-hide';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .trusted-institutions-carousel::-webkit-scrollbar {
+          display: none;
+        }
+        .trusted-institutions-carousel {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    return () => {
+      const style = document.getElementById(styleId);
+      if (style) {
+        document.head.removeChild(style);
+      }
+    };
+  }, []);
+
   // Auto-scroll every 5 seconds
   useEffect(() => {
     if (isDragging) return;
@@ -100,7 +125,7 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 md:px-16 flex flex-col lg:flex-row items-center lg:items-start">
+      <div className="px-4 sm:px-6 md:px-16 flex flex-col lg:flex-row items-center lg:items-start">
         <div className="text-center mb-6 lg:mb-0 lg:mr-4 lg:text-left flex-shrink-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center lg:whitespace-nowrap">
             <TTSWrapper
@@ -113,10 +138,15 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative w-full lg:max-w-6xl mx-auto">
+        <div className="relative w-full lg:max-w-6xl mx-auto hidden-scrollbar">
           <div
             ref={carouselRef}
-            className="overflow-hidden cursor-grab active:cursor-grabbing"
+            className="cursor-grab active:cursor-grabbing trusted-institutions-carousel"
+            style={{ 
+              touchAction: 'pan-x',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -160,6 +190,8 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
                           height={100}
                           className="object-contain max-h-[60px] sm:max-h-[70px] md:max-h-[80px] w-auto pointer-events-none select-none"
                           draggable={false}
+                          loading="lazy"
+                          sizes="(max-width: 640px) 60px, (max-width: 1024px) 70px, 80px"
                         />
                       </div>
                     ))}

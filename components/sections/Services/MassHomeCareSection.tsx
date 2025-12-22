@@ -112,6 +112,8 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                           alt={service.imageAlt}
                           fill
                           className="object-cover"
+                          loading="lazy"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                       </div>
                     </div>
@@ -179,6 +181,8 @@ const MassHomeCareSection: React.FC<MassHomeCareSectionProps> = ({
                           alt={service.imageAlt}
                           fill
                           className="object-cover"
+                          loading="lazy"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                       </div>
                     </div>

@@ -350,6 +350,8 @@ export default function QuickConnect({
                     style={{
                       borderRadius: "20px",
                     }}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <button
                     style={{

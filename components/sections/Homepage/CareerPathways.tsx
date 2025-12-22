@@ -110,6 +110,8 @@ const CareerPathwaysSection = ({ homeData }: { homeData: HomeData }) => {
                 alt={homeData?.home_cms?.career_pathway_image_alt_text_value}
                 fill
                 className="w-full h-full object-cover"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
               {/* Gradient Overlay */}
               <div

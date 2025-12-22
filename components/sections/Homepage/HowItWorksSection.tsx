@@ -159,6 +159,8 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                                 alt={step.image_alt_text_value}
                                 width={120}
                                 height={120}
+                                loading="lazy"
+                                sizes="120px"
                               />
                             </div>
                             <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">

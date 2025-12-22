@@ -479,6 +479,8 @@ const TestimonialsSection = ({
                                       width={48}
                                       height={48}
                                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                                      loading="lazy"
+                                      sizes="(max-width: 640px) 40px, 48px"
                                     />
                                   )}
                                   <div className="flex-1 min-w-0">

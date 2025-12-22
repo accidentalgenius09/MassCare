@@ -1,6 +1,7 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { TestimonialsPageData } from "@/types/Testimonials.type";
 import React from "react";
+import Link from "next/link";
 
 function TestimonialsBanner({
   testimonialsData,
@@ -19,7 +20,13 @@ function TestimonialsBanner({
               style={{ border: "1.535px solid rgba(255, 255, 255, 0.50)" }}
             >
               <TTSWrapper text={"Home / Testimonials"}>
-                Home / Testimonials
+                <span className="inline-flex items-center gap-1">
+                  <Link href="/" className="cursor-pointer">
+                    Home
+                  </Link>
+                  <span> / </span>
+                  <span>Testimonials</span>
+                </span>
               </TTSWrapper>
             </div>
             <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mt-3 sm:mt-4">
@@ -44,7 +51,10 @@ function TestimonialsBanner({
                 playsInline
                 className="w-full h-full rounded-2xl sm:rounded-3xl lg:rounded-[40px] "
               >
-                <source src={testimonialsData.testimonial_cms.section1_video_value} type="video/mp4" />
+                <source
+                  src={testimonialsData.testimonial_cms.section1_video_value}
+                  type="video/mp4"
+                />
                 Your browser does not support the video tag.
               </video>
             </div>
