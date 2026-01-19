@@ -27,7 +27,7 @@ const CoursesOffered: React.FC<{
                     <Image
                       src={course.image_value}
                       fill
-                      alt={course.image_alt_text_value}
+                      alt={course.image_alt_text_value || course.title || "Course image"}
                       className="w-full h-full object-cover rounded-2xl"
                       loading={index < 4 ? "eager" : "lazy"}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -48,7 +48,7 @@ const CoursesOffered: React.FC<{
       </div>
       {/* Who Can Apply Section */}
       <section className="relative bg-[#E8EFFF]">
-        <div className="hidden lg:block absolute top-5 right-5">
+        <div className="hidden lg:block absolute top-5 right-5 min-[1024px]:max-[1550px]:z-0 min-[1024px]:max-[1550px]:pointer-events-none">
           {" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,10 +63,10 @@ const CoursesOffered: React.FC<{
             />
           </svg>
         </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-32 min-[1024px]:max-[1550px]:relative min-[1024px]:max-[1550px]:z-10">
           <div className="grid lg:grid-cols-2 items-start gap-8 lg:gap-0">
             {/* Left Column - Requirements */}
-            <div className="bg-[#F5F8FF] p-6 sm:p-8 max-w-lg mx-auto lg:mx-0">
+            <div className="bg-[#F5F8FF] p-6 sm:p-8 max-w-lg mx-auto lg:mx-0 min-[1024px]:max-[1550px]:relative min-[1024px]:max-[1550px]:z-10">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
                 <TTSWrapper
                   text={MCMData?.service_detail_cms?.who_can_apply_title}
@@ -98,46 +98,48 @@ const CoursesOffered: React.FC<{
             </div>
 
             {/* Right Column - Images and Tagline */}
-            <div className="hidden lg:block relative h-full">
+            <div className="hidden lg:block relative h-full min-[1024px]:max-[1550px]:z-0 min-[1024px]:max-[1550px]:pointer-events-none">
               {/* Desktop Images */}
-              <div className="overflow-hidden lg:-ms-30">
-                <Image
-                  src={MCMData?.service_detail_cms?.apply_section_img_one_value}
-                  width={350}
-                  height={400}
-                  alt={
-                    MCMData?.service_detail_cms
-                      ?.apply_section_img_one_alt_text_value
-                  }
-                  className="object-cover"
-                  loading="lazy"
-                  sizes="350px"
-                />
-              </div>
-              <div className="lg:-ms-32 lg:absolute lg:mt-20">
-                <Image
-                  src="/services/MassHomeCare-Typo.png"
-                  width={300}
-                  height={300}
-                  alt="Care is Home"
-                  className="object-cover"
-                  loading="lazy"
-                  sizes="300px"
-                />
-              </div>
-              <div className="overflow-hidden lg:ms-72 lg:-mt-65">
-                <Image
-                  src={MCMData?.service_detail_cms?.apply_section_img_two_value}
-                  width={400}
-                  height={500}
-                  alt={
-                    MCMData?.service_detail_cms
-                      ?.apply_section_img_two_alt_text_value
-                  }
-                  className="object-cover"
-                  loading="lazy"
-                  sizes="400px"
-                />
+              <div className="w-fit origin-top-left max-[1175px]:scale-[0.84] min-[1176px]:max-[1279px]:scale-[0.88] min-[1280px]:max-[1439px]:scale-[0.92] min-[1440px]:max-[1550px]:scale-[0.96] min-[1551px]:scale-100">
+                <div className="overflow-hidden lg:-ms-30">
+                  <Image
+                    src={MCMData?.service_detail_cms?.apply_section_img_one_value}
+                    width={350}
+                    height={400}
+                    alt={
+                      MCMData?.service_detail_cms
+                        ?.apply_section_img_one_alt_text_value
+                    }
+                    className="object-cover"
+                    loading="lazy"
+                    sizes="350px"
+                  />
+                </div>
+                <div className="lg:-ms-32 lg:absolute lg:mt-20">
+                  <Image
+                    src="/services/MassHomeCare-Typo.png"
+                    width={300}
+                    height={300}
+                    alt="Care is Home"
+                    className="object-cover"
+                    loading="lazy"
+                    sizes="300px"
+                  />
+                </div>
+                <div className="overflow-hidden lg:ms-72 lg:-mt-65">
+                  <Image
+                    src={MCMData?.service_detail_cms?.apply_section_img_two_value}
+                    width={400}
+                    height={500}
+                    alt={
+                      MCMData?.service_detail_cms
+                        ?.apply_section_img_two_alt_text_value
+                    }
+                    className="object-cover"
+                    loading="lazy"
+                    sizes="400px"
+                  />
+                </div>
               </div>
             </div>
 

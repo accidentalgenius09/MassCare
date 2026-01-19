@@ -137,7 +137,7 @@ function ServicesOfferedSection({
               >
                 <Image
                   src={item.image_value}
-                  alt={item.image_alt_text_value}
+                  alt={item.image_alt_text_value || item.title || "Service offered image"}
                   width={800}
                   height={430}
                   className="rounded-2xl w-full h-[430px] object-center lg:object-cover"

@@ -713,7 +713,7 @@ function CareerOpportunitiesPage() {
           description={careers?.banner?.banner_description}
         />
 
-        <div className="min-h-screen bg-white pt-8 pb-2 sm:pt-12 sm:pb-6 md:pt-16 md:pb-10 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-white pt-8 pb-2 sm:pt-12 sm:pb-6 md:pt-16 md:pb-10 px-4 sm:px-6 lg:px-4">
           <div className="max-w-full px-4 sm:px-8 lg:px-20 mx-auto">
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-8 sm:mb-12 gap-6 lg:gap-0">
@@ -870,21 +870,23 @@ function CareerOpportunitiesPage() {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex flex-col lg:flex-row gap-3">
                       <button
                         onClick={() => handleViewDetails(job)}
-                        className="flex gap-2 cursor-pointer items-center justify-center px-4 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-700 hover:shadow-md transition-all duration-300 w-full sm:w-auto"
+                        className="flex cursor-pointer items-center justify-center px-4 sm:px-6 md:px-8 py-3 border border-[#0A5BE0] text-[#0A5BE0] rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-700 hover:shadow-md transition-all duration-300 w-full lg:w-auto whitespace-nowrap"
                       >
-                        <TTSWrapper text="View Details">
-                          View Details
-                        </TTSWrapper>
-                        <ArrowUpRight className="w-4 h-4" />
+                        <span className="relative z-10 flex items-center justify-center gap-2 px-20">
+                          <TTSWrapper text="View Details">
+                            View Details
+                          </TTSWrapper>
+                          <ArrowUpRight className="w-4 h-4" />
+                        </span>
                       </button>
                       <button
                         onClick={() => handleApplyNow(job)}
-                        className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-4 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+                        className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-4 sm:px-6 md:px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center justify-center gap-2 cursor-pointer w-full lg:w-auto whitespace-nowrap"
                       >
-                        <span className="relative z-10 flex items-center gap-2">
+                        <span className="relative z-10 flex items-center justify-center gap-2 px-20">
                           <TTSWrapper text="Apply Now">Apply Now</TTSWrapper>
                           <ArrowUpRight className="w-4 h-4" />
                         </span>

@@ -5,15 +5,17 @@ import { AccessibilityProvider } from "@/components/providers/AccessibilityProvi
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import CustomToaster from "@/components/ui/CustomToaster";
-import { SeasonalBackground } from "nextjs-seasonal-plugin";
+import DeferredSeasonalBackground from "@/components/ui/DeferredSeasonalBackground";
+import ReCaptchaProvider from "@/components/providers/ReCaptchaProvider";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://masscareagency.co.uk");
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "https://masscareagency.co.uk")
-  ),
+  metadataBase: new URL(siteUrl),
   title: "Mass Care - Professional Nursing, Home Care & Training Services",
   description:
     "Mass Care provides exceptional nursing care, home care services, and professional training. Celebrating 8 years of meaningful care with CQC recognition and national coverage.",
@@ -37,7 +39,7 @@ export const metadata: Metadata = {
       "Mass Care provides exceptional nursing care, home care services, and professional training. Celebrating 8 years of meaningful care with CQC recognition and national coverage.",
     images: [
       {
-        url: "/logo-mass-care.png",
+        url: `${siteUrl}/logo-mass-care.png`,
         width: 1200,
         height: 630,
         alt: "Mass Care Logo",
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
     title: "Mass Care - Professional Nursing, Home Care & Training Services",
     description:
       "Mass Care provides exceptional nursing care, home care services, and professional training. Celebrating 8 years of meaningful care with CQC recognition and national coverage.",
-    images: ["/logo-mass-care.png"],
+    images: [`${siteUrl}/logo-mass-care.png`],
   },
   icons: {
     icon: "/logo-mass-care.png",
@@ -81,7 +83,7 @@ export default function RootLayout({
           rel="preconnect"
           href="https://www.mass-care-agency.dev5.intersmarthosting.in"
         />
-        <link
+         <link
           rel="preload"
           href="/hero-banner.png"
           as="image"
@@ -93,17 +95,19 @@ export default function RootLayout({
         className="antialiased overflow-x-hidden"
         style={{ fontFamily: "Helvetica" }}
       >
-        <AccessibilityProvider>
-          <TTSProvider>
-            <Header />
-            <CustomToaster />
-            <div className="bg-white text-black">
-              <SeasonalBackground zIndex={2} />
-              {children}
-            </div>
-            <Footer />
-          </TTSProvider>
-        </AccessibilityProvider>
+        <ReCaptchaProvider>
+          <AccessibilityProvider>
+            <TTSProvider>
+              <Header />
+              <CustomToaster />
+              <div className="bg-white text-black">
+                <DeferredSeasonalBackground zIndex={2} />
+                {children}
+              </div>
+              <Footer />
+            </TTSProvider>
+          </AccessibilityProvider>
+        </ReCaptchaProvider>
       </body>
     </html>
   );

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import restApiWrapper from "@/service/RestApiWrapper";
 import dayjs from "dayjs";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export interface FormData {
   name: string;
@@ -33,8 +34,9 @@ export default function QuickConnect({
   const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
   const areaDropdownRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Check which fields are missing
     const missingFields: string[] = [];
 
@@ -55,25 +57,45 @@ export default function QuickConnect({
       return;
     }
 
-    // All fields are filled and valid, proceed with submission
-    setIsLoading(true);
-    restApiWrapper
-      .post("/contact-enquiry", formData)
-      .then((res) => {
-        navigate.push("/thankyou-enquiry");
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setFormData({
-          name: "",
-          phone_number: "",
-          purpose_of_enquiry_id: 0,
-          message: "",
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      // All fields are filled and valid, proceed with submission
+      setIsLoading(true);
+      const payload = {
+        ...formData,
+        captcha_key: token,
+      };
+      console.log("Final Payload being sent:", payload);
+      
+      restApiWrapper
+        .post("/contact-enquiry", payload)
+        .then((res) => {
+          navigate.push("/thankyou-enquiry");
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setFormData({
+            name: "",
+            phone_number: "",
+            purpose_of_enquiry_id: 0,
+            message: "",
+          });
         });
-      });
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
+    }
   };
 
   const handleInputChange = (
@@ -302,11 +324,11 @@ export default function QuickConnect({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap gap-6 items-center justify-center">
             {homeData?.blogs?.map((card) => (
               <div
                 key={card.id}
-                className="overflow-hidden"
+                className="overflow-hidden flex-shrink-0 flex-grow-0 basis-full sm:basis-[calc(50%-12px)] lg:basis-[calc(25%-18px)] max-w-full sm:max-w-[calc(50%-12px)] lg:max-w-[calc(25%-18px)]"
                 style={{
                   background: "rgba(232, 239, 255, 1)",
                   borderRadius: "40px 40px 20px 20px",

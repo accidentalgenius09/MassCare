@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CandidateMatchingIcon,
   ComplianceChecksIcon,
@@ -32,6 +32,8 @@ const FlowerDecoration = () => (
 const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(5);
+  const [isPaused, setIsPaused] = useState(false);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Update items per view based on screen size
   useEffect(() => {
@@ -55,6 +57,15 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
     setCurrentIndex(0);
   }, [itemsPerView]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const workStepsLength = homeData?.work_steps?.length || 0;
   const totalSlides =
     itemsPerView > 0 && workStepsLength > 0
@@ -63,15 +74,46 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
 
   const nextSlide = () => {
     if (totalSlides > 0) {
-      setCurrentIndex((prev) => Math.min(prev + 1, totalSlides - 1));
+      setCurrentIndex((prev) => {
+        // Loop back to first slide when reaching the end
+        if (prev >= totalSlides - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
     }
   };
 
   const prevSlide = () => {
     if (totalSlides > 0) {
-      setCurrentIndex((prev) => Math.max(prev - 1, 0));
+      setCurrentIndex((prev) => {
+        // Loop to last slide when at the beginning
+        if (prev <= 0) {
+          return totalSlides - 1;
+        }
+        return prev - 1;
+      });
     }
   };
+
+  // Auto carousel effect - advances every 5 seconds
+  useEffect(() => {
+    if (totalSlides <= 1 || isPaused) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        // Loop back to first slide when reaching the end
+        if (prev >= totalSlides - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(interval);
+  }, [totalSlides, isPaused]);
 
   return (
     <section className="pt-8 pb-16 bg-white overflow-visible">
@@ -96,13 +138,33 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-full mx-auto px-12 md:px-16 lg:px-20">
+        <div 
+          className="relative max-w-full mx-auto px-12 md:px-16 lg:px-20"
+          onMouseEnter={() => {
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
+            }
+            setIsPaused(true);
+          }}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {/* Previous Button */}
           {totalSlides > 1 && (
             <button
-              onClick={prevSlide}
+              onClick={() => {
+                if (resumeTimeoutRef.current) {
+                  clearTimeout(resumeTimeoutRef.current);
+                }
+                setIsPaused(true);
+                prevSlide();
+                // Resume auto-play after 5 seconds of inactivity
+                resumeTimeoutRef.current = setTimeout(() => {
+                  setIsPaused(false);
+                  resumeTimeoutRef.current = null;
+                }, 5000);
+              }}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-              disabled={currentIndex === 0}
               aria-label="Previous slide"
             >
               <svg
@@ -163,8 +225,8 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                                 sizes="120px"
                               />
                             </div>
-                            <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-14 md:right-16">
-                              <h3 className="text-2xl font-semibold text-gray-900">
+                            <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-16 md:right-20 pr-2 sm:pr-3">
+                              <h3 className="text-2xl font-semibold text-gray-900 line-clamp-3 break-words">
                                 <TTSWrapper
                                   text={step.title}
                                 >
@@ -172,7 +234,7 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                                 </TTSWrapper>
                               </h3>
                             </div>
-                            <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4">
+                            <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4 z-10">
                               <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-xl font-medium">
                                 <TTSWrapper
                                   text={step.id.toString()}
@@ -193,9 +255,19 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
           {/* Next Button */}
           {totalSlides > 1 && (
             <button
-              onClick={nextSlide}
+              onClick={() => {
+                if (resumeTimeoutRef.current) {
+                  clearTimeout(resumeTimeoutRef.current);
+                }
+                setIsPaused(true);
+                nextSlide();
+                // Resume auto-play after 5 seconds of inactivity
+                resumeTimeoutRef.current = setTimeout(() => {
+                  setIsPaused(false);
+                  resumeTimeoutRef.current = null;
+                }, 5000);
+              }}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
-              disabled={currentIndex === totalSlides - 1}
               aria-label="Next slide"
             >
               <svg

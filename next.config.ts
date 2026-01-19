@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
       exclude: ['error', 'warn'],
     } : false,
   },
+  experimental: {
+    // Optimize runtime performance
+    optimizePackageImports: ['lucide-react', 'react-icons'],
+  },
+  // External packages for server components
+  serverExternalPackages: [],
   // Webpack configuration for additional minification (fallback for non-Turbopack builds)
   webpack: (config, { dev, isServer }) => {
     // Ensure minification in production builds
@@ -19,18 +25,14 @@ const nextConfig: NextConfig = {
       config.optimization = {
         ...config.optimization,
         minimize: true,
+        minimizer: config.optimization.minimizer || [],
       };
     }
     return config;
   },
+  // Note: SWC minification is enabled by default in Next.js 13+
+  // Turbopack also handles minification automatically in production builds
   images: {
-    domains: [
-      "images.unsplash.com",
-      "masscareagency.co.uk",
-      "mass-care.s3.eu-west-2.amazonaws.com",
-      "www.mass-care-agency.dev5.intersmarthosting.in",
-      "i.pravatar.cc",
-    ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -51,6 +53,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'masscareagency.co.uk',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
       },
     ],
   },

@@ -62,7 +62,7 @@ const ClientStoriesSection = ({
                         story.video_thumbnail_image_value ||
                         ""
                       }
-                      alt={story.image_alt_text_value || ""}
+                      alt={story.image_alt_text_value || "Client story image"}
                       fill
                       className="object-cover object-center items-center group-hover:scale-105 transition-transform duration-300"
                     />

@@ -68,8 +68,8 @@ const BranchLocationsSection: React.FC<BranchLocationsSectionProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="pt-2 flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="pt-2 flex flex-col gap-1 px-3 flex-shrink min-w-0">
                     <p className="text-sm sm:text-base text-black whitespace-nowrap">
                       <TTSWrapper
                         text={location.phone_number_one}
@@ -90,15 +90,17 @@ const BranchLocationsSection: React.FC<BranchLocationsSectionProps> = ({
 
                   <button
                     onClick={() => window.open(location.map_link, "_blank")}
-                    className="group w-40 bg-white text-gray-800 font-medium py-3 px-4 rounded-full 
-                     flex items-center justify-between hover:bg-gray-100 hover:shadow-lg transition-all duration-300"
+                    className="group bg-white text-gray-800 font-medium py-3 px-4 rounded-full 
+                     flex items-center gap-2 flex-shrink-0 hover:bg-gray-100 hover:shadow-lg transition-all duration-300"
                   >
                     {/* Google Maps Icon */}
-                    <div className="w-5 h-5 mb-1 relative">
+                    <div className="w-5 h-5 relative flex-shrink-0">
                       <GoogleMapPinIcon />
                     </div>
-                    <span className="text-sm font-medium">Lets Go</span>
-                    <TopRightArrowBlack />
+                    <span className="text-sm font-medium whitespace-nowrap">Let's Go</span>
+                    <div className="flex-shrink-0">
+                      <TopRightArrowBlack />
+                    </div>
                   </button>
                 </div>
               </div>

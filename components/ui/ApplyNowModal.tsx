@@ -7,6 +7,7 @@ import { UploadOutline, XOutline } from "../helpers/svgs";
 import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface ApplyNowModalProps {
   isOpen: boolean;
@@ -45,6 +46,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
   const [isExperienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
   const experienceDropdownRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const dropdownCloseTimeoutRef = useRef<number | null>(null);
 
@@ -289,9 +291,18 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       return;
     }
 
-    setIsSubmitting(true);
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
 
     try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      setIsSubmitting(true);
+
       // Create FormData object
       const formdata = new FormData();
 
@@ -301,6 +312,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       formdata.append("email", formData.email.trim());
       formdata.append("phone_number", formData.phone.trim());
       formdata.append("experience", formData.experience);
+      formdata.append("captcha_key", token);
 
       // Append resume file with filename as third parameter
       if (fileInputRef.current?.files && fileInputRef.current.files[0]) {
@@ -317,8 +329,13 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
         toast.error("Application submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("An error occurred. Please try again.");
+      if (error instanceof Error && error.message.includes("reCAPTCHA")) {
+        console.error("reCAPTCHA error:", error);
+        toast.error("reCAPTCHA verification failed. Please try again.");
+      } else {
+        console.error("Error submitting form:", error);
+        toast.error("An error occurred. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }

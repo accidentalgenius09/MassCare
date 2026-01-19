@@ -6,6 +6,7 @@ import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface FormData {
   name: string;
@@ -76,7 +77,8 @@ function WorkingForUs({
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const handleSubmit = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const handleSubmit = async () => {
     const missingFields: string[] = [];
     if (!formData.name.trim()) missingFields.push("Name");
     if (!formData.email.trim()) missingFields.push("Email");
@@ -128,28 +130,43 @@ function WorkingForUs({
       toast.error("Message must be less than 500 characters");
       return;
     }
-    if (formData) {
-      const payload = {
-        service_id: MCMData.id,
-        enquiry_course_of_interest_id: formData.areaOfInterest,
-        phone_number: formData.phone,
-        preferred_intake_id: formData.preferredIntake,
-        message: formData.message,
-        name: formData.name,
-        email: formData.email,
-      };
-      setIsLoading(true);
-      restApiWrapper
-        .post("/service-enquiry", payload)
-        .then(() => {
-          router.push("/thankyou-enquiry");
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      if (formData) {
+        const payload = {
+          service_id: MCMData.id,
+          enquiry_course_of_interest_id: formData.areaOfInterest,
+          phone_number: formData.phone,
+          preferred_intake_id: formData.preferredIntake,
+          message: formData.message,
+          name: formData.name,
+          email: formData.email,
+          captcha_key: token,
+        };
+        setIsLoading(true);
+        restApiWrapper
+          .post("/service-enquiry", payload)
+          .then(() => {
+            router.push("/thankyou-enquiry");
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
     }
   };
 

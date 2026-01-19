@@ -153,7 +153,7 @@ export default function NewsAndInsightsDetailPage() {
                 <div className="relative w-full h-64 sm:h-80 lg:h-96 mb-6 rounded-2xl overflow-hidden">
                   <Image
                     src={articleData.image_value}
-                    alt={articleData?.image_alt_text_value || ""}
+                    alt={articleData?.image_alt_text_value || articleData?.banner_title || "Article image"}
                     fill
                     className="object-cover"
                     priority
