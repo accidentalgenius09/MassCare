@@ -40,9 +40,9 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
 
   // Hide scrollbars
   useEffect(() => {
-    const styleId = 'trusted-institutions-scrollbar-hide';
+    const styleId = "trusted-institutions-scrollbar-hide";
     if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
+      const style = document.createElement("style");
       style.id = styleId;
       style.textContent = `
         .trusted-institutions-carousel::-webkit-scrollbar {
@@ -142,10 +142,10 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
           <div
             ref={carouselRef}
             className="cursor-grab active:cursor-grabbing trusted-institutions-carousel"
-            style={{ 
-              touchAction: 'pan-x',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
+            style={{
+              touchAction: "pan-x",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
             }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
@@ -185,7 +185,10 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
                       >
                         <Image
                           src={institution.icon_value || ""}
-                          alt={institution.icon_alt_text_value || ""}
+                          alt={
+                            institution.icon_alt_text_value ||
+                            "Trusted institution logo"
+                          }
                           width={100}
                           height={100}
                           className="object-contain max-h-[60px] sm:max-h-[70px] md:max-h-[80px] w-auto pointer-events-none select-none"

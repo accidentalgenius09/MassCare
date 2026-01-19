@@ -76,7 +76,7 @@ const WelcomeSectionHome = ({
               <div className="inline-flex items-center space-x-2 sm:space-x-3 pt-2 sm:pt-3">
                 <Image
                   src={homeData.image_value || ""}
-                  alt={homeData.image_alt_text_value || ""}
+                  alt={homeData.image_alt_text_value || "Care Quality Commission logo"}
                   width={100}
                   height={80}
                   className="sm:w-[130px] sm:h-[100px]"

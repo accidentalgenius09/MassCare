@@ -302,12 +302,13 @@ const TestimonialsSection = ({
             className="overflow-hidden"
             style={{
               width: "100%",
-              overflow: lastCardHovered ? "hidden" : "hidden",
+              overflow: "hidden",
               overflowY:
                 itemsPerView === 1 && hoveredIndex !== null
                   ? "visible"
                   : "hidden",
               overflowX: "hidden",
+              position: "relative",
             }}
           >
             <div
@@ -355,12 +356,17 @@ const TestimonialsSection = ({
                           // On mobile, keep full width to prevent overflow
                           cardWidth = `calc(100% - 0px)`;
                         } else if (isHovered) {
-                          cardWidth = `calc(${130 / itemsPerView}% - ${
+                          // Reduced expansion for better visibility on small screens
+                          // For 2 cards: 115%, for 3 cards: 110%, for 4 cards: 108%
+                          const expansionPercent = itemsPerView === 2 ? 115 : itemsPerView === 3 ? 110 : 108;
+                          cardWidth = `calc(${expansionPercent / itemsPerView}% - ${
                             ((itemsPerView - 1) * 24) / itemsPerView
                           }px)`;
                         } else if (hasHoveredCardInSlide) {
-                          // Other cards in the same slide get slightly smaller
-                          cardWidth = `calc(${89 / itemsPerView}% - ${
+                          // Other cards in the same slide shrink more to accommodate expanded card
+                          // For 2 cards: 85%, for 3 cards: 90%, for 4 cards: 92%
+                          const shrinkPercent = itemsPerView === 2 ? 85 : itemsPerView === 3 ? 90 : 92;
+                          cardWidth = `calc(${shrinkPercent / itemsPerView}% - ${
                             ((itemsPerView - 1) * 24) / itemsPerView
                           }px)`;
                         } else {
@@ -379,7 +385,6 @@ const TestimonialsSection = ({
                               flexShrink: 0,
                               transition: "width 0.3s ease-out",
                               minWidth: itemsPerView === 1 ? "100%" : 0,
-                              maxWidth: itemsPerView === 1 ? "100%" : "none",
                             }}
                             className="relative"
                           >

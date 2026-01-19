@@ -1,16 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TopRightArrowBlack, TopRightArrowWhite } from "../helpers/svgs";
 import { usePathname, useRouter } from "next/navigation";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import toast from "react-hot-toast";
 import restApiWrapper from "@/service/RestApiWrapper";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 function Newsletter() {
   const [email, setEmail] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [subscribedEmail, setSubscribedEmail] = useState("");
   const [isNavigating, setIsNavigating] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -32,9 +34,19 @@ function Newsletter() {
       return;
     }
 
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
     try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
       const formData = new FormData();
       formData.append("email", email);
+      formData.append("captcha_key", token);
       const response = await restApiWrapper.post(
         "/newsletter-subscription",
         formData
@@ -71,25 +83,27 @@ function Newsletter() {
         <h3 className="font-semibold text-sm sm:text-base md:text-lg whitespace-nowrap">
           Subscribe Newsletter
         </h3>
-        <form className="flex w-full sm:w-auto mx-0 sm:mx-4 py-1 border border-white rounded-full pe-1">
-          <input
-            type="email"
-            placeholder="Email"
-            className="px-3 sm:px-4 py-2 border-r-0 rounded-full text-white w-full sm:w-48 md:w-56 lg:w-64 outline-none focus:outline-none focus:ring-0 bg-transparent placeholder-white text-sm sm:text-base"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button
-            type="submit"
-            onClick={(e) => {
-              handleSubmit(e);
-            }}
-            className="bg-white text-[#002D72] cursor-pointer px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0 hover:bg-gray-100 hover:shadow-md transition-all duration-300"
-          >
-            <TopRightArrowBlack />
-          </button>
-        </form>
+        <div className="flex flex-col w-full sm:w-auto mx-0 sm:mx-4 gap-3">
+          <form className="flex w-full sm:w-auto py-1 border border-white rounded-full pe-1">
+            <input
+              type="email"
+              placeholder="Email"
+              className="px-3 sm:px-4 py-2 border-r-0 rounded-full text-white w-full sm:w-48 md:w-56 lg:w-64 outline-none focus:outline-none focus:ring-0 bg-transparent placeholder-white text-sm sm:text-base"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              onClick={(e) => {
+                handleSubmit(e);
+              }}
+              className="bg-white text-[#002D72] cursor-pointer px-3 sm:px-4 py-3 sm:py-4 rounded-full font-semibold flex-shrink-0 hover:bg-gray-100 hover:shadow-md transition-all duration-300"
+            >
+              <TopRightArrowBlack />
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* Success Modal */}

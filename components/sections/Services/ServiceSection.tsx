@@ -16,7 +16,7 @@ function ServiceSection({ servicesData }: { servicesData: ServicesPageData }) {
               <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-1/2 rounded-2xl overflow-hidden">
                 <Image
                   src={servicesData.service_cms.image_one_value}
-                  alt={servicesData.service_cms.image_one_alt_text_value}
+                  alt={servicesData.service_cms.image_one_alt_text_value || servicesData.service_cms.title || "Service image"}
                   fill
                   className="object-cover"
                   priority
@@ -28,7 +28,7 @@ function ServiceSection({ servicesData }: { servicesData: ServicesPageData }) {
               <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-3/4 rounded-2xl overflow-hidden">
                 <Image
                   src={servicesData.service_cms.image_two_value}
-                  alt={servicesData.service_cms.image_two_alt_text_value}
+                  alt={servicesData.service_cms.image_two_alt_text_value || servicesData.service_cms.title || "Service image"}
                   fill
                   className="object-cover"
                   loading="lazy"

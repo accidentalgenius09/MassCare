@@ -6,6 +6,7 @@ import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface FormData {
   name: string;
@@ -44,8 +45,9 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
   const howSoonCloseTimeoutRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData) return;
 
     // Check required fields
@@ -98,30 +100,45 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
       return;
     }
 
-    // All validations passed, proceed with submission
-    const payload = {
-      service_id: MCMData.id,
-      type_of_care_id: formData.typeofCare,
-      phone_number: formData.phone,
-      how_soon_need_care_id: formData.howSoonCareNeed,
-      location: formData.location.trim(),
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-    };
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
 
-    setIsLoading(true);
-    restApiWrapper
-      .post("/service-enquiry", payload)
-      .then(() => {
-        router.push("/thankyou-enquiry");
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Failed to submit enquiry. Please try again.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      // All validations passed, proceed with submission
+      const payload = {
+        service_id: MCMData.id,
+        type_of_care_id: formData.typeofCare,
+        phone_number: formData.phone,
+        how_soon_need_care_id: formData.howSoonCareNeed,
+        location: formData.location.trim(),
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        captcha_key: token,
+      };
+
+      setIsLoading(true);
+      restApiWrapper
+        .post("/service-enquiry", payload)
+        .then(() => {
+          router.push("/thankyou-enquiry");
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Failed to submit enquiry. Please try again.");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
+    }
   };
 
   const handleInputChange = (

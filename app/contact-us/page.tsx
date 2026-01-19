@@ -9,6 +9,7 @@ import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { ContactUsDataType } from "@/types/Contact.type";
 import Image from "next/image";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import {
   ClockBlueOutline,
   ClockWhiteOutline,
@@ -32,8 +33,9 @@ const ContactPage: React.FC = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = {
       name: formData.name,
       phone_number: formData.phone_number,
@@ -84,25 +86,45 @@ const ContactPage: React.FC = () => {
       return;
     }
 
-    // All fields are filled and valid, proceed with submission
-    setIsSubmitting(true);
-    restApiWrapper
-      .post("/contact-enquiry", payload)
-      .then((res) => {
-        toast.success(res.message);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-        setFormData({
-          name: "",
-          phone_number: "",
-          serviceType: "",
-          message: "",
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      // All fields are filled and valid, proceed with submission
+      setIsSubmitting(true);
+      const finalPayload = {
+        ...payload,
+        captcha_key: token,
+      };
+      console.log("Final Payload being sent:", finalPayload);
+      
+      restApiWrapper
+        .post("/contact-enquiry", finalPayload)
+        .then((res) => {
+          toast.success(res.message);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+          setFormData({
+            name: "",
+            phone_number: "",
+            serviceType: "",
+            message: "",
+          });
         });
-      });
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

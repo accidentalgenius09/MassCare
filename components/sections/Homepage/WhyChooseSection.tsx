@@ -219,10 +219,10 @@ const WhyChooseSection = ({ homeData }: { homeData: HomeData }) => {
                             </div>
 
                             {/* Content */}
-                            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold break-words">
+                            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold line-clamp-2">
                               <TTSWrapper
                                 text={feature.title}
-                                className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold"
+                                className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold line-clamp-2"
                               >
                                 {feature.title}
                               </TTSWrapper>

@@ -141,7 +141,7 @@ function NewsAndInsightsSection({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap gap-6 items-center justify-center">
           {isLoadingCards
             ? [1, 2, 3, 4, 5, 6].slice(0, 6).map((index) => (
                 <div
@@ -176,7 +176,7 @@ function NewsAndInsightsSection({
             ? newsCards.map((card, i) => (
                 <div
                   key={i}
-                  className="overflow-hidden flex flex-col"
+                  className="overflow-hidden flex-shrink-0 flex-grow-0 basis-full sm:basis-[calc(50%-12px)] lg:basis-[calc(25%-18px)] max-w-full sm:max-w-[calc(50%-12px)] lg:max-w-[calc(25%-18px)]"
                   style={{
                     background: "rgba(232, 239, 255, 1)",
                     borderRadius: "40px 40px 20px 20px",
