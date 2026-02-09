@@ -182,12 +182,12 @@ function HomePage() {
             <HowItWorksSection homeData={homeData} />
             <WhyChooseSection homeData={homeData} />
             <TrustedInstitutionsSection homeData={homeData} />
-            <TestimonialsSection
+            {/* <TestimonialsSection
               testimonials={homeData.testimonials}
               title={homeData.home_cms.testimonial_title}
-            />
+            /> */}
             <AccreditationsSection homeData={homeData} />
-            <ServicesSection
+            {/* <ServicesSection
               title={homeData.home_cms.service_title}
               ServiceData={homeData.services}
             />
@@ -195,7 +195,7 @@ function HomePage() {
             <QuickConnect
               homeData={homeData}
               purposeOfEnquiries={purposeOfEnquiries}
-            />
+            /> */}
           </>
         )}
       </div>

@@ -10,7 +10,7 @@ interface ReCaptchaProviderProps {
 export default function ReCaptchaProvider({ children }: ReCaptchaProviderProps) {
   return (
     <GoogleReCaptchaProvider
-      reCaptchaKey="6Lc1LCAsAAAAAAUIRR7PGJu-od1B4zCV-gDB-0e7"
+      reCaptchaKey="6LdO8FMsAAAAAEyUjWGiyLES7sSJNU14RA2e3Mjx"
       scriptProps={{
         async: false,
         defer: false,
