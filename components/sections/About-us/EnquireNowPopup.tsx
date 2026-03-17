@@ -3,6 +3,7 @@ import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface FormData {
   name: string;
@@ -24,9 +25,23 @@ function EnquireNowPopup({ onClose }: EnquireNowPopupProps) {
     areaOfInterest: "",
     message: "",
   });
-  const handleSubmit = () => {
-    alert("Form submitted successfully!");
-    if (onClose) onClose();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const handleSubmit = async () => {
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      alert("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+      alert("Form submitted successfully!");
+      if (onClose) onClose();
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      alert("reCAPTCHA verification failed. Please try again.");
+    }
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {

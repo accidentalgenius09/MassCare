@@ -23,6 +23,7 @@ export interface ServicesPageData {
   export interface ServiceFacility {
     id: number
     title: string
+    description: string
     image_value: string
     image_alt_text_value: string
   }

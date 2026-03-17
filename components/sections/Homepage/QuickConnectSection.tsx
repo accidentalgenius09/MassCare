@@ -7,6 +7,8 @@ import { HomeData, TestimonialCategory } from "@/types/Home.type";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import restApiWrapper from "@/service/RestApiWrapper";
+import dayjs from "dayjs";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export interface FormData {
   name: string;
@@ -32,8 +34,9 @@ export default function QuickConnect({
   const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
   const areaDropdownRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Check which fields are missing
     const missingFields: string[] = [];
 
@@ -54,25 +57,45 @@ export default function QuickConnect({
       return;
     }
 
-    // All fields are filled and valid, proceed with submission
-    setIsLoading(true);
-    restApiWrapper
-      .post("/contact-enquiry", formData)
-      .then((res) => {
-        toast.success(res.message);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setFormData({
-          name: "",
-          phone_number: "",
-          purpose_of_enquiry_id: 0,
-          message: "",
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      // All fields are filled and valid, proceed with submission
+      setIsLoading(true);
+      const payload = {
+        ...formData,
+        captcha_key: token,
+      };
+      console.log("Final Payload being sent:", payload);
+      
+      restApiWrapper
+        .post("/contact-enquiry", payload)
+        .then((res) => {
+          navigate.push("/thankyou-enquiry");
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setFormData({
+            name: "",
+            phone_number: "",
+            purpose_of_enquiry_id: 0,
+            message: "",
+          });
         });
-      });
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
+    }
   };
 
   const handleInputChange = (
@@ -263,18 +286,17 @@ export default function QuickConnect({
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 px-8 py-3 text-white font-medium rounded-lg focus:outline-none hover:brightness-110 hover:shadow-lg transition-all duration-300"
+                className="relative overflow-hidden bg-[#0A5BE0] text-white font-medium px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center gap-2 focus:outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:before:translate-x-full"
                 style={{
-                  background: "rgba(10, 91, 224, 1)",
-                  borderRadius: "300px",
                   opacity: isLoading ? 0.5 : 1,
-                  cursor: isLoading ? "not-allowed" : "pointer",
                 }}
               >
-                <TTSWrapper text="Submit Enquiry">
-                  Submit Enquiry{""}
-                </TTSWrapper>
-                <TopRightArrowWhite />
+                <span className="relative z-10 flex items-center gap-2">
+                  <TTSWrapper text="Submit Enquiry">
+                    Submit Enquiry{""}
+                  </TTSWrapper>
+                  <TopRightArrowWhite />
+                </span>
               </button>
             </div>
           </div>
@@ -284,29 +306,29 @@ export default function QuickConnect({
       {/* News & Events Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
+          <div className="flex justify-between items-center flex-nowrap gap-2 sm:gap-4 mb-5 overflow-x-auto scrollbar-hide">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex-shrink-0">
               <TTSWrapper
                 text={homeData?.home_cms?.news_and_events_title}
-                className="text-3xl md:text-4xl font-bold text-gray-900 mb-5"
+                className="text-3xl md:text-4xl font-bold text-gray-900"
               >
                 {homeData?.home_cms?.news_and_events_title}
               </TTSWrapper>
             </h2>
             <button
               onClick={() => navigate.push("/news-and-insights")}
-              className="text-black cursor-pointer font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300"
+              className="text-black cursor-pointer font-medium flex items-center gap-2 hover:gap-3 hover:text-blue-600 transition-all duration-300 whitespace-nowrap flex-shrink-0 text-sm sm:text-base"
             >
               <TTSWrapper text="Visit News Hub">Visit News Hub</TTSWrapper>
               <TopRightArrowBlack />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap gap-6 items-center justify-center">
             {homeData?.blogs?.map((card) => (
               <div
                 key={card.id}
-                className="overflow-hidden"
+                className="overflow-hidden flex-shrink-0 flex-grow-0 basis-full sm:basis-[calc(50%-12px)] lg:basis-[calc(25%-18px)] max-w-full sm:max-w-[calc(50%-12px)] lg:max-w-[calc(25%-18px)]"
                 style={{
                   background: "rgba(232, 239, 255, 1)",
                   borderRadius: "40px 40px 20px 20px",
@@ -328,10 +350,16 @@ export default function QuickConnect({
                   </p>
                   <p className="text-sm text-black font-semibold mb-4">
                     <TTSWrapper
-                      text={card.published_on}
+                      text={
+                        card.published_on
+                          ? dayjs(card.published_on).format("DD-MM-YYYY")
+                          : ""
+                      }
                       className="text-sm text-black font-semibold mb-4"
                     >
-                      {card.published_on}
+                      {card.published_on
+                        ? dayjs(card.published_on).format("DD-MM-YYYY")
+                        : ""}
                     </TTSWrapper>
                   </p>
                 </div>
@@ -344,6 +372,8 @@ export default function QuickConnect({
                     style={{
                       borderRadius: "20px",
                     }}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <button
                     style={{

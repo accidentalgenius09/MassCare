@@ -1,11 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { HomeData } from "@/types/Home.type";
+import restApiWrapper from "@/service/RestApiWrapper";
+import { FooterData } from "@/types/Footer.type";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const [activeButton, setActiveButton] = useState<number | null>(null);
+  const pathname = usePathname();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const clickedButtonRef = useRef<boolean>(false);
+  const lastProcessedClickRef = useRef<number | null>(null);
 
   // Find default slider (is_default === 1)
   const defaultSlider = homeData?.sliders?.find(
@@ -25,33 +36,206 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     ? getSliderByServiceId(activeButton)
     : defaultSlider;
 
+  // Reset activeButton when pathname changes to home page
+  useEffect(() => {
+    if (pathname === "/") {
+      setActiveButton(null);
+    }
+  }, [pathname]);
+
+  // Listen for logo click event to reset state
+  useEffect(() => {
+    const handleLogoClick = () => {
+      if (pathname === "/") {
+        setActiveButton(null);
+      }
+    };
+
+    // Listen for custom event from Header
+    window.addEventListener("logo-click", handleLogoClick);
+    return () => {
+      window.removeEventListener("logo-click", handleLogoClick);
+    };
+  }, [pathname]);
+
+  // Preload critical images
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const preloadImage = (src: string) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = src;
+      link.fetchPriority = "high";
+      document.head.appendChild(link);
+    };
+
+    // Preload default slider images
+    if (defaultSlider?.image_value) {
+      preloadImage(defaultSlider.image_value);
+    }
+    if (defaultSlider?.image_mobile_value) {
+      preloadImage(defaultSlider.image_mobile_value);
+    }
+
+    // Fallback to default hero image
+    if (!defaultSlider?.image_value) {
+      preloadImage("/hero-banner.png");
+    }
+  }, [defaultSlider]);
+
   // Get all unique services from sliders for buttons
-  const serviceSliders = homeData?.sliders?.filter(
-    (slider) => slider.service !== null
-  ) || [];
+  const serviceSliders =
+    homeData?.sliders?.filter((slider) => slider.service !== null) || [];
+
+  const hasMoreThanThreeServices = serviceSliders.length > 3;
+  const hasThreeServices = serviceSliders.length === 3;
+
+  // Handle button click - always allow switching between buttons
+  const handleButtonClick = (serviceId: number) => {
+    // Always process the click - if clicking the active button, set to null to show default slider
+    // Otherwise, switch to the clicked button (allows switching between buttons)
+    setActiveButton((prev) => {
+      // If clicking the active button, show default slider
+      if (prev === serviceId) {
+        return null;
+      }
+      // Otherwise, switch to the clicked button
+      return serviceId;
+    });
+  };
+
+  // Drag scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    // Don't start dragging if clicking on a button
+    const target = e.target as HTMLElement;
+    const button = target.closest("button");
+    if (button) {
+      e.stopPropagation();
+      // Reset all drag state when clicking buttons to allow subsequent clicks
+      clickedButtonRef.current = true;
+      setIsDragging(false);
+      return;
+    }
+    // Only start dragging if not clicking a button
+    clickedButtonRef.current = false;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    // Don't start dragging if touching on a button
+    const target = e.target as HTMLElement;
+    if (target.closest("button")) {
+      clickedButtonRef.current = true;
+      setIsDragging(false);
+      return;
+    }
+    clickedButtonRef.current = false;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    // Don't drag if clicking on a button - check both target and if button was clicked
+    const target = e.target as HTMLElement;
+    const button = target.closest("button");
+    if (button || clickedButtonRef.current) {
+      // Reset drag state when over buttons to allow clicks
+      setIsDragging(false);
+      // Don't prevent default when over buttons - let clicks work
+      return;
+    }
+    // Only prevent default and drag if we're actually dragging
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    // If we clicked a button, don't drag
+    if (clickedButtonRef.current) {
+      setIsDragging(false);
+      return;
+    }
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = (e?: React.MouseEvent) => {
+    // Don't interfere if clicking on a button
+    if (e) {
+      const target = e.target as HTMLElement;
+      if (target.closest("button")) {
+        // Reset drag state when clicking buttons to allow subsequent clicks
+        setIsDragging(false);
+        clickedButtonRef.current = false;
+        return; // Let the button handle its own click
+      }
+    }
+    setIsDragging(false);
+    // Reset button click tracking immediately to allow rapid button switching
+    clickedButtonRef.current = false;
+  };
+
+  const [footerData, setFooterData] = useState<FooterData | null>(null);
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const siteSettings = await restApiWrapper.get("/site-settings");
+        setFooterData(siteSettings.data);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
+    fetchFooterData();
+  }, []);
+
+  const desktopImage = currentSlider?.image_value || "/hero-banner.png";
+  const mobileImage = currentSlider?.image_mobile_value || "/hero-banner.png";
+
+  console.log(currentSlider?.is_default);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         {/* Desktop Background Image */}
-        <div
-          className="hidden md:block w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
-          style={{
-            backgroundImage: currentSlider
-              ? `url('${currentSlider.image_value}')`
-              : "url('/hero-banner.png')",
-          }}
-        />
+        <div className="hidden md:block w-full h-[98%] relative">
+          <Image
+            src={desktopImage}
+            alt="Hero Banner"
+            fill
+            priority
+            className="object-cover transition-opacity duration-500 ease-in-out"
+            sizes="100vw"
+            quality={85}
+          />
+        </div>
         {/* Mobile Background Image */}
-        <div
-          className="block md:hidden w-full h-[98%] bg-cover bg-center transition-all duration-500 ease-in-out"
-          style={{
-            backgroundImage: currentSlider
-              ? `url('${currentSlider.image_mobile_value}')`
-              : "url('/hero-banner.png')",
-          }}
-        />
+        <div className="block md:hidden w-full h-[98%] relative">
+          <Image
+            src={mobileImage}
+            alt="Hero Banner"
+            fill
+            priority
+            className="object-cover transition-opacity duration-500 ease-in-out"
+            sizes="100vw"
+            quality={85}
+          />
+        </div>
         <div className="absolute inset-0" />
       </div>
 
@@ -66,7 +250,19 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
               {currentSlider?.pre_title || ""}
             </div>
           </TTSWrapper>
-
+          {currentSlider?.is_default === 0 && (
+            <div className="my-4 flex justify-center">
+              <Image
+                width={1000}
+                height={1000}
+                loading="lazy"
+                src={"/bigLogo.png"}
+                alt={"Hero Banner"}
+                className="w-auto h-auto max-w-[700px] sm:max-w-[700px] md:max-w-[700px] object-contain"
+                sizes="(max-width: 768px) 100vw, 700px"
+              />
+            </div>
+          )}
           <TTSWrapper text={currentSlider?.title || ""}>
             <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold transition-all duration-500">
               {currentSlider?.title || ""}
@@ -114,9 +310,32 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
       </div>
 
       {/* Service Cards - Bottom of Background */}
-      <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-10 px-4">
+      <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-0 right-0 z-1 px-1">
         <div className="max-w-full mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
+          <div
+            ref={scrollContainerRef}
+            onMouseDown={hasMoreThanThreeServices ? handleMouseDown : undefined}
+            onMouseMove={hasMoreThanThreeServices ? handleMouseMove : undefined}
+            onMouseUp={hasMoreThanThreeServices ? (e) => handleMouseUp(e) : undefined}
+            onMouseLeave={hasMoreThanThreeServices ? () => handleMouseUp() : undefined}
+            onTouchStart={hasMoreThanThreeServices ? handleTouchStart : undefined}
+            onTouchMove={hasMoreThanThreeServices ? handleTouchMove : undefined}
+            onTouchEnd={hasMoreThanThreeServices ? () => handleMouseUp() : undefined}
+            className={`flex items-center ${
+              hasMoreThanThreeServices ? "justify-start" : "justify-center"
+            } ${
+              hasThreeServices ? "lg:justify-center justify-start" : ""
+            } gap-2 sm:gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-2 sm:px-4 ${
+              hasMoreThanThreeServices
+                ? "cursor-grab active:cursor-grabbing"
+                : ""
+            }`}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
             {serviceSliders.map((slider) => {
               if (!slider.service) return null;
               const serviceId = slider.service.id;
@@ -125,13 +344,52 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
               return (
                 <button
                   key={slider.id}
-                  onClick={() =>
-                    setActiveButton(isActive ? null : serviceId)
-                  }
-                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 sm:py-3 md:py-4 rounded-full transition-all duration-500 border border-white/30 cursor-pointer"
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                    clickedButtonRef.current = true;
+                    setIsDragging(false);
+                    // Process click immediately on mousedown to bypass any drag interference
+                    if (lastProcessedClickRef.current !== serviceId) {
+                      lastProcessedClickRef.current = serviceId;
+                      handleButtonClick(serviceId);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                    // Only process if not already handled in onMouseDown
+                    if (lastProcessedClickRef.current !== serviceId) {
+                      clickedButtonRef.current = false;
+                      setIsDragging(false);
+                      lastProcessedClickRef.current = serviceId;
+                      handleButtonClick(serviceId);
+                    }
+                    // Reset after a delay to allow subsequent clicks
+                    setTimeout(() => {
+                      lastProcessedClickRef.current = null;
+                    }, 50);
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    clickedButtonRef.current = true;
+                    setIsDragging(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Always allow button clicks, even when switching between buttons
+                    clickedButtonRef.current = false;
+                    setIsDragging(false);
+                    handleButtonClick(serviceId);
+                  }}
+                  style={{ pointerEvents: "auto", position: "relative", zIndex: 20, touchAction: "manipulation" }}
+                  className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 rounded-full transition-all duration-500 border border-white/30 cursor-pointer flex-shrink-0 select-none"
                 >
                   <TTSWrapper text={slider.service.title}>
-                    <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-light">
+                    <span className="text-lg font-light whitespace-nowrap">
                       {slider.service.title}
                     </span>
                   </TTSWrapper>
@@ -153,7 +411,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
 
       {/* Floating Action Buttons */}
       <div className="fixed right-2 sm:right-4 md:right-6 top-[65%] -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3 max-w-[60px] sm:max-w-[70px] md:max-w-[80px]">
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() =>
+            window.open(footerData?.site_settings?.map_link || "", "_blank")
+          }
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -219,7 +482,15 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             </defs>
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() =>
+            window.open(
+              `https://wa.me/${footerData?.site_settings?.whatsapp_number}`,
+              "_blank"
+            )
+          }
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -236,7 +507,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() => {
+            window.location.href = `mailto:${footerData?.site_settings?.email}`;
+          }}
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="21"
@@ -253,7 +529,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             />
           </svg>
         </button>
-        <button className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer">
+        <button
+          onClick={() => {
+            window.location.href = `tel:${footerData?.site_settings?.phone_number}`;
+          }}
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-15 flex items-center justify-center bg-[#ffffff4d] border border-white/50 rounded-full shadow-lg cursor-pointer"
+        >
           <svg
             width="21"
             height="21"

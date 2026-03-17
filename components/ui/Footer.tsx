@@ -3,24 +3,74 @@
 import Image from "next/image";
 import LocationCard from "./FooterLogo";
 import Newsletter from "./NewsletterSubscription";
-import { FacebookIconFooter, InstagramIconFooter } from "../helpers/svgs";
+import {
+  FacebookIconFooter,
+  InstagramIconFooter,
+  LinkedInIconFooter,
+  XIconFooter,
+  YoutubeIconFooter,
+} from "../helpers/svgs";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import restApiWrapper from "@/service/RestApiWrapper";
+import { FooterData, Policy } from "@/types/Footer.type";
 
 export default function Footer() {
+  const [footerData, setFooterData] = useState<FooterData>();
+  const [isQuickLinksOpen, setIsQuickLinksOpen] = useState(false);
+  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const siteSettings = await restApiWrapper.get("/site-settings");
+        setFooterData(siteSettings.data);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
+    fetchFooterData();
+  }, []);
   return (
     <footer
       style={{ background: "#012367" }}
       className="text-white px-4 sm:px-6 md:px-12 lg:px-20"
     >
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col min-[1176px]:flex-row">
         <div className="py-8 sm:py-10 md:py-12 flex-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 pb-2 pt-6">
             {/* Quick Links */}
             <div>
-              <h3 className="font-medium text-base sm:text-lg mb-4 sm:mb-6">
-                Quick Links
-              </h3>
-              <ul className="space-y-2 text-sm sm:text-base font-light">
+              <button
+                onClick={() => setIsQuickLinksOpen(!isQuickLinksOpen)}
+                className={`lg:pointer-events-none w-full flex items-center justify-between lg:justify-start font-medium text-base sm:text-lg transition-all duration-300 ${
+                  isQuickLinksOpen ? "mb-4 sm:mb-6" : "mb-0 lg:mb-4"
+                }`}
+              >
+                <h3 className="font-semibold text-base sm:text-lg">Quick Links</h3>
+                <svg
+                  className={`lg:hidden w-5 h-5 transition-transform duration-300 ${
+                    isQuickLinksOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <ul
+                className={`space-y-2 text-sm sm:text-base font-light transition-all duration-300 ${
+                  isQuickLinksOpen
+                    ? "block"
+                    : "hidden lg:block"
+                }`}
+              >
                 <li>
                   <Link href="/" className="hover:underline">
                     Home
@@ -54,31 +104,50 @@ export default function Footer() {
 
             {/* Policies */}
             <div>
-              <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
-                Policies
-              </h3>
-              <ul className="space-y-2 text-sm sm:text-base font-light">
-                <li>
-                  <Link
-                    href="/environment-policies"
-                    className="hover:underline"
-                  >
-                    Carbon Reduction
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy-policy" className="hover:underline">
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms-and-conditions"
-                    className="hover:underline"
-                  >
-                    Terms
-                  </Link>
-                </li>
+              <button
+                onClick={() => setIsPoliciesOpen(!isPoliciesOpen)}
+                className={`lg:pointer-events-none w-full flex items-center justify-between lg:justify-start font-semibold text-base sm:text-lg transition-all duration-300 ${
+                  isPoliciesOpen ? "mb-4 sm:mb-6" : "mb-0 lg:mb-4"
+                }`}
+              >
+                <h3 className="font-semibold text-base sm:text-lg">Policies</h3>
+                <svg
+                  className={`lg:hidden w-5 h-5 transition-transform duration-300 ${
+                    isPoliciesOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <ul
+                className={`space-y-2 text-sm sm:text-base font-light transition-all duration-300 ${
+                  isPoliciesOpen
+                    ? "block"
+                    : "hidden lg:block"
+                }`}
+              >
+                {footerData?.policies?.map((policy: Policy) => (
+                  <li key={policy.id}>
+                    <Link
+                      href={
+                        policy.slug.startsWith("/")
+                          ? policy.slug
+                          : `/${policy.slug}`
+                      }
+                      className="hover:underline"
+                    >
+                      {policy.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -90,17 +159,17 @@ export default function Footer() {
               <div className="text-sm sm:text-base font-light space-y-3">
                 <p>
                   <span className="block text-sm">Phone</span>
-                  <Link href="tel:01823216575" className="hover:underline">
-                    01823 216575
+                  <Link href={`tel:${footerData?.site_settings?.phone_number}`} className="hover:underline">
+                    {footerData?.site_settings?.phone_number}
                   </Link>
                 </p>
                 <p>
                   <span className="block text-sm">Email</span>
                   <Link
-                    href="mailto:masscare@info.in"
+                    href={`mailto:${footerData?.site_settings?.email}`}
                     className="hover:underline"
                   >
-                    masscare@info.in
+                    {footerData?.site_settings?.email}
                   </Link>
                 </p>
               </div>
@@ -112,30 +181,40 @@ export default function Footer() {
                 Follow Us
               </h3>
               <div className="flex items-center space-x-4 sm:space-x-6 mb-3 sm:mb-4">
-                <Link
-                  href="https://www.facebook.com/masscare.momentous.9"
-                  target="_blank"
-                  className="hover:text-blue-300"
-                >
-                  <FacebookIconFooter />
-                </Link>
-                <Link
-                  href="https://www.instagram.com/masscaremomentous/"
-                  target="_blank"
-                  className="hover:text-blue-300"
-                >
-                  <InstagramIconFooter />
-                </Link>
+                {footerData?.social_links?.map((social) => (
+                  <Link
+                    key={social.id}
+                    href={social.url}
+                    target="_blank"
+                    className="hover:text-blue-300"
+                  >
+                    <Image
+                      src={social.icon_value}
+                      alt={social.name}
+                      width={20}
+                      height={20}
+                      loading="lazy"
+                      sizes="20px"
+                    />
+                  </Link>
+                ))}
               </div>
               {/* Example CQC image */}
-              <div className="relative -ml-2 w-20 sm:w-24 md:w-28 h-14 sm:h-16 md:h-20">
-                <Image
-                  src="/Rectangle.png"
-                  alt="CQC"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              {footerData?.footer_cms?.image_value && (
+                <div className="relative -ml-2 w-20 sm:w-24 md:w-28 h-14 sm:h-16 md:h-20">
+                  <Image
+                    src={footerData.footer_cms.image_value}
+                    alt={
+                      footerData.footer_cms.image_alt_text_value ||
+                      "Footer logo"
+                    }
+                    fill
+                    className="object-contain"
+                    loading="lazy"
+                    sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, 112px"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -147,38 +226,24 @@ export default function Footer() {
                 Accreditations
               </h3>
               <div className="flex flex-nowrap gap-2 sm:gap-3 max-w-full">
-                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
-                  <Image
-                    src="/logos/careQC.png"
-                    alt="Care Quality Commission"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
-                  <Image
-                    src="/logos/cpd.png"
-                    alt="CPD"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
-                  <Image
-                    src="/logos/skillsforcare.png"
-                    alt="Accreditation 2"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <div className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg">
-                  <Image
-                    src="/logos/dbs.png"
-                    alt="DBS"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                {footerData?.accreditations?.map((accreditation) => (
+                  <div
+                    key={accreditation.id}
+                    className="relative flex-1 min-w-0 h-8 sm:h-10 md:h-12 bg-white px-2 sm:px-4 md:px-6 rounded-lg"
+                  >
+                    <Image
+                      src={accreditation.icon_value}
+                      alt={
+                        accreditation.icon_alt_text_value ||
+                        "Accreditation logo"
+                      }
+                      loading="lazy"
+                      sizes="(max-width: 640px) 32px, (max-width: 768px) 40px, 48px"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
             {/* Newsletter */}
@@ -189,7 +254,7 @@ export default function Footer() {
           </div>
         </div>
         <div
-          className="flex justify-end w-full lg:w-1/4 -me-10"
+          className="flex justify-end w-full min-[1175px]:-mx-4 max-[1175px]:px-4 min-[1176px]:w-1/4 min-[1176px]:-me-10"
           style={{
             background: "linear-gradient(180deg, #083082 0%, #012367 100%)",
             height: "100%",
@@ -197,6 +262,7 @@ export default function Footer() {
           }}
         >
           <LocationCard
+            siteSettings={footerData?.site_settings}
             companyName="Mass Care Home"
             logoSrc="/logo-white.png"
             address="Unit A, Acorn Business Centre, Livingstone Way, Taunton, Somerset, United Kingdom, TA2 6BD"

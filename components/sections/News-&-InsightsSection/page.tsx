@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BlogCard, NewsAndInsightsData } from "@/types/News-and-Insights";
 import restApiWrapper from "@/service/RestApiWrapper";
+import dayjs from "dayjs";
 
 interface Pagination {
   total: number;
@@ -122,7 +123,7 @@ function NewsAndInsightsSection({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab2(tab.id)}
-                  className={`text-xs sm:text-sm font-medium transition-colors pb-1 ${
+                  className={`text-xs sm:text-sm font-medium cursor-pointer transition-colors pb-1 ${
                     activeTab2 === tab.id
                       ? "text-gray-900 border-b-2 border-gray-900"
                       : "text-gray-600 hover:text-gray-900"
@@ -140,7 +141,7 @@ function NewsAndInsightsSection({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap gap-6 items-center justify-center">
           {isLoadingCards
             ? [1, 2, 3, 4, 5, 6].slice(0, 6).map((index) => (
                 <div
@@ -175,7 +176,7 @@ function NewsAndInsightsSection({
             ? newsCards.map((card, i) => (
                 <div
                   key={i}
-                  className="overflow-hidden flex flex-col"
+                  className="overflow-hidden flex-shrink-0 flex-grow-0 basis-full sm:basis-[calc(50%-12px)] lg:basis-[calc(25%-18px)] max-w-full sm:max-w-[calc(50%-12px)] lg:max-w-[calc(25%-18px)]"
                   style={{
                     background: "rgba(232, 239, 255, 1)",
                     borderRadius: "40px 40px 20px 20px",
@@ -192,10 +193,16 @@ function NewsAndInsightsSection({
                     </p>
                     <p className="text-sm text-black font-semibold">
                       <TTSWrapper
-                        text={card.published_on}
+                        text={
+                          card.published_on
+                            ? dayjs(card.published_on).format("DD-MM-YYYY")
+                            : ""
+                        }
                         className="text-sm text-black font-semibold"
                       >
-                        {card.published_on}
+                        {card.published_on
+                          ? dayjs(card.published_on).format("DD-MM-YYYY")
+                          : ""}
                       </TTSWrapper>
                     </p>
                   </div>

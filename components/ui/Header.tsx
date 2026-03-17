@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useTTS } from "@/components/providers/TTSProvider";
 import { useAccessibility } from "@/components/providers/AccessibilityProvider";
 import { usePathname } from "next/navigation";
+import { ServicesPageData, Service } from "@/types/Service.type";
+import restApiWrapper from "@/service/RestApiWrapper";
 
 const Header = () => {
   const { isEnabled, setEnabled } = useTTS();
@@ -13,31 +15,102 @@ const Header = () => {
   const isHome = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const servicesDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Helper function to check if a path is active
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Refs for desktop + mobile dropdown wrappers
+  const servicesDropdownRef = useRef<HTMLDivElement | null>(null); // desktop
+  const mobileServicesDropdownRef = useRef<HTMLDivElement | null>(null); // mobile
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null); // mobile menu container
 
   const toggleTTS = () => {
     setEnabled(!isEnabled);
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    // if closing mobile menu, also close services dropdown (avoid leftover open dropdown)
+    setIsMobileMenuOpen((prev) => {
+      const newVal = !prev;
+      if (!newVal) {
+        setIsServicesDropdownOpen(false);
+      }
+      return newVal;
+    });
   };
 
+  // Click outside handler checks both desktop and mobile dropdown refs
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
+      const target = event.target as Node;
+      const clickedInsideDesktop =
         servicesDropdownRef.current &&
-        !servicesDropdownRef.current.contains(event.target as Node)
-      ) {
+        servicesDropdownRef.current.contains(target);
+      const clickedInsideMobile =
+        mobileServicesDropdownRef.current &&
+        mobileServicesDropdownRef.current.contains(target);
+      const clickedInsideMobileMenu =
+        mobileMenuRef.current &&
+        mobileMenuRef.current.contains(target);
+
+      // Close dropdown if clicked outside both desktop and mobile dropdowns
+      if (!clickedInsideDesktop && !clickedInsideMobile) {
         setIsServicesDropdownOpen(false);
+      }
+
+      // Close mobile menu if clicked outside (but keep dropdown logic separate)
+      if (isMobileMenuOpen && !clickedInsideMobileMenu && !clickedInsideMobile) {
+        // Only close mobile menu if clicking outside the menu entirely
+        // Don't close if clicking on the mobile menu button (handled by toggleMobileMenu)
+        const mobileMenuButton = (event.target as HTMLElement)?.closest('button[aria-label="Toggle mobile menu"]');
+        if (!mobileMenuButton) {
+          setIsMobileMenuOpen(false);
+          setIsServicesDropdownOpen(false);
+        }
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsServicesDropdownOpen(false);
+        // Also close mobile menu on Escape if it's open
+        if (isMobileMenuOpen) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    // Only add listeners if dropdown is open or mobile menu is open
+    if (isServicesDropdownOpen || isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKey);
+    }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
     };
+  }, [isServicesDropdownOpen, isMobileMenuOpen]);
+
+  // fetch services
+  const [servicesData, setServicesData] = useState<Service[]>();
+  useEffect(() => {
+    const fetchServicesData = async () => {
+      try {
+        const response = await restApiWrapper.get("/services");
+        setServicesData(response.data.services);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServicesData();
   }, []);
+
   return (
     <nav
       className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 sm:pb-6 pt-2 md:px-8 lg:px-16"
@@ -54,129 +127,194 @@ const Header = () => {
       />
 
       <div
-        className="relative max-w-full mx-auto flex items-center justify-between"
+        className="relative max-w-full mx-auto flex items-center justify-between gap-2 sm:gap-3"
         style={{ overflow: "visible" }}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center ml-2 sm:ml-5">
+        <Link 
+          href="/" 
+          className="flex items-center ml-2 sm:ml-5 flex-shrink-0"
+          onClick={() => {
+            // Dispatch custom event to reset hero section state when logo is clicked
+            if (isHome) {
+              window.dispatchEvent(new CustomEvent("logo-click"));
+            }
+          }}
+        >
           <Image
             src={isHome ? "/logo-mass-care.png" : "/logo-white.png"}
             alt="Mass Care Logo"
             width={120}
             height={54}
             className="sm:w-[150px] sm:h-[68px]"
+            priority
+            sizes="(max-width: 640px) 120px, 150px"
           />
         </Link>
 
         {/* Navigation Links */}
         <div
-          className="hidden lg:flex items-center space-x-10 text-sm font-light"
-          style={{ overflow: "visible" }}
+          className="hidden lg:flex items-center gap-x-6 text-sm font-light"
+          style={{ overflow: "visible", flexShrink: 1 }}
         >
           <Link
             href="/"
-            className="text-white hover:text-gray-200 transition-colors"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/") ? "font-bold" : ""
+            }`}
           >
             Home
           </Link>
           <Link
             href="/about-us"
-            className="text-white hover:text-gray-200 transition-colors"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/about-us") ? "font-bold" : ""
+            }`}
           >
             About Us
           </Link>
+
+          {/* Desktop services wrapper (has ref) */}
           <div
-            className="relative flex gap-2"
+            className="relative flex gap-2 items-center"
             ref={servicesDropdownRef}
             style={{ overflow: "visible", zIndex: 9999 }}
           >
             <Link
               href="/services"
-              className="text-white hover:text-gray-200 transition-colors"
+              className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+                isActive("/services") ? "font-bold" : ""
+              }`}
             >
               Services
             </Link>
-            <button
-              type="button"
-              onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
-              className="text-white hover:text-gray-200 transition-colors flex items-center gap-1"
-              aria-haspopup="true"
-              aria-expanded={isServicesDropdownOpen}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="8"
-                viewBox="0 0 12 8"
-                fill="none"
-                className={`transition-transform ${
-                  isServicesDropdownOpen ? "rotate-180" : ""
-                }`}
+
+            {servicesData?.some(
+              (service) =>
+                service.slug === "mcm-nursing-care-agency" ||
+                service.slug === "mass-training-academy" ||
+                service.slug === "mass-home-care"
+            ) && (
+              <button
+                type="button"
+                onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
+                className="text-white hover:text-gray-200 transition-colors flex items-center gap-1 cursor-pointer flex-shrink-0"
+                aria-haspopup="true"
+                aria-expanded={isServicesDropdownOpen}
+                aria-controls="services-dropdown-desktop"
               >
-                <path
-                  d="M1 1L6 6L11 1"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="8"
+                  viewBox="0 0 12 8"
+                  fill="none"
+                  className={`transform transition-transform duration-200 ${
+                    isServicesDropdownOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <path
+                    d="M1 1L6 6L11 1"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            )}
+
+            {/* Desktop dropdown */}
             {isServicesDropdownOpen && (
               <div
-                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] border border-gray-200"
+                id="services-dropdown-desktop"
+                className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] backdrop-blur-xl"
                 style={{ position: "absolute", overflow: "visible" }}
+                role="menu"
               >
-                <Link
-                  href="/services/mcm-nursing-care-agency"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  MCM Nursing Care Agency
-                </Link>
-                <Link
-                  href="/services/mass-home-care"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  Mass Home Care
-                </Link>
-                <Link
-                  href="/services/mass-training-academy"
-                  className="block px-4 py-3 hover:bg-blue-100 hover:text-gray-700 transition-colors"
-                  onClick={() => setIsServicesDropdownOpen(false)}
-                >
-                  Mass Training Academy
-                </Link>
+                {servicesData?.map((service) => {
+                  if (service.slug === "mcm-nursing-care-agency") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mcm-nursing-care-agency"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mcm-nursing-care-agency") ? "font-bold" : ""
+                        }`}
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
+                      >
+                        MCM Nursing Care Agency
+                      </Link>
+                    );
+                  }
+                  if (service.slug === "mass-training-academy") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mass-training-academy"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mass-training-academy") ? "font-bold" : ""
+                        }`}
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
+                      >
+                        Mass Training Academy
+                      </Link>
+                    );
+                  }
+                  if (service.slug === "mass-home-care") {
+                    return (
+                      <Link
+                        key={service.id}
+                        href="/services/mass-home-care"
+                        className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                          isActive("/services/mass-home-care") ? "font-bold" : ""
+                        }`}
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        role="menuitem"
+                      >
+                        Mass Home Care
+                      </Link>
+                    );
+                  }
+                  return null;
+                })}
               </div>
             )}
           </div>
 
           <Link
             href="/career-opportunities"
-            className="text-white hover:text-gray-200 transition-colors"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/career-opportunities") ? "font-bold" : ""
+            }`}
           >
             Careers
           </Link>
           <Link
             href="/news-and-insights"
-            className="text-white hover:text-gray-200 transition-colors"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/news-and-insights") ? "font-bold" : ""
+            }`}
           >
             News & Insights
           </Link>
           <Link
             href="/testimonials"
-            className="text-white hover:text-gray-200 transition-colors"
+            className={`text-white hover:text-gray-200 transition-colors whitespace-nowrap ${
+              isActive("/testimonials") ? "font-bold" : ""
+            }`}
           >
             Testimonials
           </Link>
         </div>
 
         {/* Right Side Actions */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="hidden lg:flex items-center space-x-2 sm:space-x-3 flex-shrink-0 flex-nowrap me-8">
           <Link
             href="/contact-us"
-            className="hidden sm:flex items-center bg-neutral-300/10 rounded-[300px] backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 transition-all"
+            className="flex items-center bg-neutral-300/10 rounded-[300px] backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 transition-all"
             style={{ border: "2px solid rgba(255, 255, 255, 0.2)" }}
           >
             <div className="flex items-center gap-2 sm:gap-3 w-full h-full">
@@ -235,21 +373,13 @@ const Header = () => {
                   d="M20.8548 9.24602H13.8028C13.233 9.24602 12.7711 9.70793 12.7711 10.2777V10.9991C12.7711 11.5689 13.233 12.0308 13.8028 12.0308C14.2647 12.0308 14.6553 11.7275 14.7868 11.3094H16.2971V18.8766H16.2348C15.6651 18.8766 15.2031 19.3385 15.2031 19.9083C15.2031 20.478 15.6651 20.94 16.2348 20.94H18.4224C18.9921 20.94 19.454 20.478 19.454 19.9083C19.454 19.3385 18.9921 18.8766 18.4224 18.8766H18.3601V11.3094H19.8704C20.0019 11.7275 20.3929 12.0308 20.8544 12.0308C21.4242 12.0308 21.8861 11.5689 21.8861 10.9991V10.2777C21.8861 9.70793 21.4242 9.24602 20.8544 9.24602H20.8548Z"
                   fill="white"
                 />
-                <path
-                  d="M12.7716 10.2777V10.9991C12.7716 11.5689 13.2335 12.0308 13.8033 12.0308C14.2652 12.0308 14.6558 11.7275 14.7873 11.3094H15.4494C15.822 10.6575 16.1352 9.96746 16.3814 9.24644H13.8033C13.2335 9.24644 12.7716 9.70836 12.7716 10.2781V10.2777Z"
-                  fill="white"
-                />
-                <path
-                  d="M0.917788 4.87695C1.48755 4.87695 1.94947 4.41504 1.94947 3.84527V3.3507H7.34248V17.1188C8.05447 16.9813 8.74455 16.7814 9.40541 16.5236V3.3507H14.7984V3.84527C14.7984 4.41504 15.2603 4.87695 15.8301 4.87695C16.3999 4.87695 16.8618 4.41504 16.8618 3.84527V3.43922C16.7483 2.74656 16.5752 2.07453 16.3483 1.42742C16.1962 1.33891 16.0192 1.28777 15.8305 1.28777H0.917788C0.348022 1.28777 -0.113892 1.74969 -0.113892 2.31945V3.84527C-0.113892 4.41504 0.348022 4.87695 0.917788 4.87695Z"
-                  fill="white"
-                />
               </g>
               <defs>
                 <clipPath id="clip0_726_21864">
                   <rect width="22" height="22" fill="white" />
                 </clipPath>
               </defs>
-            </svg>{" "}
+            </svg>
           </button>
 
           <button
@@ -263,9 +393,7 @@ const Header = () => {
               borderRadius: "300px",
               backdropFilter: "blur(17.5px)",
             }}
-            aria-label={
-              isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"
-            }
+            aria-label={isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -300,92 +428,296 @@ const Header = () => {
               </defs>
             </svg>
           </button>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMobileMenu}
-            className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
-            aria-label="Toggle mobile menu"
-          >
-            <svg
-              className="w-5 h-5 sm:w-6 sm:h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleMobileMenu}
+          className="lg:hidden w-10 h-10 flex items-center justify-center bg-[rgba(212,212,212,0.1)] bg-opacity-20 hover:bg-opacity-30 rounded-full transition-all duration-300 backdrop-blur-sm"
+          aria-label="Toggle mobile menu"
+        >
+          <svg
+            className="w-5 h-5 sm:w-6 sm:h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-[rgba(0,0,0,0.95)] backdrop-blur-lg border-t border-white/20">
+        <div 
+          ref={mobileMenuRef}
+          className="lg:hidden absolute top-full left-0 right-0 bg-[rgba(0,0,0,0.95)] backdrop-blur-lg border-t border-white/20"
+        >
           <div className="px-4 py-6 space-y-4">
             <Link
               href="/"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/") ? "font-bold" : ""
+              }`}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsServicesDropdownOpen(false);
+              }}
             >
               Home
             </Link>
             <Link
               href="/about-us"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/about-us") ? "font-bold" : ""
+              }`}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsServicesDropdownOpen(false);
+              }}
             >
               About Us
             </Link>
-            <Link
-              href="/services"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Services
-            </Link>
+
+            {/* Mobile services wrapper (has mobile ref) */}
+            <div className="relative flex items-center gap-2" ref={mobileServicesDropdownRef}>
+              <Link
+                href="/services"
+                className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                  isActive("/services") ? "font-bold" : ""
+                }`}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsServicesDropdownOpen(false);
+                }}
+              >
+                Services
+              </Link>
+
+              {servicesData?.some(
+                (service) =>
+                  service.slug === "mcm-nursing-care-agency" ||
+                  service.slug === "mass-training-academy" ||
+                  service.slug === "mass-home-care"
+              ) && (
+                <button
+                  type="button"
+                  onClick={() => setIsServicesDropdownOpen((prev) => !prev)}
+                  className="text-white hover:text-gray-200 transition-colors flex items-center gap-1 cursor-pointer flex-shrink-0"
+                  aria-haspopup="true"
+                  aria-expanded={isServicesDropdownOpen}
+                  aria-controls="services-dropdown-mobile"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="8"
+                    viewBox="0 0 12 8"
+                    fill="none"
+                    className={`transform transition-transform duration-200 ${isServicesDropdownOpen ? "rotate-180" : "rotate-0"}`}
+                  >
+                    <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Mobile dropdown */}
+              {isServicesDropdownOpen && (
+                <div
+                  id="services-dropdown-mobile"
+                  className="absolute top-full left-0 mt-2 bg-white/10 text-white rounded-lg shadow-lg py-2 min-w-[250px] z-[9999] backdrop-blur-xl"
+                  role="menu"
+                >
+                  {servicesData?.map((service) => {
+                    if (service.slug === "mcm-nursing-care-agency") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mcm-nursing-care-agency"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mcm-nursing-care-agency") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          MCM Nursing Care Agency
+                        </Link>
+                      );
+                    }
+                    if (service.slug === "mass-training-academy") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mass-training-academy"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mass-training-academy") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          Mass Training Academy
+                        </Link>
+                      );
+                    }
+                    if (service.slug === "mass-home-care") {
+                      return (
+                        <Link
+                          key={service.id}
+                          href="/services/mass-home-care"
+                          className={`block px-4 py-3 rounded-lg mx-2 hover:bg-white/20 hover:backdrop-blur-md hover:border hover:border-white/30 hover:shadow-lg transition-all duration-300 whitespace-nowrap ${
+                            isActive("/services/mass-home-care") ? "font-bold" : ""
+                          }`}
+                          onClick={() => {
+                            setIsServicesDropdownOpen(false);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          role="menuitem"
+                        >
+                          Mass Home Care
+                        </Link>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              )}
+            </div>
+
             <Link
               href="/career-opportunities"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/career-opportunities") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Careers
             </Link>
             <Link
               href="/news-and-insights"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/news-and-insights") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               News & Insights
             </Link>
             <Link
               href="/testimonials"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/testimonials") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Testimonials
             </Link>
             <Link
               href="/contact-us"
-              className="block text-white hover:text-gray-200 transition-colors text-base font-light py-2"
+              className={`block text-white hover:text-gray-200 transition-colors text-base font-light py-2 ${
+                isActive("/contact-us") ? "font-bold" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact
             </Link>
+
+            {/* Mobile Accessibility Controls */}
+            <div className="pt-4 border-t border-white/20 mt-4">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={stepFontSize}
+                  className="w-10 h-10 flex items-center justify-center transition-all duration-300 hover:bg-white/20 cursor-pointer"
+                  style={{
+                    borderRadius: "300px",
+                    border: "2px solid rgba(255, 255, 255, 0.2)",
+                    background: "rgba(212, 212, 212, 0.10)",
+                    backdropFilter: "blur(17.5px)",
+                  }}
+                  aria-label="Increase text size by 2px (resets after +10px)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    className="w-[18px] h-[18px]"
+                  >
+                    <g clipPath="url(#clip0_726_21864)">
+                      <path
+                        d="M15.8301 1.28777H0.917788C0.348022 1.28777 -0.113892 1.74969 -0.113892 2.31945V3.84527C-0.113892 4.41504 0.348022 4.87695 0.917788 4.87695C1.48755 4.87695 1.94947 4.41504 1.94947 3.84527V3.3507H7.34248V18.8762H6.06115C5.49138 18.8762 5.02947 19.3381 5.02947 19.9079C5.02947 20.4776 5.49138 20.9395 6.06115 20.9395H10.6867C11.2565 20.9395 11.7184 20.4776 11.7184 19.9079C11.7184 19.3381 11.2565 18.8762 10.6867 18.8762H9.40541V3.3507H14.7984V3.84527C14.7984 4.41504 15.2603 4.87695 15.8301 4.87695C16.3999 4.87695 16.8618 4.41504 16.8618 3.84527V2.31945C16.8618 1.74969 16.3999 1.28777 15.8301 1.28777Z"
+                        fill="white"
+                      />
+                      <path
+                        d="M20.8548 9.24602H13.8028C13.233 9.24602 12.7711 9.70793 12.7711 10.2777V10.9991C12.7711 11.5689 13.233 12.0308 13.8028 12.0308C14.2647 12.0308 14.6553 11.7275 14.7868 11.3094H16.2971V18.8766H16.2348C15.6651 18.8766 15.2031 19.3385 15.2031 19.9083C15.2031 20.478 15.6651 20.94 16.2348 20.94H18.4224C18.9921 20.94 19.454 20.478 19.454 19.9083C19.454 19.3385 18.9921 18.8766 18.4224 18.8766H18.3601V11.3094H19.8704C20.0019 11.7275 20.3929 12.0308 20.8544 12.0308C21.4242 12.0308 21.8861 11.5689 21.8861 10.9991V10.2777C21.8861 9.70793 21.4242 9.24602 20.8544 9.24602H20.8548Z"
+                        fill="white"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_726_21864">
+                        <rect width="22" height="22" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </button>
+
+                <button
+                  onClick={toggleTTS}
+                  className={`w-10 h-10 flex items-center justify-center transition-all duration-300 hover:bg-white/20 border-1 cursor-pointer ${
+                    isEnabled
+                      ? "border-blue-500 bg-blue-500/30"
+                      : "border-white/10 bg-[rgba(212,212,212,0.1)]"
+                  }`}
+                  style={{
+                    borderRadius: "300px",
+                    backdropFilter: "blur(17.5px)",
+                  }}
+                  aria-label={isEnabled ? "Disable Text-to-Speech" : "Enable Text-to-Speech"}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 22 22"
+                    fill="none"
+                    className="w-[19px] h-[19px]"
+                  >
+                    <g clipPath="url(#clip0_726_21837)">
+                      <path
+                        d="M12.76 0.236925C12.523 0.135386 12.2184 0.169233 12.0492 0.338463L4.97534 6.83692H2.2338C1.08304 6.83692 0.169189 7.75077 0.169189 8.90154V13.1323C0.169189 14.2492 1.08304 15.1969 2.2338 15.1969H4.97534L12.0492 21.6615C12.1846 21.7631 12.3538 21.8308 12.523 21.8308C12.6246 21.8308 12.6923 21.7969 12.7938 21.7631C13.0307 21.6615 13.2 21.4246 13.2 21.1538V0.846156C13.1661 0.575386 12.9969 0.338463 12.76 0.236925ZM1.52304 13.0985V8.90154C1.52304 8.49539 1.82765 8.19077 2.2338 8.19077H4.56919V13.8092H2.2338C1.82765 13.8092 1.52304 13.5046 1.52304 13.0985ZM11.8123 19.6308L5.88919 14.2154V7.81846L11.8123 2.36923V19.6308Z"
+                        fill="white"
+                      />
+                      <path
+                        d="M19.2922 4.87385C19.0215 4.60308 18.6153 4.60308 18.3446 4.87385C18.0738 5.14461 18.0738 5.55077 18.3446 5.82154C21.1876 8.66461 21.1876 13.3015 18.3446 16.1446C18.0738 16.4154 18.0738 16.8215 18.3446 17.0923C18.4799 17.2277 18.6492 17.2954 18.8184 17.2954C18.9876 17.2954 19.1569 17.2277 19.2922 17.0923C22.6769 13.7415 22.6769 8.25846 19.2922 4.87385Z"
+                        fill="white"
+                      />
+                      <path
+                        d="M17.3969 6.80308C17.1261 6.53231 16.7199 6.53231 16.4492 6.80308C16.1784 7.07385 16.1784 7.48 16.4492 7.75077C18.243 9.54462 18.243 12.4554 16.4492 14.2492C16.1784 14.52 16.1784 14.9262 16.4492 15.1969C16.5846 15.3323 16.7538 15.4 16.923 15.4C17.0922 15.4 17.2615 15.3323 17.3969 15.1969C19.6984 12.8954 19.6984 9.10462 17.3969 6.80308Z"
+                        fill="white"
+                      />
+                      <path
+                        d="M15.4677 8.69846C15.1969 8.4277 14.7907 8.4277 14.52 8.69846C14.2492 8.96923 14.2492 9.37539 14.52 9.64616C15.2646 10.3908 15.2646 11.5754 14.52 12.32C14.2492 12.5908 14.2492 12.9969 14.52 13.2677C14.6554 13.4031 14.8246 13.4708 14.9938 13.4708C15.163 13.4708 15.3323 13.4031 15.4677 13.2677C16.72 12.0154 16.72 9.98462 15.4677 8.69846Z"
+                        fill="white"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_726_21837">
+                        <rect width="22" height="22" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

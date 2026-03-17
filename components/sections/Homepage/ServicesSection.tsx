@@ -6,19 +6,25 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Service } from "@/types/Aboutus.type";
 
-const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
+const ServicesSection = ({
+  ServiceData,
+  title = "Our Services",
+}: {
+  ServiceData: Service[];
+  title?: string;
+}) => {
   const router = useRouter();
   return (
     <>
-      <div className="container mx-auto bg-white pb-8 sm:pb-12 md:pb-16 pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto bg-white pb-8 sm:pb-12 md:pb-16 pt-8 sm:pt-10 md:pt-12 px-4">
         <div className="max-w-full mx-auto">
           {/* Section Header */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8">
             <TTSWrapper
-              text="Our Services"
+              text={title}
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-8"
             >
-              Our Services
+              {title}
             </TTSWrapper>
           </h2>
           {/* Service Cards Grid */}
@@ -35,6 +41,8 @@ const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
                     alt={service.image_alt_text_value}
                     fill
                     className="w-full h-full object-cover"
+                    loading={index < 3 ? "eager" : "lazy"}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   {/* Gradient Overlay */}
                   {/* <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div> */}
@@ -128,7 +136,21 @@ const ServicesSection = ({ ServiceData }: { ServiceData: Service[] }) => {
                   </p>
 
                   {/* Features List */}
-                  <div className="space-y-1 sm:space-y-2 mb-3 sm:mb-4">
+                  <div 
+                    className={`space-y-1 sm:space-y-2 mb-3 sm:mb-4 ${
+                      service.features.length > 3 
+                        ? "max-h-[120px] sm:max-h-[140px] md:max-h-[160px] overflow-y-auto scrollbar-hide pr-2" 
+                        : ""
+                    }`}
+                    style={
+                      service.features.length > 3
+                        ? {
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "#d1d5db transparent",
+                          }
+                        : {}
+                    }
+                  >
                     {service.features.map((feature, idx) => (
                       <div
                         key={idx}

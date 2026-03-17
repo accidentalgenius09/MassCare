@@ -8,22 +8,16 @@ import {
   PeopleSVG,
 } from "@/components/helpers/svgs2";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
+import dayjs from "dayjs";
 
 function UpcomingCoursesSection({
   MCMData,
 }: {
   MCMData: McmNursingCareAgencyServiceDetail;
 }) {
-  // Format date from "2025-11-26 13:10:00" to "Friday, August 15, 2025"
+  // Format date to DD-MM-YYYY format
   const formatDate = (dateTimeString: string): string => {
-    const date = new Date(dateTimeString);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options);
+    return dayjs(dateTimeString).format("DD-MM-YYYY");
   };
 
   // Extract time from "2025-11-26 13:10:00" format
@@ -116,8 +110,14 @@ function UpcomingCoursesSection({
               {/* Enroll Button */}
               <button
                 onClick={() => {
-                  if (course.enroll_link) {
-                    window.open(course.enroll_link, "_blank");
+                  const targetSection = document.getElementById(
+                    "enrollform"
+                  );
+                  if (targetSection) {
+                    targetSection.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
                   }
                 }}
                 className="lg:w-2/3 md:w-2/3 w-2/3 bg-[#0A5BE0] text-white font-medium py-3 px-5 rounded-full flex items-center justify-center gap-2 hover:bg-[#084CC0] transition-colors"

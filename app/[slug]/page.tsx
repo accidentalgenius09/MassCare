@@ -61,6 +61,8 @@ const Page: React.FC = () => {
                     : 300
                 }
                 className="object-contain"
+                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 300px, 450px"
               />
             </div>
           </div>
@@ -126,10 +128,12 @@ const Page: React.FC = () => {
         {/* Go Back Button */}
         <button
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-medium px-10 py-3 rounded-full"
+          className="relative cursor-pointer overflow-hidden bg-[#0A5BE0] text-white font-medium px-10 py-3 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0"
         >
-          <TTSWrapper text="Go Back">Go Back </TTSWrapper>
-          <TopRightArrowWhite />
+          <span className="relative z-10 flex items-center gap-2">
+            <TTSWrapper text="Go Back">Go Back </TTSWrapper>
+            <TopRightArrowWhite />
+          </span>
         </button>
       </div>
     </div>

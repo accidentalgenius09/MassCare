@@ -50,6 +50,8 @@ const LocationsMap: React.FC<LocationsMapProps> = ({ MCMData }) => {
               width={1178}
               height={596}
               className="w-full h-full object-cover"
+              loading="lazy"
+              sizes="(max-width: 1024px) 100vw, 1178px"
             />
 
             {/* Location Pins Overlay */}

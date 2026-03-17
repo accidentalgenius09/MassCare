@@ -13,22 +13,26 @@ function ServiceSection({ servicesData }: { servicesData: ServicesPageData }) {
           <div>
             <div className="flex gap-3 sm:gap-4 md:gap-5">
               {/* First Image */}
-              <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-74 rounded-2xl overflow-hidden">
+              <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-1/2 rounded-2xl overflow-hidden">
                 <Image
                   src={servicesData.service_cms.image_one_value}
-                  alt={servicesData.service_cms.image_one_alt_text_value}
+                  alt={servicesData.service_cms.image_one_alt_text_value || servicesData.service_cms.title || "Service image"}
                   fill
                   className="object-cover"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
 
               {/* Second Image */}
-              <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-140 rounded-2xl overflow-hidden">
+              <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-96 lg:w-3/4 rounded-2xl overflow-hidden">
                 <Image
                   src={servicesData.service_cms.image_two_value}
-                  alt={servicesData.service_cms.image_two_alt_text_value}
+                  alt={servicesData.service_cms.image_two_alt_text_value || servicesData.service_cms.title || "Service image"}
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 />
               </div>
             </div>

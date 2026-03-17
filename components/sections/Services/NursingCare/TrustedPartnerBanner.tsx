@@ -29,7 +29,7 @@ const TrustedPartnerBanner: React.FC<TrustedPartnerBannerProps> = ({
   return (
     <section className="pt-1 pb-12 md:pt-1 md:pb-16 lg:pt-1 lg:pb-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-32">
-        <div className="bg-[#00235C] rounded-3xl p-8 md:p-12 lg:p-16">
+        <div className="bg-[#00235C] rounded-3xl p-8 md:p-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
             {/* Left Content */}
             <div className="flex-1 space-y-4">

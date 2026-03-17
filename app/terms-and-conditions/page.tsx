@@ -14,8 +14,10 @@ interface Policy {
 function TermsAndCondtions() {
   const [termsAndConditions, setTermsAndConditions] = useState<Policy | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const fetchTermsAndConditions = async () => {
       try {
         setIsLoading(true);
@@ -52,7 +54,7 @@ function TermsAndCondtions() {
                   Loading Terms and Conditions...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the content">
                   Please wait while we fetch the content
                 </TTSWrapper>
@@ -69,24 +71,26 @@ function TermsAndCondtions() {
           image="/common/privacypolicy-banner.png"
           description={termsAndConditions?.banner_description || ""}
         />
-        <div className="px-20 py-15">
-          <div>
-            <h1 className="text-3xl font-bold">
-              <TTSWrapper text={termsAndConditions?.title || ""}>
-                {termsAndConditions?.title || ""}
-              </TTSWrapper>
-            </h1>
+        {mounted && (
+          <div className="px-8 py-8 lg:px-20 lg:py-15">
             <div>
-              <TTSWrapper text={termsAndConditions?.content || ""}>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: termsAndConditions?.content || "",
-                  }}
-                />
-              </TTSWrapper>
+              <h1 className="text-3xl font-bold">
+                <TTSWrapper text={termsAndConditions?.title || ""}>
+                  {termsAndConditions?.title || ""}
+                </TTSWrapper>
+              </h1>
+              <div>
+                <TTSWrapper text={termsAndConditions?.content || ""}>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: termsAndConditions?.content || "",
+                    }}
+                  />
+                </TTSWrapper>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

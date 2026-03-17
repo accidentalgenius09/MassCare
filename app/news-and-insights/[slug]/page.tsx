@@ -7,6 +7,7 @@ import { TopRightArrowWhite } from "@/components/helpers/svgs";
 import { useParams, useRouter } from "next/navigation";
 import restApiWrapper from "@/service/RestApiWrapper";
 import { BlogDetail } from "@/types/News-and-Insights";
+import dayjs from "dayjs";
 interface RecentNewsItem {
   id: number;
   title: string;
@@ -89,6 +90,11 @@ export default function NewsAndInsightsDetailPage() {
     return () => window.removeEventListener("resize", updateArticleHeight);
   }, [recentNews.length]);
 
+  console.log(articleData?.related_blogs_list ,"articleData?.related_blogs_list ");
+
+  const hasRelatedBlogs = articleData?.related_blogs_list && 
+    articleData?.related_blogs_list?.length > 0;
+
   return (
     <>
       {isLoading && (
@@ -109,7 +115,7 @@ export default function NewsAndInsightsDetailPage() {
                   Loading Blog Details...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the content">
                   Please wait while we fetch the content
                 </TTSWrapper>
@@ -127,14 +133,14 @@ export default function NewsAndInsightsDetailPage() {
         />
 
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-          <p className="text-sm text-black font-semibold max-w-7xl mx-auto">
-            <TTSWrapper text={articleData?.published_on || ""}>
-              {articleData?.published_on || ""}
+          <p className="text-sm text-black font-semibold max-w-full lg:px-20 px-10 mx-auto">
+            <TTSWrapper text={articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}>
+              {articleData?.published_on ? dayjs(articleData.published_on).format("DD-MM-YYYY") : ""}
             </TTSWrapper>
           </p>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className={`grid ${hasRelatedBlogs ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1'} gap-8 max-w-full lg:px-20 px-10 mx-auto`}>
             {/* Main Content */}
-            <div ref={articleRef} className="lg:col-span-2">
+            <div ref={articleRef} className={hasRelatedBlogs ? 'lg:col-span-2' : ''}>
               {/* Title */}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-4">
                 <TTSWrapper text={articleData?.title || ""}>
@@ -147,9 +153,11 @@ export default function NewsAndInsightsDetailPage() {
                 <div className="relative w-full h-64 sm:h-80 lg:h-96 mb-6 rounded-2xl overflow-hidden">
                   <Image
                     src={articleData.image_value}
-                    alt={articleData?.image_alt_text_value || ""}
+                    alt={articleData?.image_alt_text_value || articleData?.banner_title || "Article image"}
                     fill
                     className="object-cover"
+                    priority
+                    sizes={hasRelatedBlogs ? "(max-width: 1024px) 100vw, 66vw" : "100vw"}
                   />
                 </div>
               )}
@@ -166,6 +174,7 @@ export default function NewsAndInsightsDetailPage() {
             </div>
 
             {/* Sidebar - Recent News */}
+            {hasRelatedBlogs && (
             <div className="lg:col-span-1 mx-auto">
               <div
                 className="flex flex-col"
@@ -185,7 +194,7 @@ export default function NewsAndInsightsDetailPage() {
                 ) : null}
 
                 {/* Carousel Container */}
-                <div className="flex-1 overflow-hidden w-80">
+                <div className="flex-1 w-80">
                   <div className="space-y-6">
                     {articleData?.related_blogs_list?.map((card, i) => (
                       <div
@@ -215,10 +224,10 @@ export default function NewsAndInsightsDetailPage() {
                           </p>
                           <p className="text-sm text-black font-semibold">
                             <TTSWrapper
-                              text={card.published_on}
+                              text={card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                               className="text-sm text-black font-semibold"
                             >
-                              {card.published_on}
+                              {card.published_on ? dayjs(card.published_on).format("DD-MM-YYYY") : ""}
                             </TTSWrapper>
                           </p>
                         </div>
@@ -228,6 +237,8 @@ export default function NewsAndInsightsDetailPage() {
                             alt={card.image_alt_text_value}
                             fill
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            sizes="320px"
                             style={{
                               borderRadius: "20px",
                             }}
@@ -237,7 +248,7 @@ export default function NewsAndInsightsDetailPage() {
                               backgroundColor: "rgba(10, 91, 224, 1)",
                               borderRadius: "300px",
                             }}
-                            className="absolute bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
+                            className="absolute cursor-pointer bottom-4 right-4 px-5 py-2.5 text-white text-sm font-medium rounded-lg flex items-center gap-2"
                             onClick={() =>
                               navigate.push(`/news-and-insights/${card.slug}`)
                             }
@@ -257,6 +268,7 @@ export default function NewsAndInsightsDetailPage() {
                 </div>
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ import TTSWrapper from "@/hooks/TTSWrapper";
 function MassTrainingAcademyPage() {
   const [MCMData, setMCMData] = useState<McmNursingCareAgencyServiceDetail>();
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchMCMData = async () => {
       try {
@@ -66,11 +66,9 @@ function MassTrainingAcademyPage() {
             {/* Loading Text */}
             <div className="text-center">
               <p className="text-[#0A5BE0] text-xl font-semibold animate-pulse">
-                <TTSWrapper text="Loading...">
-                  Loading...
-                </TTSWrapper>
+                <TTSWrapper text="Loading...">Loading...</TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the service details">
                   Please wait while we fetch the service details
                 </TTSWrapper>
@@ -81,7 +79,7 @@ function MassTrainingAcademyPage() {
       )}
       <PageBanner
         title={MCMData?.banner_title}
-        breadcrumb="Home / Services / Mass Training Academy"
+        breadcrumb={`Home / Services / ${MCMData?.banner_title}`}
         description={MCMData?.banner_description}
       />
       {MCMData && (
@@ -89,7 +87,9 @@ function MassTrainingAcademyPage() {
           <CareNursingAgency MCMData={MCMData} whatWeDo={false} />
           <CoursesOffered MCMData={MCMData} />
           <UpcomingCoursesSection MCMData={MCMData} />
-          <WorkingForUs MCMData={MCMData} />
+          <div id="enrollform">
+            <WorkingForUs MCMData={MCMData} />
+          </div>
           <div className="mt-20">
             <TrustedPartnerBanner MCMData={MCMData} />
           </div>

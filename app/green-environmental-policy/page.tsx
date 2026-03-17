@@ -9,8 +9,10 @@ function EnvironmentPoliciesPage() {
   const [environmentPolicies, setEnvironmentPolicies] =
     useState<GreenPolicyData>();
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const fetchEnvironmentPolicies = async () => {
       try {
         setIsLoading(true);
@@ -47,7 +49,7 @@ function EnvironmentPoliciesPage() {
                   Loading Environment Policies...
                 </TTSWrapper>
               </p>
-              <p className="text-gray-600 text-sm mt-3 max-w-md">
+              <p className="text-[#0A5BE0] text-sm mt-3 max-w-md">
                 <TTSWrapper text="Please wait while we fetch the content">
                   Please wait while we fetch the content
                 </TTSWrapper>
@@ -65,24 +67,26 @@ function EnvironmentPoliciesPage() {
           description={environmentPolicies?.banner_description}
         />
 
-        <div className="min-h-screen pt-8 pb-4 px-4 sm:px-6 lg:px-8">
-          <div className="px-12 pt-5">
-            <h1 className="text-3xl font-bold">
-              <TTSWrapper text={environmentPolicies?.title || ""}>
-                {environmentPolicies?.title}
-              </TTSWrapper>
-            </h1>
-            <div>
-              <TTSWrapper text={environmentPolicies?.content || ""}>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: environmentPolicies?.content || "",
-                  }}
-                />
-              </TTSWrapper>
+        {mounted && (
+          <div className="min-h-screen pt-8 pb-4 px-4 sm:px-6 lg:px-8">
+            <div className="px-5 py-5 lg:px-12 lg:pt-5">
+              <h1 className="text-3xl font-bold">
+                <TTSWrapper text={environmentPolicies?.title || ""}>
+                  {environmentPolicies?.title}
+                </TTSWrapper>
+              </h1>
+              <div>
+                <TTSWrapper text={environmentPolicies?.content || ""}>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: environmentPolicies?.content || "",
+                    }}
+                  />
+                </TTSWrapper>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

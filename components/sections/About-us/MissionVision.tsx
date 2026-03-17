@@ -17,6 +17,7 @@ const MissionVisionSection = ({
   // Update items per view based on screen size
   useEffect(() => {
     const updateItemsPerView = () => {
+      if (typeof window === "undefined") return;
       if (window.innerWidth < 640) {
         setItemsPerView(1);
       } else if (window.innerWidth < 1024) {
@@ -41,52 +42,34 @@ const MissionVisionSection = ({
       description: aboutUsData?.about_cms?.section2_description2,
     },
     {
-      title: aboutUsData?.about_cms?.section3_title,
+      title: aboutUsData?.about_cms?.section2_title3,
       description: aboutUsData?.about_cms?.section2_description3,
     },
   ];
 
-  const isCarousel = steps.length > 3;
-  const totalSlides = isCarousel ? Math.ceil(steps.length / itemsPerView) : 1;
+  const totalSlides =
+    itemsPerView > 0 ? Math.ceil(steps.length / itemsPerView) : 1;
+  const isCarousel = totalSlides > 1;
+  const gapSize = itemsPerView === 1 ? 16 : itemsPerView === 2 ? 24 : 32;
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    if (!isCarousel) return;
+    setCurrentIndex((prev) => Math.min(prev + 1, totalSlides - 1));
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    if (!isCarousel) return;
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="py-12 sm:py-14 lg:py-16 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-10">
         {/* Carousel Container */}
-        <div className="relative max-w-full mx-auto">
-          {/* Previous Button */}
-          {isCarousel && (
-            <button
-              onClick={prevSlide}
-              className="absolute left-10 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={currentIndex === 0}
-              aria-label="Previous slide"
-            >
-              <svg
-                className="w-6 h-6 text-black"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-          )}
+        <div className="max-w-full mx-auto">
           {/* Carousel Track */}
           {isCarousel ? (
-            <div className="">
+            <div className="overflow-hidden">
               <div
                 className="flex transition-transform duration-500 ease-out"
                 style={{
@@ -96,7 +79,7 @@ const MissionVisionSection = ({
                 {Array.from({ length: totalSlides }).map((_, slideIndex) => (
                   <div
                     key={slideIndex}
-                    className="min-w-full px-10 flex gap-4 md:gap-6 xl:gap-8"
+                    className="min-w-full px-2 sm:px-4 lg:px-6 xl:px-10 flex gap-4 sm:gap-6 xl:gap-8"
                   >
                     {steps
                       .slice(
@@ -109,30 +92,25 @@ const MissionVisionSection = ({
                           className="flex-shrink-0"
                           style={{
                             width: `calc((100% - ${
-                              (itemsPerView - 1) *
-                              (itemsPerView === 1
-                                ? 16
-                                : itemsPerView === 2
-                                ? 24
-                                : 32)
+                              (itemsPerView - 1) * gapSize
                             }px) / ${itemsPerView})`,
                           }}
                         >
-                          <div className="bg-[#012367] p-4 md:p-6 rounded-3xl h-auto md:h-52 w-full border border-gray-200 relative">
-                            <div className="absolute top-2 pt-2 right-2">
+                          <div className="bg-[#012367] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-full w-full border border-gray-200 relative">
+                            <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
                               <FlowerDecoration />
                             </div>
 
-                            <div className="relative z-10 max-w-[540px]">
-                              <h3 className="text-2xl font-semibold text-white">
+                            <div className="relative z-10 max-w-full">
+                              <h3 className="text-xl sm:text-2xl font-semibold text-white">
                                 <TTSWrapper
                                   text={step.title}
-                                  className="text-2xl font-semibold text-white"
+                                  className="text-xl sm:text-2xl font-semibold text-white"
                                 >
                                   {step.title}
                                 </TTSWrapper>
                               </h3>
-                              <p className="text-white text-xl font-normal mt-4">
+                              <p className="text-white text-base sm:text-lg font-normal mt-3">
                                 <TTSWrapper text={step.description}>
                                   {step.description}
                                 </TTSWrapper>
@@ -146,21 +124,21 @@ const MissionVisionSection = ({
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-3 px-10 gap-3 justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-2 sm:px-4 lg:px-6 xl:px-10 gap-4 sm:gap-6 xl:gap-8">
               {steps.map((step, index) => (
                 <div key={index} className="min-w-0">
-                  <div className="bg-[#012367] scrollbar-hide p-4 md:p-6 rounded-3xl h-auto md:h-60 max-w-full border border-gray-200 relative">
+                  <div className="bg-[#012367] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-full min-h-[220px] max-w-full border border-gray-200 relative">
                     {/* Decorative Flower */}
-                    <div className="absolute top-6 right-3">
+                    <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
                       <FlowerDecoration />
                     </div>
 
                     {/* Content */}
                     <div className="relative z-10 max-w-full">
-                      <h3 className="text-3xl font-semibold text-white">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-white">
                         <TTSWrapper text={step.title}>{step.title}</TTSWrapper>
                       </h3>
-                      <p className="text-white text-xl font-normal mt-4">
+                      <p className="text-white text-base sm:text-lg font-normal mt-3">
                         <TTSWrapper text={step.description}>
                           {step.description}
                         </TTSWrapper>
@@ -173,26 +151,53 @@ const MissionVisionSection = ({
           )}
 
           {isCarousel && (
-            <button
-              onClick={nextSlide}
-              className="absolute right-10 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={currentIndex === totalSlides - 1}
-              aria-label="Next slide"
-            >
-              <svg
-                className="w-6 h-6 text-black"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={prevSlide}
+                  className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  disabled={currentIndex === 0}
+                  aria-label="Previous slide"
+                >
+                  <svg
+                    className="w-5 h-5 text-gray-800"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+                <span className="text-sm font-medium text-gray-700">
+                  {currentIndex + 1} / {totalSlides}
+                </span>
+                <button
+                  onClick={nextSlide}
+                  className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  disabled={currentIndex === totalSlides - 1}
+                  aria-label="Next slide"
+                >
+                  <svg
+                    className="w-5 h-5 text-gray-800"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>

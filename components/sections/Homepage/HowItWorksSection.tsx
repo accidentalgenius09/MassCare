@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CandidateMatchingIcon,
   ComplianceChecksIcon,
@@ -32,6 +32,8 @@ const FlowerDecoration = () => (
 const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(5);
+  const [isPaused, setIsPaused] = useState(false);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Update items per view based on screen size
   useEffect(() => {
@@ -50,65 +52,81 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
     return () => window.removeEventListener("resize", updateItemsPerView);
   }, []);
 
-  const steps = [
-    {
-      number: "01",
-      title: "Initial Consultation",
-      description:
-        "We begin with a comprehensive consultation to understand your specific needs, preferences, and requirements.",
-      icon: <InitialConsultationIcon />,
-    },
-    {
-      number: "02",
-      title: "Candidate Matching",
-      description:
-        "Our expert team carefully matches you with qualified professionals who meet your specific criteria and requirements.",
-      icon: <CandidateMatchingIcon />,
-    },
-    {
-      number: "03",
-      title: "Compliance Checks",
-      description:
-        "We conduct thorough background checks, verify qualifications, and ensure all regulatory requirements are met.",
-      icon: <ComplianceChecksIcon />,
-    },
-    {
-      number: "04",
-      title: "Placement & Induction",
-      description:
-        "We facilitate smooth placement with comprehensive induction programs to ensure seamless integration.",
-      icon: <PlacementInductionIcon />,
-    },
-    {
-      number: "05",
-      title: "Ongoing Support",
-      description:
-        "We provide continuous support and monitoring to ensure quality care and satisfaction for all parties.",
-      icon: <OngoingSupportIcon />,
-    },
-  ];
+  // Reset currentIndex when itemsPerView changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [itemsPerView]);
 
-  const totalSlides = Math.ceil(homeData?.work_steps?.length / itemsPerView);
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const workStepsLength = homeData?.work_steps?.length || 0;
+  const totalSlides =
+    itemsPerView > 0 && workStepsLength > 0
+      ? Math.ceil(workStepsLength / itemsPerView)
+      : 0;
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    if (totalSlides > 0) {
+      setCurrentIndex((prev) => {
+        // Loop back to first slide when reaching the end
+        if (prev >= totalSlides - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
+    }
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    if (totalSlides > 0) {
+      setCurrentIndex((prev) => {
+        // Loop to last slide when at the beginning
+        if (prev <= 0) {
+          return totalSlides - 1;
+        }
+        return prev - 1;
+      });
+    }
   };
 
+  // Auto carousel effect - advances every 5 seconds
+  useEffect(() => {
+    if (totalSlides <= 1 || isPaused) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        // Loop back to first slide when reaching the end
+        if (prev >= totalSlides - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(interval);
+  }, [totalSlides, isPaused]);
+
   return (
-    <section className="py-8 sm:py-12 md:py-16 bg-white">
+    <section className="pt-8 pb-16 bg-white overflow-visible">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-8 sm:mb-10 md:mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             <TTSWrapper
               text={homeData.home_cms.how_it_works_title || ""}
-              className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
+              className="text-4xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4"
             >
               {homeData.home_cms.how_it_works_title || ""}
             </TTSWrapper>
-          </h2>
+          </h1>
           <p className="text-sm sm:text-base md:text-md text-gray-700 max-w-xl mx-auto px-4">
             <TTSWrapper
               text={homeData.home_cms.how_it_works_subtitle || ""}
@@ -120,17 +138,37 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-full mx-auto">
+        <div 
+          className="relative max-w-full mx-auto px-12 md:px-16 lg:px-20"
+          onMouseEnter={() => {
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = null;
+            }
+            setIsPaused(true);
+          }}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {/* Previous Button */}
-          {homeData?.work_steps?.length > 5 && (
+          {totalSlides > 1 && (
             <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={currentIndex === 0}
+              onClick={() => {
+                if (resumeTimeoutRef.current) {
+                  clearTimeout(resumeTimeoutRef.current);
+                }
+                setIsPaused(true);
+                prevSlide();
+                // Resume auto-play after 5 seconds of inactivity
+                resumeTimeoutRef.current = setTimeout(() => {
+                  setIsPaused(false);
+                  resumeTimeoutRef.current = null;
+                }, 5000);
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
               aria-label="Previous slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -152,79 +190,88 @@ const HowItWorksSection = ({ homeData }: { homeData: HomeData }) => {
                 transform: `translateX(-${currentIndex * 100}%)`,
               }}
             >
-              {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-                <div
-                  key={slideIndex}
-                  className="min-w-full flex gap-6 justify-center"
-                >
-                  {homeData?.work_steps
-                    .slice(
-                      slideIndex * itemsPerView,
-                      (slideIndex + 1) * itemsPerView
-                    )
-                    .map((step, index) => (
-                      <div
-                        key={slideIndex * itemsPerView + index}
-                        style={{
-                          width: `calc((100% - ${
-                            (itemsPerView - 1) * 24
-                          }px) / ${itemsPerView})`,
-                          flexShrink: 0,
-                        }}
-                      >
-                        <div className="bg-[#E8EFFF] p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
-                          {/* Decorative Flower */}
-                          <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
-                            <FlowerDecoration />
-                          </div>
+              {totalSlides > 0 &&
+                Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="min-w-full flex gap-6">
+                    {(homeData?.work_steps || [])
+                      .slice(
+                        slideIndex * itemsPerView,
+                        (slideIndex + 1) * itemsPerView
+                      )
+                      .map((step, index) => (
+                        <div
+                          key={slideIndex * itemsPerView + index}
+                          style={{
+                            width: `calc((100% - ${
+                              (itemsPerView - 1) * 24
+                            }px) / ${itemsPerView})`,
+                            flexShrink: 0,
+                          }}
+                        >
+                          <div className="bg-[#E8EFFF] py-4 pe-4 ps-4 sm:py-5 sm:pe-5 sm:pe-5 md:py-6 md:pe-6 md:ps-6 rounded-2xl sm:rounded-3xl h-70 sm:h-80 md:h-85 shadow-sm hover:shadow-md transition-shadow border border-gray-200 relative">
+                            {/* Decorative Flower */}
+                            <div className="absolute top-1 sm:top-1 right-1 sm:right-2">
+                              <FlowerDecoration />
+                            </div>
 
-                          {/* Icon */}
-                          <div className="flex mb-3 sm:mb-4">
-                            <Image
-                              src={step.image_value}
-                              alt={step.image_alt_text_value}
-                              width={100}
-                              height={100}
-                            />
-                          </div>
-                          <div className="w-full max-w-[120px] sm:max-w-[140px] absolute bottom-3 sm:bottom-4">
-                            <h3 className="w-full text-sm sm:text-base md:text-lg font-semibold text-gray-900">
-                              <TTSWrapper
-                                text={step.title}
-                                className="text-sm sm:text-base md:text-lg font-semibold text-gray-900"
-                              >
-                                {step.title}
-                              </TTSWrapper>
-                            </h3>
-                          </div>
-                          <div className="absolute right-1 sm:right-2 bottom-3 sm:bottom-4">
-                            <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium">
-                              <TTSWrapper
-                                text={step.id.toString()}
-                                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-lg sm:text-xl font-medium"
-                              >
-                                {step.id.toString()}
-                              </TTSWrapper>
+                            {/* Icon */}
+                            <div className="flex">
+                              <Image
+                                src={step.image_value}
+                                alt={step.image_alt_text_value}
+                                width={120}
+                                height={120}
+                                loading="lazy"
+                                sizes="120px"
+                              />
+                            </div>
+                            <div className="absolute left-4 sm:left-5 md:left-6 bottom-3 sm:bottom-4 right-12 sm:right-16 md:right-20 pr-2 sm:pr-3">
+                              <h3 className="text-2xl font-semibold text-gray-900 line-clamp-3 break-words">
+                                <TTSWrapper
+                                  text={step.title}
+                                >
+                                  {step.title}
+                                </TTSWrapper>
+                              </h3>
+                            </div>
+                            <div className="absolute right-1 sm:right-2 md:right-3 bottom-3 sm:bottom-4 z-10">
+                              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-xl font-medium">
+                                <TTSWrapper
+                                  text={step.id.toString()}
+                                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-[#3C5387] text-xl font-medium"
+                                >
+                                  {step.id.toString()}
+                                </TTSWrapper>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                </div>
-              ))}
+                      ))}
+                  </div>
+                ))}
             </div>
           </div>
 
           {/* Next Button */}
-          {steps.length > 5 && (
+          {totalSlides > 1 && (
             <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 bg-[rgba(255, 255, 255, 0.2)] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={currentIndex === totalSlides - 1}
+              onClick={() => {
+                if (resumeTimeoutRef.current) {
+                  clearTimeout(resumeTimeoutRef.current);
+                }
+                setIsPaused(true);
+                nextSlide();
+                // Resume auto-play after 5 seconds of inactivity
+                resumeTimeoutRef.current = setTimeout(() => {
+                  setIsPaused(false);
+                  resumeTimeoutRef.current = null;
+                }, 5000);
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 bg-white shadow-lg rounded-full flex items-center justify-center hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-200"
               aria-label="Next slide"
             >
               <svg
-                className="w-6 h-6 text-gray-600"
+                className="w-5 h-5 md:w-6 md:h-6 text-gray-700"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

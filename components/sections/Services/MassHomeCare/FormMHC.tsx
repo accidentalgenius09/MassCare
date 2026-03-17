@@ -5,6 +5,8 @@ import restApiWrapper from "@/service/RestApiWrapper";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface FormData {
   name: string;
@@ -43,17 +45,83 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
   const howSoonCloseTimeoutRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const handleSubmit = () => {
-    if (formData) {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  
+  const handleSubmit = async () => {
+    if (!formData) return;
+
+    // Check required fields
+    const missingFields: string[] = [];
+    if (!formData.name.trim()) missingFields.push("Name");
+    if (!formData.email.trim()) missingFields.push("Email");
+    if (!formData.phone.trim()) missingFields.push("Phone");
+    if (!formData.location.trim()) missingFields.push("Location");
+    if (!formData.typeofCare) missingFields.push("Type of Care");
+    if (!formData.howSoonCareNeed) missingFields.push("How soon care is needed");
+
+    if (missingFields.length > 0) {
+      toast.error(
+        missingFields.length === 1
+          ? `Please fill in ${missingFields[0]}`
+          : `Please fill in all required fields: ${missingFields.join(", ")}`
+      );
+      return;
+    }
+
+    // Validate name
+    const nameLength = formData.name.trim().length;
+    if (nameLength < 2) {
+      toast.error("Name must be at least 2 characters");
+      return;
+    }
+    if (nameLength > 100) {
+      toast.error("Name must be less than 100 characters");
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Validate phone number (count digits, not total length)
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+
+    // Validate location
+    const locationLength = formData.location.trim().length;
+    if (locationLength < 2) {
+      toast.error("Location must be at least 2 characters");
+      return;
+    }
+
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
+
+    try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      // All validations passed, proceed with submission
       const payload = {
         service_id: MCMData.id,
         type_of_care_id: formData.typeofCare,
         phone_number: formData.phone,
         how_soon_need_care_id: formData.howSoonCareNeed,
-        location: formData.location,
-        name: formData.name,
-        email: formData.email,
+        location: formData.location.trim(),
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        captcha_key: token,
       };
+
       setIsLoading(true);
       restApiWrapper
         .post("/service-enquiry", payload)
@@ -62,10 +130,14 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
         })
         .catch((err) => {
           console.error(err);
+          toast.error("Failed to submit enquiry. Please try again.");
         })
         .finally(() => {
           setIsLoading(false);
         });
+    } catch (error) {
+      console.error("reCAPTCHA error:", error);
+      toast.error("reCAPTCHA verification failed. Please try again.");
     }
   };
 
@@ -74,6 +146,24 @@ function FormMHC({ MCMData }: { MCMData: McmNursingCareAgencyServiceDetail }) {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    if (e.target.name === "phone") {
+      // Only allow digits and plus sign
+      const filteredValue = e.target.value.replace(/[^\d+]/g, "");
+      
+      // If filtered value is different from input, invalid characters were entered
+      if (filteredValue !== e.target.value) {
+        toast.error("Phone number can only contain digits and plus sign (+)");
+        return;
+      }
+      
+      // Update with filtered value
+      setFormData({
+        ...formData,
+        [e.target.name]: filteredValue,
+      });
+      return;
+    }
+    
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,

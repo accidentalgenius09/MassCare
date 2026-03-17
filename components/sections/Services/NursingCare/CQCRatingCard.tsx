@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { McmNursingCareAgencyServiceDetail } from "@/types/Service.type";
+import dayjs from "dayjs";
 
 function CQCRatingCard({
   MCMData,
@@ -21,6 +22,8 @@ function CQCRatingCard({
                 width={200}
                 height={140}
                 className="object-contain w-40 sm:w-48 md:w-56"
+                loading="lazy"
+                sizes="(max-width: 640px) 160px, (max-width: 768px) 192px, 224px"
               />
               <p className="text-xs sm:text-sm text-black font-normal -mt-2 text-center md:text-left">
                 <TTSWrapper
@@ -41,10 +44,10 @@ function CQCRatingCard({
                     {MCMData?.service_detail_cms?.quality_section_title}
                   </TTSWrapper>
                 </h4>
-                <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 inline-block mb-4">
-                  <p className="text-white">
+                <div className="bg-[#0A5BE0] rounded-full px-3 sm:px-4 py-2 sm:py-2 inline-block mb-4">
+                  <p className="text-white text-xs sm:text-base leading-tight whitespace-nowrap">
                     <TTSWrapper text="Overall Rating:">
-                      <span className="font-semibold text-lg">
+                      <span className="font-semibold text-xs sm:text-lg">
                         Overall Rating:{" "}
                       </span>
                     </TTSWrapper>
@@ -75,9 +78,9 @@ function CQCRatingCard({
                 </p>
                 <p className="text-xs sm:text-sm text-black font-normal">
                   <TTSWrapper
-                    text={MCMData?.service_detail_cms?.last_inspection_date}
+                    text={MCMData?.service_detail_cms?.last_inspection_date ? dayjs(MCMData.service_detail_cms.last_inspection_date).format("DD-MM-YYYY") : ""}
                   >
-                    {MCMData?.service_detail_cms?.last_inspection_date}
+                    {MCMData?.service_detail_cms?.last_inspection_date ? dayjs(MCMData.service_detail_cms.last_inspection_date).format("DD-MM-YYYY") : ""}
                   </TTSWrapper>
                 </p>
               </div>

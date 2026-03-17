@@ -7,6 +7,7 @@ import { UploadOutline, XOutline } from "../helpers/svgs";
 import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface ApplyNowModalProps {
   isOpen: boolean;
@@ -45,6 +46,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
   const [isExperienceDropdownOpen, setExperienceDropdownOpen] = useState(false);
   const experienceDropdownRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const dropdownCloseTimeoutRef = useRef<number | null>(null);
 
@@ -289,9 +291,18 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       return;
     }
 
-    setIsSubmitting(true);
+    // Get reCAPTCHA token right before submission
+    if (!executeRecaptcha) {
+      toast.error("reCAPTCHA is not ready. Please try again.");
+      return;
+    }
 
     try {
+      const token = await executeRecaptcha("submit");
+      console.log("reCAPTCHA Token:", token);
+
+      setIsSubmitting(true);
+
       // Create FormData object
       const formdata = new FormData();
 
@@ -301,6 +312,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
       formdata.append("email", formData.email.trim());
       formdata.append("phone_number", formData.phone.trim());
       formdata.append("experience", formData.experience);
+      formdata.append("captcha_key", token);
 
       // Append resume file with filename as third parameter
       if (fileInputRef.current?.files && fileInputRef.current.files[0]) {
@@ -317,8 +329,13 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
         toast.error("Application submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("An error occurred. Please try again.");
+      if (error instanceof Error && error.message.includes("reCAPTCHA")) {
+        console.error("reCAPTCHA error:", error);
+        toast.error("reCAPTCHA verification failed. Please try again.");
+      } else {
+        console.error("Error submitting form:", error);
+        toast.error("An error occurred. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -330,14 +347,65 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
     }
   };
 
+  const handleBackdropWheel = (e: React.WheelEvent) => {
+    // Prevent background scroll when scrolling on backdrop
+    const target = e.target as HTMLElement;
+    const modalContent = target.closest('.modal-content-wrapper');
+    
+    // If scrolling on backdrop (not modal content), prevent it
+    if (!modalContent || target === e.currentTarget) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      // Disable body scroll
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        // Restore body scroll
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        // Restore scroll position
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0000004f] overflow-y-auto"
       onClick={handleBackdropClick}
+      onWheel={handleBackdropWheel}
+      onScroll={(e) => {
+        // Prevent backdrop from scrolling
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      onTouchMove={(e) => {
+        // Prevent background scroll on touch devices
+        const target = e.target as HTMLElement;
+        const modalContent = target.closest('.modal-content-wrapper');
+        if (!modalContent) {
+          e.preventDefault();
+        }
+      }}
     >
-      <div className="bg-white rounded-md w-[98%] max-w-6xl max-h-[90vh] my-auto relative flex flex-col">
+      <div className="modal-content-wrapper bg-white rounded-md w-[98%] max-w-6xl max-h-[90vh] my-auto relative flex flex-col">
         {/* Close Button */}
         {/* Modal Content */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 overflow-y-auto scrollbar-hide flex-1">
@@ -551,7 +619,7 @@ const ApplyNowModal: React.FC<ApplyNowModalProps> = ({
                   </div>
                   <p className="text-xs sm:text-sm text-[#00000066]">
                     <TTSWrapper text="Click To Upload Your CV (PDF, DOC, DOCX)">
-                      Click To Upload Your CV (PDF, DOC, DOCX)
+                      Click To Upload Your CV (PDF, DOC, DOCX) (Max 5MB)
                     </TTSWrapper>
                   </p>
                 </div>

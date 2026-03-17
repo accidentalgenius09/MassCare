@@ -11,9 +11,9 @@ const TestimonialHero: React.FC<{ testimonialsData: TestimonialsPageData }> = ({
 }) => {
   const router = useRouter();
   return (
-    <div className="mx-30">
+    <div className="lg:mx-26 mx-10">
       <div className="mx-auto px-4 py-16">
-        <div className="grid lg:grid-cols-2 gap-12 items-stretch h-full">
+        <div className="grid lg:grid-cols-2 gap-18 items-stretch h-full">
           {/* Left Content */}
           <div className="max-w-lg space-y-6 flex flex-col justify-center">
             <h1 className="text-5xl font-semibold text-black leading-tight">
@@ -32,19 +32,21 @@ const TestimonialHero: React.FC<{ testimonialsData: TestimonialsPageData }> = ({
               </TTSWrapper>
             </p>
 
-            <div className="w-fit">
+            <div className="w-full lg:w-fit relative z-10 mt-4 lg:mt-0">
               <button
                 onClick={() => router.push("/contact-us")}
-                className="inline-flex items-center gap-2 bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="relative overflow-hidden bg-[#0A5BE0] text-white font-normal px-8 py-4 rounded-full hover:shadow-lg transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#0A5BE0] before:to-[#003C9F] before:content-[''] before:-translate-x-full before:transition-transform before:duration-300 before:z-0 hover:before:translate-x-0 inline-flex items-center justify-center gap-2 cursor-pointer w-full lg:w-auto"
               >
-                <TTSWrapper text="Contact Us">Contact Us</TTSWrapper>
-                <TopRightArrowWhite />
+                <span className="relative z-10 flex items-center gap-2">
+                  <TTSWrapper text="Contact Us">Contact Us</TTSWrapper>
+                  <TopRightArrowWhite />
+                </span>
               </button>
             </div>
           </div>
 
           {/* Right Content - Image with Overlays */}
-          <div className="relative mx-auto">
+          <div className="relative mx-auto lg:w-full w-2/3 lg:ms-30">
             {/* Main Image Card */}
             <div className="absolute -top-20 -left-20">
               <Image

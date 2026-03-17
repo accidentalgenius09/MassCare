@@ -59,9 +59,11 @@ const CareNursingAgency: React.FC<CareNursingAgencyProps> = ({
               {MCMData?.detail_image_value && (
                 <Image
                   src={MCMData?.detail_image_value}
-                  alt={MCMData?.image_alt_text_value}
+                  alt={MCMData?.image_alt_text_value || "Care Nursing Agency"}
                   width={800}
                   height={500}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 800px"
                   className="object-cover"
                 />
               )}
@@ -70,7 +72,7 @@ const CareNursingAgency: React.FC<CareNursingAgencyProps> = ({
 
           {/* Text Content */}
           <div className="order-1 lg:order-2 flex flex-col justify-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl max-w-1/2 font-bold text-black mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl max-w-2/3 font-bold text-black mb-6 leading-tight">
               <TTSWrapper text={MCMData?.detail_page_title || ""}>
                 {MCMData?.detail_page_title}
               </TTSWrapper>

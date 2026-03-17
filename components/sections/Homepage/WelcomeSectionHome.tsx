@@ -3,6 +3,7 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
 import { HomeCms } from "@/types/Home.type";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const WelcomeSectionHome = ({
   homeData,
@@ -11,10 +12,13 @@ const WelcomeSectionHome = ({
   homeData: HomeCms;
   page: string;
 }) => {
+  const router = useRouter();
   return (
     <section className="pb-2 pt-8 sm:pt-12 md:pt-16 bg-white text-black">
-      <div className={`container mx-auto ${page === "home" ? "px-24" : "px-4"}`}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-2 sm:ms-4 md:ms-6 me-4 sm:me-6 md:me-10 justify-between">
+      <div
+        className={`container mx-auto ${page === "home" ? "px-4 lg:px-24" : "px-4"}`}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 ms-0 sm:ms-4 md:ms-6 me-0 sm:me-6 md:me-10 justify-between">
           {/* Left Content */}
           <div>
             <TTSWrapper text={homeData.title}>
@@ -39,7 +43,10 @@ const WelcomeSectionHome = ({
           </div>
 
           {/* Right Content - Mission, Vision & Accreditation */}
-          <div className={`ml-0 sm:ml-12 md:ml-24`}>
+          <div
+            onClick={() => router.push("/about-us")}
+            className={`ml-0 cursor-pointer sm:ml-12 md:ml-24`}
+          >
             {/* Mission */}
             <div className="px-4 sm:px-5 md:px-6 pt-4 sm:pt-5 md:pt-6 pb-3 sm:pb-4 rounded-2xl sm:rounded-3xl md:rounded-[40px] border border-gray-200">
               <div className="mb-3 sm:mb-4">
@@ -69,10 +76,12 @@ const WelcomeSectionHome = ({
               <div className="inline-flex items-center space-x-2 sm:space-x-3 pt-2 sm:pt-3">
                 <Image
                   src={homeData.image_value || ""}
-                  alt={homeData.image_alt_text_value || ""}
+                  alt={homeData.image_alt_text_value || "Care Quality Commission logo"}
                   width={100}
                   height={80}
                   className="sm:w-[130px] sm:h-[100px]"
+                  loading="lazy"
+                  sizes="(max-width: 640px) 100px, 130px"
                 />
               </div>
             </div>
