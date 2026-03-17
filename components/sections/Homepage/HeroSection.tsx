@@ -16,7 +16,7 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const clickedButtonRef = useRef<boolean>(false);
-  const lastProcessedClickRef = useRef<number | null>(null);
+  const lastClickTimeRef = useRef<number>(0);
 
   // Find default slider (is_default === 1)
   const defaultSlider = homeData?.sliders?.find(
@@ -350,9 +350,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
                     e.nativeEvent.stopImmediatePropagation();
                     clickedButtonRef.current = true;
                     setIsDragging(false);
-                    // Process click immediately on mousedown to bypass any drag interference
-                    if (lastProcessedClickRef.current !== serviceId) {
-                      lastProcessedClickRef.current = serviceId;
+                    // Process click immediately on mousedown to ensure it works on large screens
+                    // This fires before drag handlers can interfere
+                    const now = Date.now();
+                    // Only process if enough time has passed since last click (prevents double execution)
+                    if (now - lastClickTimeRef.current > 100) {
+                      lastClickTimeRef.current = now;
                       handleButtonClick(serviceId);
                     }
                   }}
@@ -360,17 +363,14 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
                     e.preventDefault();
                     e.stopPropagation();
                     e.nativeEvent.stopImmediatePropagation();
-                    // Only process if not already handled in onMouseDown
-                    if (lastProcessedClickRef.current !== serviceId) {
+                    // Fallback handler - only process if not already handled in onMouseDown
+                    const now = Date.now();
+                    if (now - lastClickTimeRef.current > 100) {
                       clickedButtonRef.current = false;
                       setIsDragging(false);
-                      lastProcessedClickRef.current = serviceId;
+                      lastClickTimeRef.current = now;
                       handleButtonClick(serviceId);
                     }
-                    // Reset after a delay to allow subsequent clicks
-                    setTimeout(() => {
-                      lastProcessedClickRef.current = null;
-                    }, 50);
                   }}
                   onTouchStart={(e) => {
                     e.stopPropagation();

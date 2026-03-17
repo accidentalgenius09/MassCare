@@ -8,19 +8,14 @@ import { MetaData, TestimonialCategory } from "@/types/Home.type";
 import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { ContactUsDataType } from "@/types/Contact.type";
+import { MapPin, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import {
-  ClockBlueOutline,
-  ClockWhiteOutline,
-  MailBlueOutline,
-  MailWhiteOutline,
-  MapPinWithBg,
-  MapPinWithBgWhite,
-  PhoneBlueOutline,
-  PhoneWhiteOutline,
+  MailContact,
+  PhoneContact,
+  MapPinContact,
   TopRightArrowWhite,
-  UploadIcon,
 } from "@/components/helpers/svgs";
 
 const ContactPage: React.FC = () => {
@@ -103,7 +98,7 @@ const ContactPage: React.FC = () => {
         captcha_key: token,
       };
       console.log("Final Payload being sent:", finalPayload);
-      
+
       restApiWrapper
         .post("/contact-enquiry", finalPayload)
         .then((res) => {
@@ -308,82 +303,65 @@ const ContactPage: React.FC = () => {
     };
   }, [isDropdownOpen]);
 
-  const [contactIcons, setContactIcons] = useState<
-    Array<{
-      id: number;
-      icon: React.ReactElement;
-      hoverIcon: React.ReactElement;
-      title: string;
-      content: string;
-    }>
-  >([]);
+  const [contactIcons, setContactIcons] = useState<{
+    id?: number;
+    address?: string;
+    phone_number?: string;
+    email?: string;
+    map_embed_url?: string;
+    title?: string;
+  }>({});
+  const hasContactIcons = Object.keys(contactIcons).length > 0;
+
+  const [selectedLocation, setSelectedLocation] = useState<
+    ContactUsDataType["locations"][number] | null
+  >(null);
+  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
+  const locationDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (
-      !contactUsData?.contact_infos ||
-      !Array.isArray(contactUsData.contact_infos) ||
-      contactUsData.contact_infos.length === 0
-    ) {
-      setContactIcons([]);
-      return;
+    if (!selectedLocation && contactUsData?.locations?.length) {
+      setSelectedLocation(contactUsData.locations[0]);
     }
+  }, [contactUsData?.locations, selectedLocation]);
 
-    // Validate that all icon components are defined
-    const iconComponents = {
-      ClockBlueOutline,
-      ClockWhiteOutline,
-      MailBlueOutline,
-      MailWhiteOutline,
-      MapPinWithBg,
-      MapPinWithBgWhite,
-      PhoneBlueOutline,
-      PhoneWhiteOutline,
+  useEffect(() => {
+    if (selectedLocation) {
+      const fetchData = async () => {
+        try {
+          setIsLoading(true);
+          const response = await restApiWrapper.get(
+            `/contact-info?location=${selectedLocation.slug}`
+          );
+          setContactIcons(response?.data ?? {});
+        } catch (error) {
+          console.error("Error fetching contact infos:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [selectedLocation]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        locationDropdownRef.current &&
+        !locationDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsLocationDropdownOpen(false);
+      }
     };
 
-    // Check if any icon component is undefined
-    const undefinedIcons = Object.entries(iconComponents).filter(
-      ([_, component]) => !component
-    );
-    if (undefinedIcons.length > 0) {
-      console.error(
-        "Undefined icon components:",
-        undefinedIcons.map(([name]) => name)
-      );
-      setContactIcons([]);
-      return;
+    if (isLocationDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
-    const respData = contactUsData.contact_infos
-      .map((item) => {
-        let icon: React.ReactElement;
-        let hoverIcon: React.ReactElement;
-        if (item.title === "Open Hours") {
-          icon = <ClockWhiteOutline />;
-          hoverIcon = <ClockBlueOutline />;
-        } else if (item.title === "Mail To Us") {
-          icon = <MailWhiteOutline />;
-          hoverIcon = <MailBlueOutline />;
-        } else if (item.title === "Location") {
-          icon = <MapPinWithBg />;
-          hoverIcon = <MapPinWithBgWhite />;
-        } else if (item.title === "Get Consultation") {
-          icon = <PhoneWhiteOutline />;
-          hoverIcon = <PhoneBlueOutline />;
-        } else {
-          icon = <ClockWhiteOutline />;
-          hoverIcon = <ClockBlueOutline />; // Default icon
-        }
-        return {
-          id: item.id,
-          icon: icon,
-          hoverIcon: hoverIcon,
-          title: item.title,
-          content: item.content,
-        };
-      })
-      .filter((item) => item.icon && item.hoverIcon); // Filter out any items with undefined icons
-    setContactIcons(respData);
-  }, [contactUsData?.contact_infos]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLocationDropdownOpen]);
 
   return (
     <>
@@ -423,162 +401,181 @@ const ContactPage: React.FC = () => {
           description={contactUsData?.banner?.banner_description || ""}
         />
 
-        <div className="min-h-screen bg-white">
-          <section className="py-12 md:py-20 px-4 md:px-8 lg:px-16 bg-white">
+        <div className="bg-white">
+          <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16">
             <div className="max-w-7xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
-                <TTSWrapper
-                  text={contactUsData?.contact_cms.section1_title || ""}
-                >
-                  {contactUsData?.contact_cms.section1_title || ""}
-                </TTSWrapper>
-              </h2>
-              <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto text-sm md:text-base">
-                <TTSWrapper
-                  text={contactUsData?.contact_cms.section1_description || ""}
-                >
-                  {contactUsData?.contact_cms.section1_description || ""}
-                </TTSWrapper>
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {contactIcons.map((item) => {
-                  if (!item.icon || !item.hoverIcon) return null;
-                  return (
-                    <div
-                      key={item.id}
-                      className="group rounded-2xl p-6 cursor-pointer
-                 bg-blue-50 hover:bg-[#0A5BE0]
-                 transition-colors duration-300"
-                    >
-                      <div
-                        className="w-12 h-12 flex items-center justify-center mb-4 
-                      bg-[#0A5BE0] group-hover:bg-white 
-                      rounded-full transition-colors duration-300 relative"
-                      >
-                        <span className="block group-hover:hidden">
-                          {item.icon}
-                        </span>
-                        <span className="hidden group-hover:block">
-                          {item.hoverIcon}
-                        </span>
-                      </div>
-                      <h3
-                        className="font-bold text-base sm:text-lg mb-2 
-                     text-black group-hover:text-white 
-                     transition-colors duration-300"
-                      >
-                        {item.title}
-                      </h3>
-
-                      {/* Content */}
-                      <TTSWrapper text={item.content}>
-                        <div
-                          className="text-sm text-gray-700 group-hover:text-white 
-                     transition-colors duration-300"
-                          dangerouslySetInnerHTML={{ __html: item.content }}
-                        />
-                      </TTSWrapper>
+              {/* Locations + Map */}
+              <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-stretch">
+                <div className="rounded-2xl bg-white">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
+                        <TTSWrapper
+                          text={contactUsData?.contact_cms.section1_title || ""}
+                        >
+                          {contactUsData?.contact_cms.section1_title || ""}
+                        </TTSWrapper>
+                      </h2>
+                      <p className="text-gray-600 mt-2 max-w-xl text-sm md:text-base">
+                        <TTSWrapper
+                          text={
+                            contactUsData?.contact_cms.section1_description || ""
+                          }
+                        >
+                          {contactUsData?.contact_cms.section1_description || ""}
+                        </TTSWrapper>
+                      </p>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
 
-          {/* Main Contact Section */}
-          <section className="py-8 md:py-12 px-4 md:px-8 lg:px-16 relative">
-            <div className="max-w-full mx-auto">
-              <div className="grid lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start">
-                {/* Left Side - Contact Info */}
-                <div className="space-y-6 md:space-y-8">
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-black mb-3">
-                      <TTSWrapper
-                        text={contactUsData?.contact_cms.section2_title || ""}
-                      >
-                        {contactUsData?.contact_cms.section2_title || ""}
-                      </TTSWrapper>
-                    </h2>
-                    <p className="text-gray-600 mb-6 md:mb-8 text-sm leading-relaxed">
-                      <TTSWrapper
-                        text={
-                          contactUsData?.contact_cms.section2_description || ""
+                    {/* Location dropdown (UI only) */}
+                    <div
+                      className="w-full sm:w-56"
+                      ref={locationDropdownRef}
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setIsLocationDropdownOpen(!isLocationDropdownOpen)
                         }
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-left flex items-center justify-between text-sm sm:text-base shadow-sm"
                       >
-                        {contactUsData?.contact_cms.section2_description || ""}
-                      </TTSWrapper>
-                    </p>
+                        <span className="text-gray-900">
+                          {selectedLocation?.name || "Select location"}
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-[#000] transition-transform duration-200 ${isLocationDropdownOpen ? "rotate-180" : ""
+                            }`}
+                        />
+                      </button>
+                      {isLocationDropdownOpen && (
+                        <div className="absolute w-full sm:w-56 mt-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                          {contactUsData?.locations.map((option) => (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedLocation(option);
+                                setIsLocationDropdownOpen(false);
+                              }}
+                              className={`w-full px-4 py-2 text-left hover:bg-blue-50 transition-colors text-sm ${selectedLocation?.id === option.id
+                                ? "bg-blue-100 text-blue-700 font-medium"
+                                : "text-gray-700"
+                                }`}
+                            >
+                              {option.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Contact Options */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* Emergency Helpline */}
-                    {contactUsData?.contact_items.map((item) => (
-                      <div key={item.id}>
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 rounded-full flex items-center flex-shrink-0">
-                            <Image
-                              src={item.icon_value}
-                              alt={item.icon_alt_text_value}
-                              width={29}
-                              height={29}
-                              loading="lazy"
-                              sizes="29px"
-                            />
+                  <div className="mt-6 rounded-2xl bg-white">
+                    <div className="mt-1 text-lg sm:text-xl font-semibold text-black">
+                      <TTSWrapper text={contactIcons.title || ""}>
+                        {contactIcons.title}
+                      </TTSWrapper>
+                    </div>
+
+                    <div className="mt-1">
+                      {hasContactIcons && (
+                        <div key={contactIcons.id}>
+                          {/* Address */}
+                          <div className="py-4">
+                            <div className="flex items-center gap-1 font-bold text-[#0D1B3E] text-sm mb-2">
+                              <MapPinContact />
+                              <TTSWrapper text="Address">Address</TTSWrapper>
+                            </div>
+                            <div className="text-base text-gray-700">
+                              <TTSWrapper text={contactIcons.address || ""}>
+                                {contactIcons.address}
+                              </TTSWrapper>
+                            </div>
                           </div>
-                          <span className="font-semibold text-base text-black flex-1 min-w-0 break-words">
-                            <TTSWrapper text={item.title}>
-                              {item.title}
-                            </TTSWrapper>
-                          </span>
+                          <hr className="border-gray-200" />
+
+                          {/* Phone */}
+                          <div className="py-4">
+                            <div className="flex items-center gap-1 font-bold text-[#0D1B3E] text-sm mb-2">
+                              <PhoneContact />
+                              <TTSWrapper text="Phone">Phone</TTSWrapper>
+                            </div>
+                            <div className="text-base text-gray-700">
+                              <TTSWrapper text={contactIcons.phone_number || ""}>
+                                {contactIcons.phone_number}
+                              </TTSWrapper>
+                            </div>
+                          </div>
+                          <hr className="border-gray-200" />
+
+                          {/* Email */}
+                          <div className="py-4">
+                            <div className="flex items-center gap-1 font-bold text-[#0D1B3E] text-sm mb-2">
+                              <MailContact />
+                              <TTSWrapper text="Email">Email</TTSWrapper>
+                            </div>
+                            <div className="text-base text-gray-700">
+                              <TTSWrapper text={contactIcons.email || ""}>
+                                {contactIcons.email}
+                              </TTSWrapper>
+                            </div>
+                          </div>
+                          <hr className="border-gray-200" />
+
                         </div>
-                        <p className="text-[13px] text-[#999]">
-                          <TTSWrapper text={item.sub_title}>
-                            {item.sub_title}
-                          </TTSWrapper>
-                        </p>
-                        <div className="text-sm text-black mt-3 max-w-sm break-words">
-                          <TTSWrapper text={item.content}>
-                            <div
-                              className="text-sm text-gray-700"
-                              dangerouslySetInnerHTML={{ __html: item.content }}
-                            />
-                          </TTSWrapper>
-                        </div>
-                      </div>
-                    ))}
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Side - Contact Form */}
-                <div className="bg-[#012B71] lg:absolute rounded-2xl sm:rounded-3xl p-4 md:p-6 lg:p-8 relative lg:right-10 lg:-translate-x-16 h-auto pb-4 md:pb-6 lg:pb-8 mt-6 lg:mt-0">
-                  <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 text-center pt-3">
+                {hasContactIcons && (
+                  <div className="rounded-2xl overflow-hidden bg-gray-200 min-h-[260px] md:min-h-[340px]">
+                    <iframe
+                      src={contactIcons?.map_embed_url ?? ""}
+                      width="100%"
+                      height="100%"
+                      style={{
+                        border: 0,
+                      }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Mass Care Location Map"
+                    ></iframe>
+                  </div>
+                )}
+              </div>
+
+              {/* Contact Form + Info Box */}
+              <div className="mt-10 md:mt-14 w-full gap-6 md:gap-8 items-start grid lg:grid-cols-2">
+                {/* Contact Form */}
+                <div className="bg-[#012B71] rounded-2xl sm:rounded-3xl p-5 md:p-7 lg:p-8">
+                  <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-5 text-center">
                     <TTSWrapper
                       text={contactUsData?.contact_cms.section3_title || ""}
                     >
                       {contactUsData?.contact_cms.section3_title || ""}
                     </TTSWrapper>
                   </h3>
+
                   <div className="space-y-3">
-                    <div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <input
                         type="text"
                         name="name"
                         placeholder="Name*"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2.5 sm:py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500 text-sm sm:text-base"
+                        className="w-full px-4 py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500 text-sm sm:text-base"
                       />
-                    </div>
-                    <div>
+
                       <input
                         type="text"
                         name="phone_number"
                         placeholder="Phone*"
                         value={formData.phone_number}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2.5 sm:py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500 text-sm sm:text-base"
+                        className="w-full px-4 py-3 bg-white rounded-xl border-0 focus:outline-none text-gray-900 placeholder-gray-500 text-sm sm:text-base"
                       />
                     </div>
 
@@ -586,7 +583,7 @@ const ContactPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="w-full px-3 py-2.5 sm:py-3 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none text-left flex items-center justify-between text-sm sm:text-base"
+                        className="w-full px-4 py-3 rounded-xl border-0 focus:outline-none text-gray-700 bg-white appearance-none text-left flex items-center justify-between text-sm sm:text-base"
                       >
                         <span
                           className={
@@ -600,13 +597,12 @@ const ContactPage: React.FC = () => {
                             : "Service Type*"}
                         </span>
                         <ChevronDown
-                          className={`w-4 h-4 text-[#000] transition-transform duration-200 ${
-                            isDropdownOpen ? "rotate-180" : ""
-                          }`}
+                          className={`w-4 h-4 text-[#000] transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       {isDropdownOpen && (
-                        <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                        <div className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
                           {purposeOfEnquiries.map((option) => (
                             <button
                               key={option.id}
@@ -614,11 +610,10 @@ const ContactPage: React.FC = () => {
                               onClick={() => {
                                 handleSelectChange(String(option.id));
                               }}
-                              className={`w-full px-3 py-1 text-left hover:bg-blue-50 transition-colors ${
-                                formData.serviceType === String(option.id)
-                                  ? "bg-blue-100 text-blue-700 font-medium"
-                                  : "text-gray-700"
-                              }`}
+                              className={`w-full px-4 py-2 text-left hover:bg-blue-50 transition-colors ${formData.serviceType === String(option.id)
+                                ? "bg-blue-100 text-blue-700 font-medium"
+                                : "text-gray-700"
+                                }`}
                             >
                               {option.title}
                             </button>
@@ -627,36 +622,22 @@ const ContactPage: React.FC = () => {
                       )}
                     </div>
 
-                    <div>
-                      <textarea
-                        name="message"
-                        placeholder="Message"
-                        value={formData.message}
-                        onChange={handleTextareaChange}
-                        rows={3}
-                        className="w-full px-3 py-2 h-32 sm:h-36 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500 text-sm sm:text-base resize-none"
-                      />
-                    </div>
-
-                    <div className="rounded-xl px-4 text-center cursor-pointert bg-transparent">
-                      {/* <div className="w-8 h-8 flex items-center justify-center mx-auto">
-                      <UploadIcon />
-                    </div> */}
-                      <p className="text-[#012B71] text-xs px-3">
-                        <TTSWrapper text="Upload medical records, referral letters, or other relevant document">
-                          Upload medical records, referral letters, or other
-                          relevant document
-                        </TTSWrapper>
-                      </p>
-                    </div>
+                    <textarea
+                      name="message"
+                      placeholder="Message*"
+                      value={formData.message}
+                      onChange={handleTextareaChange}
+                      rows={5}
+                      className="w-full px-4 py-3 h-32 sm:h-40 rounded-xl border-0 focus:outline-none bg-white text-gray-900 placeholder-gray-500 text-sm sm:text-base resize-none"
+                    />
 
                     <button
                       onClick={handleSubmit}
-                      className={`w-full sm:w-auto mx-auto bg-[#0A5BE0] text-white py-2.5 sm:py-3 px-4 sm:px-6 mt-3 rounded-full flex items-center justify-center group text-sm sm:text-base hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ${
-                        isSubmitting
-                          ? "opacity-50 cursor-not-allowed"
-                          : "cursor-pointer"
-                      }`}
+                      disabled={isSubmitting}
+                      className={`w-full sm:w-auto mx-auto bg-[#0A5BE0] text-white py-3 px-6 mt-2 rounded-full flex items-center justify-center group text-sm sm:text-base hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ${isSubmitting
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                        }`}
                     >
                       <TTSWrapper
                         text={isSubmitting ? "Submitting..." : "Submit Enquiry"}
@@ -669,31 +650,56 @@ const ContactPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+
+                {/* Get in touch box */}
+                <div>
+                  <h3 className="text-4xl sm:text-5xl font-bold text-black">
+                    <TTSWrapper
+                      text={contactUsData?.contact_cms.section2_title || ""}
+                    >
+                      {contactUsData?.contact_cms.section2_title || ""}
+                    </TTSWrapper>
+                  </h3>
+                  <p className="text-gray-600 mt-2 text-sm md:text-md max-w-2xl">
+                    <TTSWrapper
+                      text={contactUsData?.contact_cms.section2_description || ""}
+                    >
+                      {contactUsData?.contact_cms.section2_description || ""}
+                    </TTSWrapper>
+                  </p>
+                  <div className="rounded-2xl sm:rounded-3xl bg-[#EEF2FF] p-5 md:p-7 lg:p-8 mt-6">
+                    <div className="grid grid-cols-2">
+                      {contactUsData?.contact_items.map((item, index) => (
+                        <div
+                          key={item.id}
+                          className={`p-5 md:p-6 min-w-0
+          ${index % 2 === 0 ? "border-r border-gray-300" : ""}
+          ${index < 2 ? "border-b border-gray-300" : ""}
+        `}
+                        >
+                          <div className="font-semibold text-[#0D1B3E] text-base sm:text-lg mb-1">
+                            <TTSWrapper text={item.title}>{item.title}</TTSWrapper>
+                          </div>
+                          <div className="text-sm text-[#6B7280] mb-3">
+                            <TTSWrapper text={item.sub_title}>{item.sub_title}</TTSWrapper>
+                          </div>
+                          <div className="text-sm text-[#2563EB] break-words">
+                            <TTSWrapper text={item.content}>
+                              <div
+                                className="text-sm text-[#2563EB]"
+                                dangerouslySetInnerHTML={{ __html: item.content }}
+                              />
+                            </TTSWrapper>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
         </div>
-
-        <section className="pb-8 md:pb-12">
-          <div className="max-w-full mx-auto">
-            <div className="overflow-hidden h-64 md:h-80 lg:h-100 bg-gray-200">
-              {/* Interactive Map with Dynamic Coordinates */}
-              <iframe
-                src={contactUsData?.contact_cms.section4_iframe_url}
-                width="100%"
-                height="100%"
-                style={{
-                  border: 0,
-                  pointerEvents: "none", // disables zoom & pan
-                }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Mass Care Location Map"
-              ></iframe>
-            </div>
-          </div>
-        </section>
 
         {/* FAQ Section */}
         <FAQ

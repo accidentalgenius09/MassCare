@@ -3,7 +3,14 @@ export interface ContactUsDataType {
   contact_cms: ContactCms;
   contact_infos: ContactInfo[];
   contact_items: ContactItem[];
+  locations: LocationsData[];
   faqs: Faq[];
+}
+
+export interface LocationsData {
+  id: number;
+  name: string;
+  slug: string;
 }
 
 export interface Banner {
