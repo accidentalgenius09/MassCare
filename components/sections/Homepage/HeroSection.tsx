@@ -16,6 +16,8 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const clickedButtonRef = useRef<boolean>(false);
+  const isPointerDownRef = useRef(false);
+  const [isMoved, setIsMoved] = useState(false);
   const lastClickTimeRef = useRef<number>(0);
 
   // Find default slider (is_default === 1)
@@ -57,6 +59,22 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
       window.removeEventListener("logo-click", handleLogoClick);
     };
   }, [pathname]);
+
+  // Ensure drag state can't get "stuck" if pointer-up happens outside the container.
+  useEffect(() => {
+    const resetDragState = () => {
+      isPointerDownRef.current = false;
+      setIsDragging(false);
+      setTimeout(() => setIsMoved(false), 0);
+    };
+
+    window.addEventListener("mouseup", resetDragState);
+    window.addEventListener("touchend", resetDragState);
+    return () => {
+      window.removeEventListener("mouseup", resetDragState);
+      window.removeEventListener("touchend", resetDragState);
+    };
+  }, []);
 
   // Preload critical images
   useEffect(() => {
@@ -106,22 +124,13 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     });
   };
 
-  // Drag scroll handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
-    // Don't start dragging if clicking on a button
-    const target = e.target as HTMLElement;
-    const button = target.closest("button");
-    if (button) {
-      e.stopPropagation();
-      // Reset all drag state when clicking buttons to allow subsequent clicks
-      clickedButtonRef.current = true;
-      setIsDragging(false);
-      return;
-    }
-    // Only start dragging if not clicking a button
-    clickedButtonRef.current = false;
-    setIsDragging(true);
+  
+    if ((e.target as HTMLElement).closest("button")) return;
+  
+    isPointerDownRef.current = true;
+    // ❗ DO NOT set isDragging here
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
   };
@@ -132,36 +141,40 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     const target = e.target as HTMLElement;
     if (target.closest("button")) {
       clickedButtonRef.current = true;
+      isPointerDownRef.current = false;
       setIsDragging(false);
       return;
     }
     clickedButtonRef.current = false;
+    isPointerDownRef.current = true;
     setIsDragging(true);
     setStartX(e.touches[0].pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
-    // Don't drag if clicking on a button - check both target and if button was clicked
-    const target = e.target as HTMLElement;
-    const button = target.closest("button");
-    if (button || clickedButtonRef.current) {
-      // Reset drag state when over buttons to allow clicks
-      setIsDragging(false);
-      // Don't prevent default when over buttons - let clicks work
-      return;
-    }
-    // Only prevent default and drag if we're actually dragging
-    if (!isDragging) return;
-    e.preventDefault();
+    if (!scrollContainerRef.current) return;
+    // Only react to move after a real drag has started (mouse down on container).
+    if (!isPointerDownRef.current) return;
+  
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll speed multiplier
-    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    const walk = x - startX;
+  
+    // 👉 Activate drag ONLY after threshold
+    if (Math.abs(walk) > 5) {
+      if (!isDragging) {
+        setIsDragging(true);
+        setIsMoved(true);
+      }
+  
+      e.preventDefault();
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk * 2;
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!hasMoreThanThreeServices || !scrollContainerRef.current) return;
+    if (!isPointerDownRef.current) return;
     // If we clicked a button, don't drag
     if (clickedButtonRef.current) {
       setIsDragging(false);
@@ -174,20 +187,12 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
     scrollContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleMouseUp = (e?: React.MouseEvent) => {
-    // Don't interfere if clicking on a button
-    if (e) {
-      const target = e.target as HTMLElement;
-      if (target.closest("button")) {
-        // Reset drag state when clicking buttons to allow subsequent clicks
-        setIsDragging(false);
-        clickedButtonRef.current = false;
-        return; // Let the button handle its own click
-      }
-    }
+  const handleMouseUp = () => {
+    isPointerDownRef.current = false;
     setIsDragging(false);
-    // Reset button click tracking immediately to allow rapid button switching
-    clickedButtonRef.current = false;
+    // Delay resetting isMoved so the onClick handler can read it first,
+    // then clear it for the next interaction.
+    setTimeout(() => setIsMoved(false), 0);
   };
 
   const [footerData, setFooterData] = useState<FooterData | null>(null);
@@ -205,8 +210,6 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
 
   const desktopImage = currentSlider?.image_value || "/hero-banner.png";
   const mobileImage = currentSlider?.image_mobile_value || "/hero-banner.png";
-
-  console.log(currentSlider?.is_default);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
@@ -316,20 +319,17 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
             ref={scrollContainerRef}
             onMouseDown={hasMoreThanThreeServices ? handleMouseDown : undefined}
             onMouseMove={hasMoreThanThreeServices ? handleMouseMove : undefined}
-            onMouseUp={hasMoreThanThreeServices ? (e) => handleMouseUp(e) : undefined}
+            onMouseUp={hasMoreThanThreeServices ? () => handleMouseUp() : undefined}
             onMouseLeave={hasMoreThanThreeServices ? () => handleMouseUp() : undefined}
             onTouchStart={hasMoreThanThreeServices ? handleTouchStart : undefined}
             onTouchMove={hasMoreThanThreeServices ? handleTouchMove : undefined}
             onTouchEnd={hasMoreThanThreeServices ? () => handleMouseUp() : undefined}
-            className={`flex items-center ${
-              hasMoreThanThreeServices ? "justify-start" : "justify-center"
-            } ${
-              hasThreeServices ? "lg:justify-center justify-start" : ""
-            } gap-2 sm:gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-2 sm:px-4 ${
-              hasMoreThanThreeServices
+            className={`flex items-center ${hasMoreThanThreeServices ? "justify-start" : "justify-center"
+              } ${hasThreeServices ? "lg:justify-center justify-start" : ""
+              } gap-2 sm:gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-2 sm:px-4 ${hasMoreThanThreeServices
                 ? "cursor-grab active:cursor-grabbing"
                 : ""
-            }`}
+              }`}
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -345,47 +345,10 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
                 <button
                   key={slider.id}
                   type="button"
-                  onMouseDown={(e) => {
-                    e.stopPropagation();
-                    e.nativeEvent.stopImmediatePropagation();
-                    clickedButtonRef.current = true;
-                    setIsDragging(false);
-                    // Process click immediately on mousedown to ensure it works on large screens
-                    // This fires before drag handlers can interfere
-                    const now = Date.now();
-                    // Only process if enough time has passed since last click (prevents double execution)
-                    if (now - lastClickTimeRef.current > 100) {
-                      lastClickTimeRef.current = now;
-                      handleButtonClick(serviceId);
-                    }
-                  }}
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.nativeEvent.stopImmediatePropagation();
-                    // Fallback handler - only process if not already handled in onMouseDown
-                    const now = Date.now();
-                    if (now - lastClickTimeRef.current > 100) {
-                      clickedButtonRef.current = false;
-                      setIsDragging(false);
-                      lastClickTimeRef.current = now;
-                      handleButtonClick(serviceId);
-                    }
-                  }}
-                  onTouchStart={(e) => {
-                    e.stopPropagation();
-                    clickedButtonRef.current = true;
-                    setIsDragging(false);
-                  }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Always allow button clicks, even when switching between buttons
-                    clickedButtonRef.current = false;
-                    setIsDragging(false);
+                    if (isMoved) return; // ❗ ignore click if user dragged
                     handleButtonClick(serviceId);
                   }}
-                  style={{ pointerEvents: "auto", position: "relative", zIndex: 20, touchAction: "manipulation" }}
                   className="group flex items-center bg-[rgba(212,212,212,0.1)] hover:bg-opacity-20 backdrop-blur-md text-white ps-3 sm:ps-4 md:ps-6 pe-2 sm:pe-3 py-2 rounded-full transition-all duration-500 border border-white/30 cursor-pointer flex-shrink-0 select-none"
                 >
                   <TTSWrapper text={slider.service.title}>
@@ -394,11 +357,10 @@ const HeroSection = ({ homeData }: { homeData: HomeData }) => {
                     </span>
                   </TTSWrapper>
                   <div
-                    className={`ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full transition-all text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal ${
-                      isActive
-                        ? "bg-blue-500"
-                        : "bg-[rgba(217,217,217,0.4)] bg-opacity-20 group-hover:bg-opacity-30"
-                    }`}
+                    className={`ml-2 sm:ml-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full transition-all text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal ${isActive
+                      ? "bg-blue-500"
+                      : "bg-[rgba(217,217,217,0.4)] bg-opacity-20 group-hover:bg-opacity-30"
+                      }`}
                   >
                     +
                   </div>

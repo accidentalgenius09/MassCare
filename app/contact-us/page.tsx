@@ -104,8 +104,8 @@ const ContactPage: React.FC = () => {
         .then((res) => {
           toast.success(res.message);
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((err: unknown) => {
+          toast.error(err instanceof Error ? err.message : "API request failed");
         })
         .finally(() => {
           setIsSubmitting(false);

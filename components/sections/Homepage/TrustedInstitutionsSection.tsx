@@ -125,7 +125,7 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
 
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-white">
-      <div className="px-4 sm:px-6 md:px-16 flex flex-col lg:flex-row items-center lg:items-start">
+      <div className="px-4 sm:px-6 md:px-16 flex flex-col lg:flex-row items-center">
         <div className="text-center mb-6 lg:mb-0 lg:mr-4 lg:text-left flex-shrink-0">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center lg:whitespace-nowrap">
             <TTSWrapper
@@ -189,12 +189,12 @@ const TrustedInstitutionsSection = ({ homeData }: { homeData: HomeData }) => {
                             institution.icon_alt_text_value ||
                             "Trusted institution logo"
                           }
-                          width={100}
-                          height={100}
-                          className="object-contain max-h-[60px] sm:max-h-[70px] md:max-h-[80px] w-auto pointer-events-none select-none"
+                          width={120}
+                          height={120}
+                          className="object-contain max-h-[80px] max-w-[80px] sm:max-h-[90px] sm:max-w-[90px] md:max-h-[100px] md:max-w-[100px] pointer-events-none select-none"
                           draggable={false}
                           loading="lazy"
-                          sizes="(max-width: 640px) 60px, (max-width: 1024px) 70px, 80px"
+                          sizes="(max-width: 740px) 80px, (max-width: 1124px) 90px, 100px"
                         />
                       </div>
                     ))}
