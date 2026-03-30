@@ -8,8 +8,6 @@ import { MetaData, TestimonialCategory } from "@/types/Home.type";
 import restApiWrapper from "@/service/RestApiWrapper";
 import toast from "react-hot-toast";
 import { ContactUsDataType } from "@/types/Contact.type";
-import { MapPin, Phone, Mail } from "lucide-react";
-import Image from "next/image";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import {
   MailContact,
@@ -17,6 +15,7 @@ import {
   MapPinContact,
   TopRightArrowWhite,
 } from "@/components/helpers/svgs";
+import { cmsFieldToString } from "@/lib/cmsFieldToString";
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -395,10 +394,10 @@ const ContactPage: React.FC = () => {
 
       <div className={isLoading ? "blur-sm pointer-events-none" : ""}>
         <PageBanner
-          title={contactUsData?.banner?.banner_title || ""}
+          title={contactUsData?.banner?.banner_title}
           breadcrumb="Home / Contact Us"
           image="/common/contact-banner.jpeg"
-          description={contactUsData?.banner?.banner_description || ""}
+          description={contactUsData?.banner?.banner_description}
         />
 
         <div className="bg-white">
@@ -411,18 +410,24 @@ const ContactPage: React.FC = () => {
                     <div>
                       <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
                         <TTSWrapper
-                          text={contactUsData?.contact_cms.section1_title || ""}
+                          text={cmsFieldToString(
+                            contactUsData?.contact_cms?.section1_title
+                          )}
                         >
-                          {contactUsData?.contact_cms.section1_title || ""}
+                          {cmsFieldToString(
+                            contactUsData?.contact_cms?.section1_title
+                          )}
                         </TTSWrapper>
                       </h2>
                       <p className="text-gray-600 mt-2 max-w-xl text-sm md:text-base">
                         <TTSWrapper
-                          text={
-                            contactUsData?.contact_cms.section1_description || ""
-                          }
+                          text={cmsFieldToString(
+                            contactUsData?.contact_cms?.section1_description
+                          )}
                         >
-                          {contactUsData?.contact_cms.section1_description || ""}
+                          {cmsFieldToString(
+                            contactUsData?.contact_cms?.section1_description
+                          )}
                         </TTSWrapper>
                       </p>
                     </div>
@@ -472,8 +477,8 @@ const ContactPage: React.FC = () => {
 
                   <div className="mt-6 rounded-2xl bg-white">
                     <div className="mt-1 text-lg sm:text-xl font-semibold text-black">
-                      <TTSWrapper text={contactIcons.title || ""}>
-                        {contactIcons.title}
+                      <TTSWrapper text={cmsFieldToString(contactIcons.title)}>
+                        {cmsFieldToString(contactIcons.title)}
                       </TTSWrapper>
                     </div>
 
@@ -487,8 +492,8 @@ const ContactPage: React.FC = () => {
                               <TTSWrapper text="Address">Address</TTSWrapper>
                             </div>
                             <div className="text-base text-gray-700">
-                              <TTSWrapper text={contactIcons.address || ""}>
-                                {contactIcons.address}
+                              <TTSWrapper text={cmsFieldToString(contactIcons.address)}>
+                                {cmsFieldToString(contactIcons.address)}
                               </TTSWrapper>
                             </div>
                           </div>
@@ -501,8 +506,10 @@ const ContactPage: React.FC = () => {
                               <TTSWrapper text="Phone">Phone</TTSWrapper>
                             </div>
                             <div className="text-base text-gray-700">
-                              <TTSWrapper text={contactIcons.phone_number || ""}>
-                                {contactIcons.phone_number}
+                              <TTSWrapper
+                                text={cmsFieldToString(contactIcons.phone_number)}
+                              >
+                                {cmsFieldToString(contactIcons.phone_number)}
                               </TTSWrapper>
                             </div>
                           </div>
@@ -515,8 +522,8 @@ const ContactPage: React.FC = () => {
                               <TTSWrapper text="Email">Email</TTSWrapper>
                             </div>
                             <div className="text-base text-gray-700">
-                              <TTSWrapper text={contactIcons.email || ""}>
-                                {contactIcons.email}
+                              <TTSWrapper text={cmsFieldToString(contactIcons.email)}>
+                                {cmsFieldToString(contactIcons.email)}
                               </TTSWrapper>
                             </div>
                           </div>
@@ -552,9 +559,13 @@ const ContactPage: React.FC = () => {
                 <div className="bg-[#012B71] rounded-2xl sm:rounded-3xl p-5 md:p-7 lg:p-8">
                   <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-5 text-center">
                     <TTSWrapper
-                      text={contactUsData?.contact_cms.section3_title || ""}
+                      text={cmsFieldToString(
+                        contactUsData?.contact_cms?.section3_title
+                      )}
                     >
-                      {contactUsData?.contact_cms.section3_title || ""}
+                      {cmsFieldToString(
+                        contactUsData?.contact_cms?.section3_title
+                      )}
                     </TTSWrapper>
                   </h3>
 
@@ -593,7 +604,7 @@ const ContactPage: React.FC = () => {
                           }
                         >
                           {selectedService
-                            ? selectedService.title
+                            ? cmsFieldToString(selectedService.title)
                             : "Service Type*"}
                         </span>
                         <ChevronDown
@@ -615,7 +626,7 @@ const ContactPage: React.FC = () => {
                                 : "text-gray-700"
                                 }`}
                             >
-                              {option.title}
+                              {cmsFieldToString(option.title)}
                             </button>
                           ))}
                         </div>
@@ -655,16 +666,24 @@ const ContactPage: React.FC = () => {
                 <div>
                   <h3 className="text-4xl sm:text-5xl font-bold text-black">
                     <TTSWrapper
-                      text={contactUsData?.contact_cms.section2_title || ""}
+                      text={cmsFieldToString(
+                        contactUsData?.contact_cms?.section2_title
+                      )}
                     >
-                      {contactUsData?.contact_cms.section2_title || ""}
+                      {cmsFieldToString(
+                        contactUsData?.contact_cms?.section2_title
+                      )}
                     </TTSWrapper>
                   </h3>
                   <p className="text-gray-600 mt-2 text-sm md:text-md max-w-2xl">
                     <TTSWrapper
-                      text={contactUsData?.contact_cms.section2_description || ""}
+                      text={cmsFieldToString(
+                        contactUsData?.contact_cms?.section2_description
+                      )}
                     >
-                      {contactUsData?.contact_cms.section2_description || ""}
+                      {cmsFieldToString(
+                        contactUsData?.contact_cms?.section2_description
+                      )}
                     </TTSWrapper>
                   </p>
                   <div className="rounded-2xl sm:rounded-3xl bg-[#EEF2FF] p-5 md:p-7 lg:p-8 mt-6">
@@ -678,16 +697,22 @@ const ContactPage: React.FC = () => {
         `}
                         >
                           <div className="font-semibold text-[#0D1B3E] text-base sm:text-lg mb-1">
-                            <TTSWrapper text={item.title}>{item.title}</TTSWrapper>
+                            <TTSWrapper text={cmsFieldToString(item.title)}>
+                              {cmsFieldToString(item.title)}
+                            </TTSWrapper>
                           </div>
                           <div className="text-sm text-[#6B7280] mb-3">
-                            <TTSWrapper text={item.sub_title}>{item.sub_title}</TTSWrapper>
+                            <TTSWrapper text={cmsFieldToString(item.sub_title)}>
+                              {cmsFieldToString(item.sub_title)}
+                            </TTSWrapper>
                           </div>
                           <div className="text-sm text-[#2563EB] break-words">
-                            <TTSWrapper text={item.content}>
+                            <TTSWrapper text={cmsFieldToString(item.content)}>
                               <div
                                 className="text-sm text-[#2563EB]"
-                                dangerouslySetInnerHTML={{ __html: item.content }}
+                                dangerouslySetInnerHTML={{
+                                  __html: cmsFieldToString(item.content),
+                                }}
                               />
                             </TTSWrapper>
                           </div>
@@ -703,8 +728,10 @@ const ContactPage: React.FC = () => {
 
         {/* FAQ Section */}
         <FAQ
-          title={contactUsData?.contact_cms.section5_title || ""}
-          description={contactUsData?.contact_cms.section5_description || ""}
+          title={cmsFieldToString(contactUsData?.contact_cms?.section5_title)}
+          description={cmsFieldToString(
+            contactUsData?.contact_cms?.section5_description
+          )}
           faqList={contactUsData?.faqs}
         />
       </div>

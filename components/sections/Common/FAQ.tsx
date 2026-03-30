@@ -1,5 +1,6 @@
 "use client";
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { cmsFieldToString } from "@/lib/cmsFieldToString";
 import { Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
 import { Faq } from "@/types/Career.type";
@@ -52,20 +53,26 @@ function FAQ({ title, description, faqList }: { title?: string, description?: st
   const leftColumnFAQs = dataToUse.slice(0, midpoint);
   const rightColumnFAQs = dataToUse.slice(midpoint);
 
+  const titleStr = cmsFieldToString(title);
+  const descriptionStr = cmsFieldToString(description);
+  const defaultTitle = "Frequently Asked Questions";
+  const defaultDescription =
+    "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry";
+
   return (
     <section className="py-8 md:py-12 px-4 sm:px-8 lg:px-20 bg-white pb-20">
       <div className="max-w-full mx-auto">
         <div className="mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4">
-            <TTSWrapper text={title ? title : "Frequently Asked Questions"}>
-              {title ? title : "Frequently Asked Questions"}
+            <TTSWrapper text={titleStr || defaultTitle}>
+              {titleStr || defaultTitle}
             </TTSWrapper>
           </h2>
-          <TTSWrapper text={description ? description : "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry"}>
+          <TTSWrapper text={descriptionStr || defaultDescription}>
             <div
               className="text-gray-600 max-w-lg prose prose-sm"
               dangerouslySetInnerHTML={{
-                __html: description || "Lorem Ipsum is simply dummy Lorem Ipsum is simply dummy text of the printing and typesetting ndsince the 1500s, when an unknown printer took a galleytext of the printing and typesetting industry"
+                __html: descriptionStr || defaultDescription,
               }}
             />
           </TTSWrapper>
@@ -87,7 +94,9 @@ function FAQ({ title, description, faqList }: { title?: string, description?: st
                   onClick={() => toggleFAQ(faq.id)}
                 >
                   <h3 className="text-sm sm:text-md font-semibold pr-2 sm:pr-4 flex-1">
-                    <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
+                    <TTSWrapper text={cmsFieldToString(faq.question)}>
+                      {cmsFieldToString(faq.question)}
+                    </TTSWrapper>
                   </h3>
                   <button
                     className={`flex-shrink-0 w-8 h-8 ${expandedFAQ === faq.id
@@ -106,11 +115,11 @@ function FAQ({ title, description, faqList }: { title?: string, description?: st
                   <div className="px-4 sm:px-6 pb-4 sm:pb-6 bg-[#0A5BE0] text-white">
                     <div className="border-gray-100">
                       <div className="text-sm sm:text-base leading-relaxed">
-                        <TTSWrapper text={faq.answer}>
+                        <TTSWrapper text={cmsFieldToString(faq.answer)}>
                           <div
                             className="text-sm sm:text-base leading-relaxed prose prose-sm"
                             dangerouslySetInnerHTML={{
-                              __html: faq.answer || ""
+                              __html: cmsFieldToString(faq.answer),
                             }}
                           />
                         </TTSWrapper>
@@ -137,7 +146,9 @@ function FAQ({ title, description, faqList }: { title?: string, description?: st
                   onClick={() => toggleFAQ(faq.id)}
                 >
                   <h3 className="text-sm sm:text-md font-semibold pr-2 sm:pr-4 flex-1">
-                    <TTSWrapper text={faq.question}>{faq.question}</TTSWrapper>
+                    <TTSWrapper text={cmsFieldToString(faq.question)}>
+                      {cmsFieldToString(faq.question)}
+                    </TTSWrapper>
                   </h3>
                   <button
                     className={`flex-shrink-0 w-8 h-8 ${expandedFAQ === faq.id
@@ -156,11 +167,11 @@ function FAQ({ title, description, faqList }: { title?: string, description?: st
                   <div className="px-4 sm:px-6 pb-4 sm:pb-6 bg-[#0A5BE0] text-white">
                     <div className="border-gray-100">
                       <div className="text-sm sm:text-base leading-relaxed">
-                        <TTSWrapper text={faq.answer}>
+                        <TTSWrapper text={cmsFieldToString(faq.answer)}>
                           <div
                             className="text-sm sm:text-base leading-relaxed prose prose-sm"
                             dangerouslySetInnerHTML={{
-                              __html: faq.answer || ""
+                              __html: cmsFieldToString(faq.answer),
                             }}
                           />
                         </TTSWrapper>

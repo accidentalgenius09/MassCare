@@ -1,11 +1,12 @@
 import TTSWrapper from "@/hooks/TTSWrapper";
+import { cmsFieldToString } from "@/lib/cmsFieldToString";
 import React from "react";
 import Link from "next/link";
 
 interface PageBannerProps {
-  title?: string;
+  title?: unknown;
   breadcrumb: string;
-  description?: string;
+  description?: unknown;
   image?: string;
 }
 
@@ -15,6 +16,8 @@ function PageBanner({
   description,
   image,
 }: PageBannerProps) {
+  const titleStr = cmsFieldToString(title);
+  const descriptionStr = cmsFieldToString(description);
   // Function to map breadcrumb text to URL
   const getBreadcrumbUrl = (text: string): string | null => {
     const normalizedText = text.trim().toLowerCase();
@@ -110,14 +113,14 @@ function PageBanner({
               </div>
             </TTSWrapper>
           </div>
-          {title && (
+          {titleStr && (
             <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mt-3 sm:mt-4">
-              <TTSWrapper text={title}>{title}</TTSWrapper>
+              <TTSWrapper text={titleStr}>{titleStr}</TTSWrapper>
             </h1>
           )}
-          {description && (
+          {descriptionStr && (
             <p className="text-white text-sm sm:text-base md:text-lg font-normal mt-3 sm:mt-4 max-w-2xl px-4">
-              <TTSWrapper text={description}>{description}</TTSWrapper>
+              <TTSWrapper text={descriptionStr}>{descriptionStr}</TTSWrapper>
             </p>
           )}
         </div>
